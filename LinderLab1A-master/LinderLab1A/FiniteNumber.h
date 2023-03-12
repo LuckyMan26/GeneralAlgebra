@@ -1,6 +1,6 @@
 #pragma once
 #include "PositiveNumber.h"
-
+//Created by M.Tyshchenko
 class FiniteNumber : public PositiveNumber {
 private: 
 	PositiveNumber p = PositiveNumber("10");

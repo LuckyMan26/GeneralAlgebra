@@ -1,6 +1,6 @@
 #pragma once
 #include "PositiveNumber.h"
-
+//Created by M.Tyshchenko
 enum Sign {PLUS, MINUS};
 
 class SignedNumber : public PositiveNumber {

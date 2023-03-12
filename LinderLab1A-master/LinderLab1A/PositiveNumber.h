@@ -7,6 +7,7 @@
 *
 *
 */
+//Created by M.Tyshchenko
 class PositiveNumber {
 private:
 	static const int vectorP = 10;
