@@ -2,6 +2,7 @@
 #include <iostream>
 #include <vector>
 #include <cmath>
+#include <string>
 /**
 * Class for number in infinite field
 *
@@ -159,7 +160,22 @@ public:
 		}
 		return true;
 	}
-
+	//Division with remainder 
+	//Implemented by Artem Volyk
+	int operator % (int& n) const {
+		int size = digits.size();
+		std::vector<int> parts(0, size / 6 + 1);
+		for (int i = 0; i < size / 6; i++) {
+			for (int j = 0; j < 6; j++) {
+				parts[i] += pow(10, j) * digits[i + j];
+			}
+		}
+		int rest = 0;
+		for (int i = 0; i < parts.size(); i++) {
+			rest += int((pow(10,6*i)*parts[i])) % n;
+		}
+		return int(rest) % n;
+	}
 	/**
 	* Adds two positive numbers
 	*/
@@ -262,7 +278,52 @@ public:
 		other.multiplyBy(*this);
 		return other;
 	}
+	std::vector<std::pair<PositiveNumber, int>> factorise() {
+		std::vector<std::pair<PositiveNumber, int>> v;
+		int n;
+		for (int i = 0; i < digits.size(); i++) {
+			n+= std::pow(vectorP, digits.size() - i - 1) * digits[i];
+		}
+		 uint64_t square = static_cast<uint64_t>(std::sqrt(n));
+	for (std::size_t i = 2; i <= square && i <= n; ++i)
+	{	
+		PositiveNumber ii = PositiveNumber(std::to_string(i));
+		bool isPrime = true;
+		for (auto p : v)
+		{
+			if (p.first * p.first > ii)
+			{
+				break;
+			}
+			if (i % p.first == 0u)
+			{
+				isPrime = false;
+				break;
+			}
+		}
 
-
+		if (isPrime)
+		{
+			uint64_t count = 0;
+			while (n % i == 0)
+			{
+				++count;
+				n /= i;
+			}
+			v.emplace_back(ii, count);
+			if (count != 0)
+			{
+				square = static_cast<uint64_t>(std::sqrt(n));
+			}
+		}
+	}
+	if (n != 1)
+	{
+		v.emplace_back(n, 1);
+	}
+	}
+	PositiveNumber phi() {
+		
+	}
 
 };
