@@ -27,17 +27,47 @@ public:
 		this->digits = parseDigits(n);
 		setP(p);
 	}
-
 	/*
-	* Find multiplicative inverse number
+		* Implemented by Vlad Avramenko
 	*/
 
-	PositiveNumber inverse() const {
-
+	friend FiniteNumber operator+(FiniteNumber left, const FiniteNumber& n) {
+		left.addTo(n);
+		left.toFieldSize();
+		return left;
+	}
+	FiniteNumber& operator+=(const FiniteNumber& n) {
+		this->addTo(n);
+		this->toFieldSize();
+		return *this;
+	}
+	FiniteNumber operator*(const FiniteNumber& n) {
+		return this->toFinite(simpleMultiplication(n));
+	}
+	FiniteNumber operator*=(const FiniteNumber& n) {
+		this->multiplyBy(n);
+		this->toFieldSize();
+		return *this;
+	}
+	friend FiniteNumber operator-(FiniteNumber left, const FiniteNumber& n) {
+		left.substract(n);
+		left.toFieldSize();
+		return left;
+	}
+	FiniteNumber& operator-=(const FiniteNumber& n) {
+		this->substract(n);
+		this->toFieldSize();
+		return *this;
 	}
 
+	/*
+	* Find inverse number
+	*/
+	FiniteNumber inverse() const {
+		
+	}
+	//Converts PositiveNumber to field size
 	void toFieldSize() {
-		//TODO
 		if (p > *this) {
 			return;
 		}
@@ -48,6 +78,12 @@ public:
 			}
 			this->digits = parseDigits(t.toString());
 		}
+	}
+
+	FiniteNumber toFinite(PositiveNumber num) {
+		FiniteNumber res(num.toString(), this->p);
+		res.toFieldSize();
+		return res;
 	}
 
 	void toFieldSize(std::string p_str, std::string n_str) {

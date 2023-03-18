@@ -26,13 +26,22 @@ void testSignedNumbers() {
 	std::cout << signedN.toString() << std::endl;
 	
 }
-
+//Testing FiniteNumbers by Vlad Avramenko
 void testFiniteNumbers() {
+	std::cout << "\nTESTING FINITE NUMBERS\n";
 	FiniteNumber fin1 = FiniteNumber("x10 6");
 	FiniteNumber fin2 = FiniteNumber("x10 6");
-	fin1.addTo(fin2);
-	fin1.toFieldSize();
-	std::cout << fin1.toString();
+	std::cout << "fin1 = " << fin1.toString() << " fin2 = " << fin2.toString() << std::endl;
+	FiniteNumber fin3 = fin1 + fin2;
+	std::cout << "fin1 + fin2 = " << fin3.toString() << std::endl;
+	fin1 += fin2;
+	std::cout << "fin1 += fin2 => " << fin1.toString() << std::endl;
+	fin3 = fin1 - fin2;
+	std::cout << "fin1 - fin2 = " << fin3.toString() << std::endl;
+	fin1 -= fin2;
+	std::cout << "fin1 -= fin2 => " << fin1.toString() << std::endl;
+	fin3 = fin1 * fin2;
+	std::cout << "fin1 * fin2 = " << fin3.toString() << std::endl;
 }
 
 void testDifferentSize() {

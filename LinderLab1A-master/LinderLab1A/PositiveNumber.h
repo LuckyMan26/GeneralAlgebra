@@ -278,7 +278,7 @@ public:
 		other.multiplyBy(*this);
 		return other;
 	}
-	std::vector<std::pair<PositiveNumber, int>> factorise() {
+	/*std::vector<std::pair<PositiveNumber, int>> factorise() {
 		std::vector<std::pair<PositiveNumber, int>> v;
 		int n;
 		for (int i = 0; i < digits.size(); i++) {
@@ -324,6 +324,6 @@ public:
 	}
 	PositiveNumber phi() {
 		
-	}
+	}*/
 
 };
