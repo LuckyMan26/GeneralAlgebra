@@ -50,4 +50,12 @@ public:
 		PositiveNumber::multiplyBy(other);
 		this->sign = (this->sign == other.sign) ? PLUS : MINUS;
 	}
+
+	/*
+	* Implemented by Vlad Avramenko
+	*/
+
+	Sign getSign() {
+		return this->sign;
+	}
 };

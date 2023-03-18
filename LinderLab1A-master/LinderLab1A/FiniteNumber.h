@@ -31,6 +31,9 @@ public:
 		* Implemented by Vlad Avramenko
 	*/
 
+	/*
+	* overloaded operators
+	*/
 	friend FiniteNumber operator+(FiniteNumber left, const FiniteNumber& n) {
 		left.addTo(n);
 		left.toFieldSize();
@@ -63,8 +66,46 @@ public:
 	/*
 	* Find inverse number
 	*/
-	FiniteNumber inverse() const {
-		
+	FiniteNumber inverse() {
+		PositiveNumber n = p;
+		PositiveNumber g(this->toString());
+		PositiveNumber gcd = GCD(n, g);
+		if (gcd.toString() != "1") {
+			return *this;
+		}
+		// remainder = (t0*n + s0*g) + d*(t1*n + s1*g)
+		SignedNumber s0("0"), s1("1");
+		while (true) {
+			SignedNumber d("0");
+			
+			while (n >= g) {
+				n -= g;
+				d.addTo(SignedNumber("-1"));
+			}
+			SignedNumber temp_s = s0;
+			s0 = s1;
+			d.multiplyBy(s1);
+			s1 = temp_s;
+			s1.addTo(d);
+			if (n.toString() == "1") {
+				break;
+			}
+			else {
+				PositiveNumber temp = n;
+				n = g;
+				g = temp;
+			}
+		}
+		if (s1.getSign() == MINUS) {
+			SignedNumber p_signed(p.toString());
+			while (s1 < p_signed) {
+				s1.substractFrom(p_signed);
+			}
+			return FiniteNumber((p - PositiveNumber(s1.toString())).toString(), this->p);
+		}
+		else {
+			return FiniteNumber(s1.toString(), this->p);
+		}
 	}
 	//Converts PositiveNumber to field size
 	void toFieldSize() {

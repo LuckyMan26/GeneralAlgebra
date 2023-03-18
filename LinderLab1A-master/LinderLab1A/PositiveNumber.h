@@ -278,6 +278,23 @@ public:
 		other.multiplyBy(*this);
 		return other;
 	}
+
+	/*
+	* Implemented by Vlad Avrmenko
+	*/
+	//Function for finding Greatest Common Divisor for 2 PositiveNumbers 
+	PositiveNumber GCD(PositiveNumber n1, PositiveNumber n2) {
+		while (n1 != n2) {
+			if (n1 > n2) {
+				n1 -= n2;
+			}
+			else {
+				n2 -= n1;
+			}
+		}
+		return n1;
+	}
+
 	/*std::vector<std::pair<PositiveNumber, int>> factorise() {
 		std::vector<std::pair<PositiveNumber, int>> v;
 		int n;
