@@ -15,15 +15,12 @@ void testPositiveNumbers() {
 
 void testSignedNumbers() {
 	FiniteNumber finite = FiniteNumber("x10 1344");
-
-	SignedNumber signedN = SignedNumber("200");
+	std::cout << "Testing signed numbers" << std::endl;
+	SignedNumber signedN = SignedNumber("1555");
 	SignedNumber signedM = SignedNumber("-300");
-	signedN.addTo(signedM);
-	std::cout << signedN.toString() << std::endl;
-	signedN.substract(signedM);
-	std::cout << signedN.toString() << std::endl;
-	signedN.multiplyBy(signedM);
-	std::cout << signedN.toString() << std::endl;
+	SignedNumber res = signedN;
+	res -= signedM;
+	std::cout << res.toString() << std::endl;
 	
 }
 //Testing FiniteNumbers by Vlad Avramenko
@@ -53,7 +50,7 @@ void testFiniteNumbers() {
 
 void testDifferentSize() {
 	PositiveNumber a = PositiveNumber("10000");
-	PositiveNumber b = PositiveNumber("0");
+	PositiveNumber b = PositiveNumber("0000");
 	PositiveNumber c = a * b;
 	PositiveNumber d = b * a;
 	std::cout << c.toString() << std::endl;

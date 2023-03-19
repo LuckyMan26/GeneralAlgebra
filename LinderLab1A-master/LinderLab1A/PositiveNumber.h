@@ -12,8 +12,8 @@
 class PositiveNumber {
 private:
 	static const int vectorP = 10;
-
-
+	
+protected:
 	PositiveNumber trim() {
 		while (digits.size() != 0 && digits.back() == 0) {
 			this->digits.pop_back();
@@ -21,7 +21,6 @@ private:
 		return (*this);
 	}
 
-protected:
 	std::vector<int> digits; //digits as decimal numbers
 
 	std::vector<int> parseDigits(std::string str) {
@@ -58,13 +57,19 @@ protected:
 		}
 		return product.trim();
 	}
-
+	/**
+	* Multiplies number by other using primitive algorithm
+	*/
+	static PositiveNumber simpleMultiplication(PositiveNumber a, PositiveNumber b) {
+		return a.simpleMultiplication(b);
+	}
 
 public:
 	PositiveNumber() {
 	}
 	PositiveNumber(std::string digitsString) {
 		this->digits = parseDigits(digitsString);
+		this->trim();
 	}
 	int& operator[](int i) {
 		return digits[i];

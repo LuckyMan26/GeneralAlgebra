@@ -7,6 +7,74 @@ class SignedNumber : public PositiveNumber {
 private:
 	Sign sign = PLUS;
 public:
+	friend SignedNumber operator+(SignedNumber left, const SignedNumber& n) {
+		left.addTo(n);
+		return left;
+	}
+	SignedNumber& operator+=(const SignedNumber& n) {
+		this->addTo(n);
+		return *this;
+	}
+	SignedNumber operator*(const SignedNumber& n) {
+		return SignedNumber (PositiveNumber::simpleMultiplication(*this, n), (this->sign == n.sign) ? PLUS : MINUS);
+	}
+	SignedNumber operator*=(const SignedNumber& n) {
+		this->multiplyBy(n);
+		return *this;
+	}
+	friend PositiveNumber operator-(SignedNumber left, const SignedNumber& n) {
+		left.substractFrom(n);
+		return left;
+	}
+	PositiveNumber& operator-=(const SignedNumber& n) {
+		this->substractFrom(n);
+		return *this;
+	}
+	bool operator==(SignedNumber& n) const {
+		return equals(n);
+	}
+	bool operator!=(SignedNumber& n) const {
+		return !equals(n);
+	}
+	bool operator>(SignedNumber& n) const {
+		if (n.sign == PLUS && this->sign == MINUS)
+			return false;
+		else if (this->sign == PLUS && n.sign == MINUS) {
+			return true;
+		}
+		return PositiveNumber::operator>(n);
+	}
+
+	bool operator>=(SignedNumber& n) const {
+		if (n.sign == PLUS && this->sign == MINUS)
+			return false;
+		else if (this->sign == PLUS && n.sign == MINUS) {
+			return true;
+		}
+		return PositiveNumber::operator<=(n);
+	}
+	bool operator<(SignedNumber& n) const {
+		if (n.sign == PLUS && this->sign == MINUS)
+			return true;
+		else if (this->sign == PLUS && n.sign == MINUS) {
+			return false;
+		}
+		return PositiveNumber::operator<(n);
+	}
+	bool operator<=(SignedNumber& n) const {
+		if (n.sign == PLUS && this->sign == MINUS)
+			return true;
+		else if (this->sign == PLUS && n.sign == MINUS) {
+			return false;
+		}
+		return PositiveNumber::operator<=(n);
+	}
+
+	bool equals(SignedNumber n) const {
+		if (this->sign != n.sign)
+			return false;
+		return PositiveNumber::equals(n);
+	}
 	void addTo(SignedNumber other) {
 		if (this->sign == other.sign) {
 			PositiveNumber::addTo(other);
@@ -34,6 +102,12 @@ public:
 			this->sign = MINUS;
 		}
 		this->digits = parseDigits(str);
+		this->trim();
+	}
+	SignedNumber(PositiveNumber absolute, Sign sign) {
+		this->sign = sign;
+		this->digits = parseDigits(absolute.toString());
+		
 	}
 	std::string toString() {
 		std::string s = sign == PLUS ? "" : "-";
