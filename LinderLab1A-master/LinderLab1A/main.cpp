@@ -42,8 +42,13 @@ void testFiniteNumbers() {
 	std::cout << "fin1 -= fin2 => " << fin1.toString() << std::endl;
 	fin3 = fin1 * fin2;
 	std::cout << "fin1 * fin2 = " << fin3.toString() << std::endl;
-	FiniteNumber orig = FiniteNumber("x150 31");
+	FiniteNumber orig = FiniteNumber("x10 1");
 	std::cout << " inverse to " << orig.toString() << " is " << orig.inverse().toString() << std::endl;
+	fin1 = FiniteNumber("x10 4");
+	fin2 = FiniteNumber("x10 3");
+	std::cout << " fin1 / fin2 = " << (fin1 / fin2).toString() << "\t fin2 / fin1 " << (fin2 / fin1).toString() << std::endl;
+	fin1.divideBy(fin2);
+	std::cout << "fin1 /= fin2 => " << fin1.toString() << std::endl;
 }
 
 void testDifferentSize() {

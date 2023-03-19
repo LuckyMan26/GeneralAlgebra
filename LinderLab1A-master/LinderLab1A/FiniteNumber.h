@@ -3,6 +3,7 @@
 //Created by M.Tyshchenko
 class FiniteNumber : public PositiveNumber {
 private: 
+	//p stands for field (поле)
 	PositiveNumber p = PositiveNumber("10");
 	void setP(PositiveNumber p) {
 		this->p = p;
@@ -63,17 +64,23 @@ public:
 		return *this;
 	}
 
+	friend FiniteNumber operator/(FiniteNumber left, const FiniteNumber& n) {
+		return left.divide(n);
+	}
+
 	/*
 	* Find inverse number
+	* if inverse number exist - finds inverse, else - returns 1
 	*/
 	FiniteNumber inverse() {
 		PositiveNumber n = p;
 		PositiveNumber g(this->toString());
 		PositiveNumber gcd = GCD(n, g);
-		if (gcd.toString() != "1") {
-			return *this;
+		if (g.toString() == "1" || gcd.toString() != "1") {
+			return FiniteNumber("1", p);
 		}
 		// remainder = (t0*n + s0*g) + d*(t1*n + s1*g)
+		// t0 and t1 are omitted because we don`t need them
 		SignedNumber s0("0"), s1("1");
 		while (true) {
 			SignedNumber d("0");
@@ -97,15 +104,29 @@ public:
 			}
 		}
 		if (s1.getSign() == MINUS) {
-			SignedNumber p_signed(p.toString());
-			while (s1 < p_signed) {
-				s1.substractFrom(p_signed);
+			PositiveNumber s1_pos(s1);
+			while (s1_pos > p) {
+				s1_pos -= p;
 			}
-			return FiniteNumber((p - PositiveNumber(s1.toString())).toString(), this->p);
+			return FiniteNumber((p - s1_pos).toString(), this->p);
 		}
 		else {
 			return FiniteNumber(s1.toString(), this->p);
 		}
+	}
+
+	void divideBy(FiniteNumber num) {
+		if (this->p != num.p) {
+			return;
+		}
+		*this *= num.inverse();
+	}
+
+	FiniteNumber divide(FiniteNumber num) {
+		if (this->p != num.p) {
+			return FiniteNumber("1", this->p);
+		}
+		return *this*num.inverse();
 	}
 	//Converts PositiveNumber to field size
 	void toFieldSize() {
@@ -120,7 +141,7 @@ public:
 			this->digits = parseDigits(t.toString());
 		}
 	}
-
+	// Converts PositiveNumber to FiniteNumber
 	FiniteNumber toFinite(PositiveNumber num) {
 		FiniteNumber res(num.toString(), this->p);
 		res.toFieldSize();

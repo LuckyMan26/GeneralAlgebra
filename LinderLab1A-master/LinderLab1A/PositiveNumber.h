@@ -112,24 +112,29 @@ public:
 		}
 		return true;
 	}
+
+	//Note by Vlad Avramenko
+	//Possible bug, implemented fix
+	// Numbers were compared from end to start, changed to comparison from start to end
 	bool operator>(PositiveNumber& n) const {
 		if (digits.size() > n.digits.size())
 			return true;
 		if (digits.size() < n.digits.size())
 			return false;
-		for (int i = 0; i < digits.size(); i++) {
+		for (int i = digits.size() - 1; i >= 0; i--) {
 			if (digits[i] == n[i])
 				continue;
 			return digits[i] > n[i];
 		}
 		return false;
 	}
+
 	bool operator>=(PositiveNumber& n) const {
 		if (digits.size() > n.digits.size())
 			return true;
 		if (digits.size() < n.digits.size())
 			return false;
-		for (int i = 0; i < digits.size(); i++) {
+		for (int i = digits.size() - 1; i >= 0; i--) {
 			if (digits[i] == n[i])
 				continue;
 			return digits[i] > n[i];
@@ -141,7 +146,7 @@ public:
 			return true;
 		if (digits.size() > n.digits.size())
 			return false;
-		for (int i = 0; i < digits.size(); i++) {
+		for (int i = digits.size() - 1; i >= 0; i--) {
 			if (digits[i] == n[i])
 				continue;
 			return digits[i] < n[i];
@@ -153,7 +158,7 @@ public:
 			return true;
 		if (digits.size() > n.digits.size())
 			return false;
-		for (int i = 0; i < digits.size(); i++) {
+		for (int i = digits.size()-1; i >= 0; i--) {
 			if (digits[i] == n[i])
 				continue;
 			return digits[i] < n[i];
