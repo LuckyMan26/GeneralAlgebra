@@ -78,10 +78,11 @@ void exponentTest() {
 	testFunction((n.shift(2)).toString(), "1500");
 	testFunction((m.shift(-2)).toString(), "0");
 	std::cout << FiniteNumber("x257 10000").inverse().toString() << std::endl;
-
-
 	FiniteNumber toMultiply = FiniteNumber("x257 128");
+	FiniteNumber toMultiply2 = FiniteNumber("x257 80");
 	Exponentiation exp = Exponentiation();
+	FiniteNumber result = exp.montgomeryMultiplication(toMultiply, toMultiply2);
+	std::cout << result.toString() << std::endl;
 }
 
 
