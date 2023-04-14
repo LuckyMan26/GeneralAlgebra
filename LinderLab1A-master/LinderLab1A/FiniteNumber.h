@@ -7,7 +7,7 @@ private:
 	PositiveNumber p = PositiveNumber("10");
 	void setP(PositiveNumber p) {
 		this->p = p;
-		toFieldSize(p.toString(), this->toString());
+		toFieldSize();
 	}
 
 public:
@@ -35,6 +35,11 @@ public:
 		this->digits = parseDigits(n);
 		setP(p);
 	}
+
+	PositiveNumber getP() const {
+		return p;
+	}
+
 	/*
 		* Implemented by Vlad Avramenko
 	*/
@@ -167,12 +172,6 @@ public:
 			}
 			this->digits = parseDigits(n.toString());
 		}
-	}
-
-	static FiniteNumber tempMultiply(FiniteNumber a, FiniteNumber b) {
-		FiniteNumber s = (a * b);
-		s.toFieldSize();
-		return s;
 	}
 };
 

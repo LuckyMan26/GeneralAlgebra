@@ -307,6 +307,28 @@ public:
 		}
 		return n1;
 	}
+	/*
+	* Shifting number left or right (% 10)
+	* Examples: 
+	* 5.shift(2): 5 => 500
+	* 100.shift(-1): 100 => 10
+	* 
+	* Implemented by M. Tyshechenko
+	*/
+	PositiveNumber shift(int numDigits) {
+		PositiveNumber number = PositiveNumber(*this);
+		if (numDigits < 0) {
+			for (int i = 0; i < -numDigits && number.digits.size()>0; i++) {
+				number.digits.erase(number.digits.begin());
+			}
+		}
+		else {
+			for (int i = 0; i < numDigits; i++) {
+				number.digits.insert(number.digits.begin(), 0);
+			}
+		}
+		return number;
+	}
 
 	/*std::vector<std::pair<PositiveNumber, int>> factorise() {
 		std::vector<std::pair<PositiveNumber, int>> v;

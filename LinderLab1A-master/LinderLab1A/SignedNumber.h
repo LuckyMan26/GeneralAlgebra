@@ -81,14 +81,14 @@ public:
 		}
 		else {
 			PositiveNumber::substract(other);
-			this->sign = (*this > other) ? this->sign : other.sign;
+			this->sign = PositiveNumber::operator>(other) ? this->sign : other.sign;
 		}
 
 	}
 	void substractFrom(SignedNumber other) {
 		if (this->sign == other.sign) {
 			PositiveNumber::substract(other);
-			if (*this < other) {
+			if (PositiveNumber::operator<(other)) {
 				flipSign();
 			}
 		}

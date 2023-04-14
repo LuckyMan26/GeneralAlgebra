@@ -1,5 +1,6 @@
 #include "SignedNumber.h"
 #include "FiniteNumber.h"
+#include "Exponent.h"
 
 void testPositiveNumbers() {
 	PositiveNumber a = PositiveNumber("1234");
@@ -72,8 +73,15 @@ void exponentTest() {
 	FiniteNumber m = FiniteNumber(PositiveNumber("431"), PositiveNumber("17"));
 	std::cout << n.toString() << std::endl;
 	testFunction(n.toString(), "15");
-	testFunction(FiniteNumber::tempMultiply(n, m).toString(), "5");
-	testFunction(FiniteNumber::tempMultiply(m, n).toString(), "5");
+	testFunction((n * m).toString(), "5");
+	testFunction((m * n).toString(), "5");
+	testFunction((n.shift(2)).toString(), "1500");
+	testFunction((m.shift(-2)).toString(), "0");
+	std::cout << FiniteNumber("x257 10000").inverse().toString() << std::endl;
+
+
+	FiniteNumber toMultiply = FiniteNumber("x257 128");
+	Exponentiation exp = Exponentiation();
 }
 
 
