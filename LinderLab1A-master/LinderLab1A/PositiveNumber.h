@@ -14,6 +14,7 @@ private:
 	static const int vectorP = 10;
 	
 protected:
+
 	PositiveNumber trim() {
 		while (digits.size() != 0 && digits.back() == 0) {
 			this->digits.pop_back();
@@ -32,7 +33,6 @@ protected:
 		}
 		return digits;
 	}
-
 	/**
 	* Multiplies number by other using primitive algorithm
 	*/
@@ -65,6 +65,9 @@ protected:
 	}
 
 public:
+	std::vector<int> getDigits() const {
+		return digits;
+	}
 	PositiveNumber() {
 	}
 	PositiveNumber(std::string digitsString) {

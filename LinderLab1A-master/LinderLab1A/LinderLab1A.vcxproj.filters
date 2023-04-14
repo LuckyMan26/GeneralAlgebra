@@ -30,6 +30,9 @@
     <ClInclude Include="SignedNumber.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Exponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="FiniteField.cpp">

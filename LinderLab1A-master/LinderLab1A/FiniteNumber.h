@@ -11,6 +11,13 @@ private:
 	}
 
 public:
+
+	FiniteNumber(PositiveNumber base, PositiveNumber p) {
+		this->p = p;
+		this->digits = base.getDigits();
+		this->toFieldSize();
+	}
+
 	FiniteNumber(std::string from, PositiveNumber p) {
 		this->digits = parseDigits(from);
 		setP(p);
@@ -160,6 +167,12 @@ public:
 			}
 			this->digits = parseDigits(n.toString());
 		}
+	}
+
+	static FiniteNumber tempMultiply(FiniteNumber a, FiniteNumber b) {
+		FiniteNumber s = (a * b);
+		s.toFieldSize();
+		return s;
 	}
 };
 

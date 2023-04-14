@@ -1,7 +1,6 @@
 #include "SignedNumber.h"
 #include "FiniteNumber.h"
 
-
 void testPositiveNumbers() {
 	PositiveNumber a = PositiveNumber("1234");
 	PositiveNumber b = PositiveNumber("99");
@@ -57,11 +56,31 @@ void testDifferentSize() {
 	std::cout << d.toString() << std::endl;
 }
 
+void testFunction(std::string expected, std::string actual) {
+	if (expected == actual) {
+		std::cout << "\033[35;32mSUCCESS\033[35;0m";
+		std::cout << ": " << expected << " == " << actual << std::endl;
+	}
+	else {
+		std::cout << "\033[35;31mERROR\033[35;0m";
+		std::cout << ": " << expected << " != " << actual << std::endl;
+	}
+}
+
+void exponentTest() {
+	FiniteNumber n = FiniteNumber(PositiveNumber("100"), PositiveNumber("17"));
+	FiniteNumber m = FiniteNumber(PositiveNumber("431"), PositiveNumber("17"));
+	std::cout << n.toString() << std::endl;
+	testFunction(n.toString(), "15");
+	testFunction(FiniteNumber::tempMultiply(n, m).toString(), "5");
+	testFunction(FiniteNumber::tempMultiply(m, n).toString(), "5");
+}
 
 
 int main() {
-	testDifferentSize();
-	testPositiveNumbers();
-	testSignedNumbers();
-	testFiniteNumbers();
+	//testDifferentSize();
+	//testPositiveNumbers();
+	//testSignedNumbers();
+	//testFiniteNumbers();
+	exponentTest();
 }
