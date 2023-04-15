@@ -153,6 +153,13 @@ public:
 		return PositiveNumber(result);
 	}
 
+	PositiveNumber remainder(PositiveNumber& n1, PositiveNumber& n2) {
+		return n1 - (n2 * (n1 / n2));
+	}
+
+	PositiveNumber operator%(PositiveNumber& other) {
+		return remainder(*this, other);
+	}
 
 	bool operator>(PositiveNumber& n) const {
 		if (digits.size() > n.digits.size())

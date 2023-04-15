@@ -61,6 +61,24 @@ TEST_CASE("Division Test for SignedNumber") {
 	CHECK(p3.toString() == "0");
 }
 
+//Test by V.Avramenko
+TEST_CASE("Remainder Test for Positive and Signed Numbers") {
+	PositiveNumber p1("10");
+	PositiveNumber p2("8");
+	PositiveNumber p3 = p1 % p2;
+	CHECK(p3.toString() == "2");
+	p1 = PositiveNumber("102");
+	p3 = p1 % p2;
+	CHECK(p3.toString() == "6");
+	p2 = PositiveNumber("2");
+	p3 = p1 % p2;
+	CHECK(p3.toString() == "0");
+	p1 = PositiveNumber("7");
+	p2 = PositiveNumber("8");
+	p3 = p1 % p2;
+	CHECK(p3.toString() == "7");
+}
+
 //Test by M. Tyshchenko
 TEST_CASE("Test on random numbers") {
 	std::cout << "Testing on random values" << std::endl;
