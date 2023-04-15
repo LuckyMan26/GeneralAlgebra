@@ -41,37 +41,41 @@ TEST_CASE("Test on random numbers") {
 //Tests by M. Tyshchenko
 TEST_CASE("Signed numbers") {
 	FiniteNumber finite = FiniteNumber("x10 1344");
-	std::cout << "Testing signed numbers" << std::endl;
+	CHECK(finite.toString() == "4");
 	SignedNumber signedN = SignedNumber("1555");
 	SignedNumber signedM = SignedNumber("-300");
 	SignedNumber res = signedN;
 	res -= signedM;
-	std::cout << res.toString() << std::endl;
+	CHECK(res.toString() == "1855");
 
 }
 //Testing FiniteNumbers by Vlad Avramenko
 TEST_CASE("Finite numbers") {
-	std::cout << "\nTESTING FINITE NUMBERS\n";
 	FiniteNumber fin1 = FiniteNumber("x10 6");
 	FiniteNumber fin2 = FiniteNumber("x10 6");
-	std::cout << "fin1 = " << fin1.toString() << " fin2 = " << fin2.toString() << std::endl;
+	CHECK(fin1.toString() == "6");
+	CHECK(fin2.toString() == "6");
 	FiniteNumber fin3 = fin1 + fin2;
-	std::cout << "fin1 + fin2 = " << fin3.toString() << std::endl;
+	CHECK(fin3.toString() == "2");
 	fin1 += fin2;
-	std::cout << "fin1 += fin2 => " << fin1.toString() << std::endl;
+	CHECK(fin1.toString() == "2");
 	fin3 = fin1 - fin2;
-	std::cout << "fin1 - fin2 = " << fin3.toString() << std::endl;
+	CHECK(fin3.toString() == "4");
 	fin1 -= fin2;
-	std::cout << "fin1 -= fin2 => " << fin1.toString() << std::endl;
+	CHECK(fin1.toString() == "4");
 	fin3 = fin1 * fin2;
-	std::cout << "fin1 * fin2 = " << fin3.toString() << std::endl;
-	FiniteNumber orig = FiniteNumber("x10 1");
-	std::cout << " inverse to " << orig.toString() << " is " << orig.inverse().toString() << std::endl;
+	CHECK(fin3.toString() == "4");
+	FiniteNumber orig = FiniteNumber("x10 7");
+	FiniteNumber inv = orig.inverse();
+	CHECK(inv.toString() == "3");
 	fin1 = FiniteNumber("x10 4");
 	fin2 = FiniteNumber("x10 3");
-	std::cout << " fin1 / fin2 = " << (fin1 / fin2).toString() << "\t fin2 / fin1 " << (fin2 / fin1).toString() << std::endl;
+	FiniteNumber fin4 = fin1 / fin2;
+	FiniteNumber fin5 = fin2 / fin1;
+	CHECK(fin4.toString() == "8");
+	CHECK(fin5.toString() == "3");
 	fin1.divideBy(fin2);
-	std::cout << "fin1 /= fin2 => " << fin1.toString() << std::endl;
+	CHECK(fin1.toString() == "8");
 }
 
 //Tests by M. Tyshchenko
