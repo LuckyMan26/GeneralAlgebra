@@ -33,10 +33,10 @@ TEST_CASE("Division Test for PositiveNumber") {
 	p2 = PositiveNumber("23");
 	p3 = p1 / p2;
 	CHECK(p3.toString() == "43");
-	p1 = PositiveNumber("1200000");
-	p2 = PositiveNumber("10000");
+	p1 = PositiveNumber("669999");
+	p2 = PositiveNumber("257");
 	p3 = p1 / p2;
-	CHECK(p3.toString() == "12");
+	CHECK(p3.toString() == "2607");
 }
 
 //Test by V.Avramenko
