@@ -39,6 +39,28 @@ TEST_CASE("Division Test for PositiveNumber") {
 	CHECK(p3.toString() == "12");
 }
 
+//Test by V.Avramenko
+TEST_CASE("Division Test for SignedNumber") {
+	SignedNumber p1("-12");
+	SignedNumber p2("3");
+	SignedNumber p3 = p1 / p2;
+	CHECK(p3.toString() == "-4");
+	p3 = p2 / p1;
+	CHECK(p3.toString() == "0");
+	p1 = SignedNumber("-16");
+	p2 = SignedNumber("3");
+	p3 = p1 / p2;
+	CHECK(p3.toString() == "-5");
+	p1 = SignedNumber("-11");
+	p2 = SignedNumber("-3");
+	p3 = p1 / p2;
+	CHECK(p3.toString() == "3");
+	p1 = SignedNumber("2");
+	p2 = SignedNumber("-3");
+	p3 = p1 / p2;
+	CHECK(p3.toString() == "0");
+}
+
 //Test by M. Tyshchenko
 TEST_CASE("Test on random numbers") {
 	std::cout << "Testing on random values" << std::endl;

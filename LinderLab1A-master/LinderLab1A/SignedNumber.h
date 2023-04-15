@@ -129,6 +129,32 @@ public:
 	* Implemented by Vlad Avramenko
 	*/
 
+	//Division for SignedNumbers
+	SignedNumber operator/(SignedNumber& other) {
+		return divide(*this, other);
+	}
+
+	PositiveNumber toUnsigned() {
+		if (this->sign == MINUS) {
+			return PositiveNumber(this->toString().substr(1, this->digits.size()));
+		}
+		else {
+			return PositiveNumber(this->toString());
+		}
+	}
+
+	SignedNumber divide(SignedNumber n1, SignedNumber n2) {
+		PositiveNumber p1 = n1.toUnsigned();
+		PositiveNumber p2 = n2.toUnsigned();
+		PositiveNumber num = PositiveNumber::divide(p1, p2);
+		if (n1.sign != n2.sign && num.toString() != "0") {
+			return SignedNumber(num, MINUS);
+		}
+		else {
+			return SignedNumber(num, PLUS);
+		}
+	}
+
 	Sign getSign() {
 		return this->sign;
 	}

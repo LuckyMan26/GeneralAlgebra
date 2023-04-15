@@ -154,9 +154,6 @@ public:
 	}
 
 
-	//Note by Vlad Avramenko
-	//Possible bug, implemented fix
-	// Numbers were compared from end to start, changed to comparison from start to end
 	bool operator>(PositiveNumber& n) const {
 		if (digits.size() > n.digits.size())
 			return true;
