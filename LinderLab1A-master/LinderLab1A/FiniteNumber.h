@@ -147,9 +147,7 @@ public:
 		}
 		else {
 			PositiveNumber t = PositiveNumber(*this);
-			while (t >= p) {
-				t -= p;
-			}
+			t = t % p;
 			this->digits = parseDigits(t.toString());
 		}
 	}
@@ -167,9 +165,7 @@ public:
 			return;
 		}
 		else {
-			while (n >= p) {
-				n -= p;
-			}
+			n = n % p;
 			this->digits = parseDigits(n.toString());
 		}
 	}
