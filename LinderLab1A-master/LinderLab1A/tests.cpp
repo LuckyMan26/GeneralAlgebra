@@ -9,7 +9,7 @@
 #include <string>
 
 
-//Tests by M. Tyshchenko
+//Test by M. Tyshchenko
 TEST_CASE("Positive numbers") {
 	PositiveNumber a = PositiveNumber("1234");
 	PositiveNumber b = PositiveNumber("99");
@@ -21,7 +21,7 @@ TEST_CASE("Positive numbers") {
 	CHECK((a + b).toString() == "1333");
 }
 
-//Tests by M. Tyshchenko
+//Test by M. Tyshchenko
 TEST_CASE("Test on random numbers") {
 	std::cout << "Testing on random values" << std::endl;
 	std::random_device rand_dev;
