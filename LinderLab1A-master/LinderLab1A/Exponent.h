@@ -33,14 +33,16 @@ public:
 			rNum = rNum.shift(1);
 			shift++;
 		}
-		PositiveNumber k = PositiveNumber("67"); // (rNum * FiniteNumber(rNum, p).inverse() - FiniteNumber("1")); /// p;
+		std::cout << FiniteNumber(rNum, p).inverse().toString() << std::endl;
+		PositiveNumber k =  (rNum * FiniteNumber(rNum, p).inverse() - FiniteNumber("1")) / p;
+		std::cout << k.toString() << std::endl;
 		PositiveNumber aM = toMontgomery(a, shift);
 		PositiveNumber bM = toMontgomery(b, shift);
 		PositiveNumber x = aM * bM;
 		FiniteNumber s = FiniteNumber(x * k, rNum);
 		PositiveNumber t = x + p * s;
 		PositiveNumber u = t.shift(shift);
-		//FiniteNumber cM = FiniteNumber(u, p); // origin: u < n ? u : u - n
+		// origin: u < n ? u : u - n
 		return FiniteNumber(redc(rNum, p, k, t, shift), p);
 	}
 };

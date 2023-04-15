@@ -103,10 +103,9 @@ TEST_CASE("Remainder Test for Signed Numbers") {
 
 //Test by M. Tyshchenko
 TEST_CASE("Test on random numbers") {
-	std::cout << "Testing on random values" << std::endl;
 	std::random_device rand_dev;
 	std::mt19937 generator(rand_dev());
-	std::uniform_int_distribution<int>  distr(0, 1000);
+	std::uniform_int_distribution<int>  distr(0, 5000);
 	for (int i = 0; i < 200; i++) {
 		int a = distr(generator);
 		int b = distr(generator);
@@ -115,6 +114,10 @@ TEST_CASE("Test on random numbers") {
 		CHECK((aNum + bNum).toString() == std::to_string(a + b));
 		CHECK((aNum - bNum).toString() == std::to_string(abs(a - b)));
 		CHECK((aNum * bNum).toString() == std::to_string(a * b));
+		if (b != 0) {
+			//CHECK((aNum / bNum).toString() == std::to_string(a / b));
+			//CHECK((aNum % bNum).toString() == std::to_string(a % b));
+		}
 	}
 }
 
@@ -171,17 +174,21 @@ TEST_CASE("Test zero") {
 TEST_CASE("Exponent") {
 	FiniteNumber n = FiniteNumber(PositiveNumber("100"), PositiveNumber("17"));
 	FiniteNumber m = FiniteNumber(PositiveNumber("431"), PositiveNumber("17"));
-	std::cout << n.toString() << std::endl;
 	CHECK(n.toString() == "15");
 	CHECK((n * m).toString() == "5");
 	CHECK((m * n).toString() == "5");
 	CHECK((n.shift(2)).toString() == "1500");
 	CHECK((m.shift(-2)).toString() == "0");
 	CHECK(FiniteNumber("x257 10000").inverse().toString() == "67");
-	/*
+
+	PositiveNumber a = PositiveNumber("669999");
+	PositiveNumber b = PositiveNumber("257");
+	PositiveNumber d = a / b;
+	CHECK(d.toString() == "2607");
+
 	FiniteNumber toMultiply = FiniteNumber("x257 128");
 	FiniteNumber toMultiply2 = FiniteNumber("x257 80");
 	Exponentiation exp = Exponentiation();
 	FiniteNumber result = exp.montgomeryMultiplication(toMultiply, toMultiply2);
-	std::cout << result.toString() << std::endl;*/
+	std::cout << "RESULT: " << result.toString() << std::endl;
 }
