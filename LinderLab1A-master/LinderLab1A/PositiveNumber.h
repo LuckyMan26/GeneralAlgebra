@@ -120,6 +120,39 @@ public:
 		}
 		return true;
 	}
+	//Implemented by Vlad Avramenko
+	//Division for PositiveNumbers
+	PositiveNumber operator/(PositiveNumber& other) {
+		return divide(*this, other);
+	}
+
+	PositiveNumber divide(PositiveNumber& n1, PositiveNumber& n2) {
+		if (n1 < n2) {
+			return PositiveNumber("0");
+		}
+		int i = n2.digits.size()-1;
+		PositiveNumber part(n1.toString().substr(0, i+1));
+		std::string result;
+		while (i < n1.digits.size()) {
+			while (part < n2) {
+				i++;
+				if (i >= n1.digits.size()) {
+					return PositiveNumber(result);
+				}
+				else {
+					part = PositiveNumber(part.toString() + n1.toString()[i]);
+				}
+			}
+			int j = 0;
+			while (part >= n2) {
+				j++;
+				part -= n2;
+			}
+			result.append(std::to_string(j));
+		}
+		return PositiveNumber(result);
+	}
+
 
 	//Note by Vlad Avramenko
 	//Possible bug, implemented fix

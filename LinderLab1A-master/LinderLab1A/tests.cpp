@@ -21,6 +21,24 @@ TEST_CASE("Positive numbers") {
 	CHECK((a + b).toString() == "1333");
 }
 
+//Test by V.Avramenko
+TEST_CASE("Division Test for PositiveNumber") {
+	PositiveNumber p1("12");
+	PositiveNumber p2("3");
+	PositiveNumber p3 = p1 / p2;
+	CHECK(p3.toString() == "4");
+	p3 = p2 / p1;
+	CHECK(p3.toString() == "0");
+	p1 = PositiveNumber("1008");
+	p2 = PositiveNumber("23");
+	p3 = p1 / p2;
+	CHECK(p3.toString() == "43");
+	p1 = PositiveNumber("1200000");
+	p2 = PositiveNumber("10000");
+	p3 = p1 / p2;
+	CHECK(p3.toString() == "12");
+}
+
 //Test by M. Tyshchenko
 TEST_CASE("Test on random numbers") {
 	std::cout << "Testing on random values" << std::endl;
