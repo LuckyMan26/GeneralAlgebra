@@ -146,6 +146,7 @@ public:
 			while (part < n2) {
 				i++;
 				if (i >= n1.digits.size()) {
+					result.append("0");
 					return PositiveNumber(result);
 				}
 				else {

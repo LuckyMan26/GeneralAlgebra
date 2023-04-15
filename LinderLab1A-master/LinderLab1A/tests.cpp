@@ -115,8 +115,8 @@ TEST_CASE("Test on random numbers") {
 		CHECK((aNum - bNum).toString() == std::to_string(abs(a - b)));
 		CHECK((aNum * bNum).toString() == std::to_string(a * b));
 		if (b != 0) {
-			//CHECK((aNum / bNum).toString() == std::to_string(a / b));
-			//CHECK((aNum % bNum).toString() == std::to_string(a % b));
+			CHECK((aNum / bNum).toString() == std::to_string(a / b));
+			CHECK((aNum % bNum).toString() == std::to_string(a % b));
 		}
 	}
 }
@@ -181,10 +181,10 @@ TEST_CASE("Exponent") {
 	CHECK((m.shift(-2)).toString() == "0");
 	CHECK(FiniteNumber("x257 10000").inverse().toString() == "67");
 
-	PositiveNumber a = PositiveNumber("669999");
-	PositiveNumber b = PositiveNumber("257");
+	PositiveNumber a = PositiveNumber("4444");
+	PositiveNumber b = PositiveNumber("433");
 	PositiveNumber d = a / b;
-	CHECK(d.toString() == "2607");
+	CHECK(d.toString() == "10");
 
 	FiniteNumber toMultiply = FiniteNumber("x257 128");
 	FiniteNumber toMultiply2 = FiniteNumber("x257 80");
