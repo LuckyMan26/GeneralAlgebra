@@ -134,12 +134,22 @@ public:
 		PositiveNumber part(n1.toString().substr(0, i+1));
 		std::string result;
 		while (i < n1.digits.size()) {
+			if (part < n2) {
+				i++;
+				if (i >= n1.digits.size()) {
+					return PositiveNumber(result);
+				}
+				else {
+					part = PositiveNumber(part.toString() + n1.toString()[i]);
+				}
+			}
 			while (part < n2) {
 				i++;
 				if (i >= n1.digits.size()) {
 					return PositiveNumber(result);
 				}
 				else {
+					result.append("0");
 					part = PositiveNumber(part.toString() + n1.toString()[i]);
 				}
 			}
