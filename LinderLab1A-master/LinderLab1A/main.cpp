@@ -86,10 +86,11 @@ void exponentTest() {
 }
 
 
-int main() {
-	//testDifferentSize();
-	//testPositiveNumbers();
-	//testSignedNumbers();
-	//testFiniteNumbers();
+int main2() {
+	testDifferentSize();
+	testPositiveNumbers();
+	testSignedNumbers();
+	testFiniteNumbers();
 	exponentTest();
+	return 0;
 }
