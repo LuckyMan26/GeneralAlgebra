@@ -62,7 +62,7 @@ TEST_CASE("Division Test for SignedNumber") {
 }
 
 //Test by V.Avramenko
-TEST_CASE("Remainder Test for Positive and Signed Numbers") {
+TEST_CASE("Remainder Test for Positive Numbers") {
 	PositiveNumber p1("10");
 	PositiveNumber p2("8");
 	PositiveNumber p3 = p1 % p2;
@@ -77,6 +77,28 @@ TEST_CASE("Remainder Test for Positive and Signed Numbers") {
 	p2 = PositiveNumber("8");
 	p3 = p1 % p2;
 	CHECK(p3.toString() == "7");
+}
+
+//Test by V.Avramenko
+TEST_CASE("Remainder Test for Signed Numbers") {
+	SignedNumber p1("-10");
+	SignedNumber p2("8");
+	SignedNumber p3 = p1 % p2;
+	CHECK(p3.toString() == "-2");
+	p1 = SignedNumber("-102");
+	p3 = p1 % p2;
+	CHECK(p3.toString() == "-6");
+	p2 = SignedNumber("-2");
+	p3 = p1 % p2;
+	CHECK(p3.toString() == "0");
+	p1 = SignedNumber("7");
+	p2 = SignedNumber("-8");
+	p3 = p1 % p2;
+	CHECK(p3.toString() == "7");
+	p1 = SignedNumber("-9");
+	p2 = SignedNumber("-8");
+	p3 = p1 % p2;
+	CHECK(p3.toString() == "-1");
 }
 
 //Test by M. Tyshchenko

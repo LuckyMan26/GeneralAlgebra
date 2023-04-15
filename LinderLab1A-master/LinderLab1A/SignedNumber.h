@@ -155,6 +155,22 @@ public:
 		}
 	}
 
+	SignedNumber operator%(SignedNumber& other) {
+		return remainder(*this, other);
+	}
+
+	SignedNumber remainder(SignedNumber n1, SignedNumber n2) {
+		PositiveNumber p1 = n1.toUnsigned();
+		PositiveNumber p2 = n2.toUnsigned();
+		PositiveNumber num = PositiveNumber::remainder(p1, p2);
+		if (n1.sign == MINUS && num.toString() != "0") {
+			return SignedNumber(num, MINUS);
+		}
+		else {
+			return SignedNumber(num, PLUS);
+		}
+	}
+
 	Sign getSign() {
 		return this->sign;
 	}
