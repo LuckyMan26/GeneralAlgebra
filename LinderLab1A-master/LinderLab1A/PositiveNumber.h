@@ -439,6 +439,11 @@ public:
 		
 	}*/
 	std::string bits() {
+		std::string result = bitsReverse();
+		reverse(result.begin(), result.end());
+		return result;
+	}
+	std::string bitsReverse() {
 		PositiveNumber divideBy = PositiveNumber("2");
 		std::string result = "";
 		PositiveNumber current = *this;
@@ -454,7 +459,6 @@ public:
 			}
 			current = current / divideBy;
 		}
-		reverse(result.begin(), result.end());
 		return result;
 	}
 };

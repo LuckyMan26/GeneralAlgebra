@@ -64,17 +64,18 @@ public:
 		PositiveNumber s = redc2(rNum, p, k, x, shift);
 		return FiniteNumber(s * rInv, p);
 	}
-
+	/**
+	* Eponention using montgomery algorithm
+	* Problem: for-loop in montgomery form definitely works faster, but initialization takes too much time
+	*/
 	FiniteNumber montgomeryExponention(FiniteNumber base, PositiveNumber power) {
-		std::chrono::steady_clock::time_point t1= std::chrono::steady_clock::now();
+		//std::chrono::steady_clock::time_point t1= std::chrono::steady_clock::now();
 		PositiveNumber rNum = PositiveNumber("10000");
 		int shift = 4;
 		PositiveNumber p = base.getP();
-		
-		while (rNum < p) { //r has to be greater than p
-			rNum = rNum.shift(1);
-			shift++;
-		}
+		int sizeDifference = p.getDigits().size() - 4;
+		rNum = rNum.shift(sizeDifference);
+		shift += sizeDifference;
 		
 		PositiveNumber res = rNum % p;
 		FiniteNumber rInv = FiniteNumber(res, p).inverse();
@@ -82,11 +83,10 @@ public:
 		PositiveNumber k = (rInvPositive.shift(shift) - FiniteNumber("1")) / p;
 		
 		PositiveNumber baseShifted = toMontgomery(base, shift);
-		std::chrono::steady_clock::time_point t2 = std::chrono::steady_clock::now();
-		std::string powerBits = power.bits();
-		std::chrono::steady_clock::time_point t4 = std::chrono::steady_clock::now();
-		reverse(powerBits.begin(), powerBits.end());
-		std::chrono::steady_clock::time_point t3 = std::chrono::steady_clock::now();
+		//std::chrono::steady_clock::time_point t2 = std::chrono::steady_clock::now();
+		std::string powerBits = power.bitsReverse();
+		//std::chrono::steady_clock::time_point t4 = std::chrono::steady_clock::now();
+		//std::chrono::steady_clock::time_point t3 = std::chrono::steady_clock::now();
 		//std::cout << "PreSet up = " << std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count() << " ms" << std::endl;
 		//std::cout << "Set up = " << std::chrono::duration_cast<std::chrono::microseconds>(t3 - t2).count() << " ms" << std::endl;
 		//std::cout << "Sum = " << std::chrono::duration_cast<std::chrono::microseconds>(t3 - t1).count() << " ms" << std::endl << std::endl;
