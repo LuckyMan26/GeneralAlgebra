@@ -170,7 +170,7 @@ TEST_CASE("Test zero") {
 	CHECK(b * a == zero);
 }
 
-//Tests by M. Tyshchenko
+//Tests for exponentiation by M. Tyshchenko
 TEST_CASE("Exponent") {
 	FiniteNumber n = FiniteNumber(PositiveNumber("100"), PositiveNumber("17"));
 	FiniteNumber m = FiniteNumber(PositiveNumber("431"), PositiveNumber("17"));
@@ -181,14 +181,30 @@ TEST_CASE("Exponent") {
 	CHECK((m.shift(-2)).toString() == "0");
 	CHECK(FiniteNumber("x257 10000").inverse().toString() == "67");
 
-	PositiveNumber a = PositiveNumber("4444");
-	PositiveNumber b = PositiveNumber("433");
-	PositiveNumber d = a / b;
-	CHECK(d.toString() == "10");
-
 	FiniteNumber toMultiply = FiniteNumber("x257 128");
 	FiniteNumber toMultiply2 = FiniteNumber("x257 80");
 	Exponentiation exp = Exponentiation();
-	FiniteNumber result = exp.montgomeryMultiplication(toMultiply, toMultiply2);
-	std::cout << "RESULT: " << result.toString() << std::endl;
+	FiniteNumber result = exp.montgomeryMultiplication(toMultiply, toMultiply2); //217?
+	CHECK(result.toString() == "217");
+
+	toMultiply = FiniteNumber("x97 15");
+	toMultiply2 = FiniteNumber("x97 75");
+	CHECK(exp.montgomeryMultiplication(toMultiply, toMultiply2).toString() == "58");
+
+	FiniteNumber base = FiniteNumber("x257 30");
+	PositiveNumber power = PositiveNumber("5");
+	result = exp.montgomeryExponention(base, power);
+	CHECK(result.toString() == "136");
+
+	base = FiniteNumber("x113 1222");
+	power = PositiveNumber("4");
+	result = exp.montgomeryExponention(base, power);
+	CHECK(result.toString() == "8");
+}
+//Tests for bits function
+TEST_CASE("Test binary form") {
+	CHECK(PositiveNumber("5").bits() == "101");
+	CHECK(PositiveNumber("0").bits() == "0");
+	CHECK(PositiveNumber("100").bits() == "1100100");
+	CHECK(PositiveNumber("4").bits() == "100");
 }

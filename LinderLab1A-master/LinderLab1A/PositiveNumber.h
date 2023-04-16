@@ -425,5 +425,18 @@ public:
 	PositiveNumber phi() {
 		
 	}*/
-
+	std::string bits() {
+		PositiveNumber divideBy = PositiveNumber("2");
+		std::string result = "";
+		PositiveNumber current = *this;
+		PositiveNumber zero = PositiveNumber("0");
+		if (digits.empty())
+			return "0";
+		while (current != zero) {
+			result += (current % divideBy).toString();
+			current = current / divideBy;
+		}
+		reverse(result.begin(), result.end());
+		return result;
+	}
 };

@@ -33,16 +33,26 @@ public:
 			rNum = rNum.shift(1);
 			shift++;
 		}
-		std::cout << FiniteNumber(rNum, p).inverse().toString() << std::endl;
+		FiniteNumber rInv = FiniteNumber(rNum, p).inverse();
 		PositiveNumber k =  (rNum * FiniteNumber(rNum, p).inverse() - FiniteNumber("1")) / p;
-		std::cout << k.toString() << std::endl;
 		PositiveNumber aM = toMontgomery(a, shift);
 		PositiveNumber bM = toMontgomery(b, shift);
 		PositiveNumber x = aM * bM;
-		FiniteNumber s = FiniteNumber(x * k, rNum);
-		PositiveNumber t = x + p * s;
-		PositiveNumber u = t.shift(shift);
-		// origin: u < n ? u : u - n
-		return FiniteNumber(redc(rNum, p, k, t, shift), p);
+		PositiveNumber s = x * rInv;
+		return FiniteNumber(redc(rNum, p, k, s, shift), p);
+	}
+
+	FiniteNumber montgomeryExponention(FiniteNumber base, PositiveNumber power) {
+		PositiveNumber p = base.getP();
+		FiniteNumber res = FiniteNumber("1", p);
+		std::string powerBits = power.bits();
+		reverse(powerBits.begin(), powerBits.end());
+		for (int i = 0; i < powerBits.length(); i++) {
+			if (powerBits[i] == '1') {
+				res = montgomeryMultiplication(base, res);
+			}
+			base = montgomeryMultiplication(base, base);
+		}
+		return res;
 	}
 };
