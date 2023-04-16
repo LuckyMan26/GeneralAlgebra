@@ -18,6 +18,14 @@ private:
 		return t < N ? t : N - t;
 	}
 
+	PositiveNumber redc2(PositiveNumber x, PositiveNumber k,PositiveNumber R, PositiveNumber p, int shiftBy) {
+		PositiveNumber s = (x * k);
+		s = s.first(shiftBy);
+		PositiveNumber t = x + s * p;
+		PositiveNumber u = t.shift(-shiftBy);
+		return u < p ? u : u - p;
+	}
+
 public:
 	Exponentiation() {
 	}
@@ -39,18 +47,47 @@ public:
 		return FiniteNumber(redc(rNum, p, k, s, shift), p);
 	}
 
+	FiniteNumber montgomeryMultiplication2(FiniteNumber a, FiniteNumber b) {
+		PositiveNumber rNum = PositiveNumber("10000");
+		int shift = 4;
+		PositiveNumber p = a.getP();
+		while (rNum < p) { //r has to be greater than p
+			rNum = rNum.shift(1);
+			shift++;
+		}
+		FiniteNumber rInv = FiniteNumber(rNum, p).inverse();
+		PositiveNumber rInvPositive = rInv;
+		PositiveNumber k = (rInvPositive.shift(shift) - FiniteNumber("1")) / p;
+		PositiveNumber aM = toMontgomery(a, shift);
+		PositiveNumber bM = toMontgomery(b, shift);
+		PositiveNumber x = aM * bM;
+		PositiveNumber s = redc(rNum, p, k, x, shift);
+		return FiniteNumber(s * rInv, p);
+	}
+
 	FiniteNumber montgomeryExponention(FiniteNumber base, PositiveNumber power) {
+		PositiveNumber rNum = PositiveNumber("10000");
+		int shift = 4;
 		PositiveNumber p = base.getP();
-		FiniteNumber res = FiniteNumber("1", p);
+		while (rNum < p) { //r has to be greater than p
+			rNum = rNum.shift(1);
+			shift++;
+		}
+		FiniteNumber rInv = FiniteNumber(rNum, p).inverse();
+		PositiveNumber k = (rNum * FiniteNumber(rNum, p).inverse() - FiniteNumber("1")) / p;
+		PositiveNumber baseShifted = toMontgomery(base, shift);
+		PositiveNumber res = rNum % p;
 		std::string powerBits = power.bits();
 		reverse(powerBits.begin(), powerBits.end());
 		for (int i = 0; i < powerBits.length(); i++) {
 			if (powerBits[i] == '1') {
-				res = montgomeryMultiplication(base, res);
+				res = res * baseShifted;
+				res = redc2(res, k, rNum, p, shift);
 			}
-			base = montgomeryMultiplication(base, base);
+			baseShifted = baseShifted * baseShifted;
+			baseShifted = redc2(baseShifted, k, rNum, p, shift);
 		}
-		return res;
+		return FiniteNumber(res * rInv, p);
 	}
 	/**
 	* Exponentation without using montgomery form (for timing test)

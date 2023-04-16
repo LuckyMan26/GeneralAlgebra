@@ -378,6 +378,14 @@ public:
 		return number;
 	}
 
+	PositiveNumber first(int numDigits) {
+		PositiveNumber number = PositiveNumber(*this);
+		if (numDigits < number.digits.size()) {
+			number.digits.assign(number.digits.begin(), number.digits.begin() + numDigits);
+		}
+		return number.trim();
+	}
+
 	/*std::vector<std::pair<PositiveNumber, int>> factorise() {
 		std::vector<std::pair<PositiveNumber, int>> v;
 		int n;

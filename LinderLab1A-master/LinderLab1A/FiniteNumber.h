@@ -169,5 +169,20 @@ public:
 			this->digits = parseDigits(n.toString());
 		}
 	}
+
+	FiniteNumber shift(int numDigits) {
+		FiniteNumber number = FiniteNumber(*this);
+		if (numDigits < 0) {
+			for (int i = 0; i < -numDigits && number.digits.size()>0; i++) {
+				number.digits.erase(number.digits.begin());
+			}
+		}
+		else {
+			for (int i = 0; i < numDigits; i++) {
+				number.digits.insert(number.digits.begin(), 0);
+			}
+		}
+		return FiniteNumber(number, number.p);
+	}
 };
 

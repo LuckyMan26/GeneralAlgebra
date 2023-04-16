@@ -177,8 +177,10 @@ TEST_CASE("Exponent") {
 	CHECK(n.toString() == "15");
 	CHECK((n * m).toString() == "5");
 	CHECK((m * n).toString() == "5");
-	CHECK((n.shift(2)).toString() == "1500");
-	CHECK((m.shift(-2)).toString() == "0");
+
+	PositiveNumber aN = PositiveNumber("15");
+	CHECK((aN.shift(2)).toString() == "1500");
+	CHECK((aN.shift(-2)).toString() == "0");
 	CHECK(FiniteNumber("x257 10000").inverse().toString() == "67");
 
 	FiniteNumber toMultiply = FiniteNumber("x257 128");
@@ -190,6 +192,7 @@ TEST_CASE("Exponent") {
 	toMultiply = FiniteNumber("x97 15");
 	toMultiply2 = FiniteNumber("x97 75");
 	CHECK(exp.montgomeryMultiplication(toMultiply, toMultiply2).toString() == "58");
+	exp.montgomeryMultiplication2(toMultiply, toMultiply2).toString();
 
 	FiniteNumber base = FiniteNumber("x257 30");
 	PositiveNumber power = PositiveNumber("5");
