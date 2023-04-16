@@ -1,6 +1,6 @@
 #pragma once
 #include "FiniteNumber.h"
-#include<chrono>
+
 class Exponentiation {
 private:
 
@@ -12,12 +12,11 @@ private:
 		return FiniteNumber(x.shift(-shiftBy), P);
 	}
 	
-	PositiveNumber redc(PositiveNumber R, PositiveNumber N, PositiveNumber Ninv, PositiveNumber T, int shiftBy) {
+	PositiveNumber redcSlow(PositiveNumber R, PositiveNumber N, PositiveNumber Ninv, PositiveNumber T, int shiftBy) {
 		FiniteNumber m = FiniteNumber(FiniteNumber(T, R) * FiniteNumber(Ninv, R), R);
 		PositiveNumber t = (T + N * m).shift(-shiftBy);
 		return t < N ? t : N - t;
 	}
-
 	PositiveNumber redc2(PositiveNumber x, PositiveNumber k,PositiveNumber R, PositiveNumber p, int shiftBy) {
 		PositiveNumber s = (x * k);
 		s = s.first(shiftBy);
@@ -29,8 +28,11 @@ private:
 public:
 	Exponentiation() {
 	}
-
-	FiniteNumber montgomeryMultiplication(FiniteNumber a, FiniteNumber b) {
+	/**
+	* Deprecated;
+	* Use montgomery multiplication instread
+	*/
+	FiniteNumber montgomeryMultiplicationDeprecated(FiniteNumber a, FiniteNumber b) {
 		PositiveNumber rNum = PositiveNumber("10000");
 		int shift = 4;
 		PositiveNumber p = a.getP();
@@ -44,35 +46,34 @@ public:
 		PositiveNumber bM = toMontgomery(b, shift);
 		PositiveNumber x = aM * bM;
 		PositiveNumber s = x * rInv;
-		return FiniteNumber(redc(rNum, p, k, s, shift), p);
+		return FiniteNumber(redcSlow(rNum, p, k, s, shift), p);
 	}
 
-	FiniteNumber montgomeryMultiplication2(FiniteNumber a, FiniteNumber b) {
+	FiniteNumber montgomeryMultiplication(FiniteNumber a, FiniteNumber b) {
 		PositiveNumber rNum = PositiveNumber("10000");
 		int shift = 4;
 		PositiveNumber p = a.getP();
-		while (rNum < p) { //r has to be greater than p
-			rNum = rNum.shift(1);
-			shift++;
-		}
+		int sizeDifference = p.getDigits().size() - 4;
+		rNum = rNum.shift(sizeDifference);
+		shift += sizeDifference;
 		FiniteNumber rInv = FiniteNumber(rNum, p).inverse();
 		PositiveNumber rInvPositive = rInv;
 		PositiveNumber k = (rInvPositive.shift(shift) - FiniteNumber("1")) / p;
 		PositiveNumber aM = toMontgomery(a, shift);
 		PositiveNumber bM = toMontgomery(b, shift);
 		PositiveNumber x = aM * bM;
-		PositiveNumber s = redc2(rNum, p, k, x, shift);
+		PositiveNumber s = redc2(x, k, rNum, p, shift);
 		return FiniteNumber(s * rInv, p);
 	}
 	/**
-	* Eponention using montgomery algorithm
-	* Problem: for-loop in montgomery form definitely works faster, but initialization takes too much time
+	* Eponention using Montgomery algorithm
+	* Implemented by M. Tyshchenko
 	*/
 	FiniteNumber montgomeryExponention(FiniteNumber base, PositiveNumber power) {
-		//std::chrono::steady_clock::time_point t1= std::chrono::steady_clock::now();
 		PositiveNumber rNum = PositiveNumber("10000");
 		int shift = 4;
 		PositiveNumber p = base.getP();
+
 		int sizeDifference = p.getDigits().size() - 4;
 		rNum = rNum.shift(sizeDifference);
 		shift += sizeDifference;
@@ -83,15 +84,10 @@ public:
 		PositiveNumber k = (rInvPositive.shift(shift) - FiniteNumber("1")) / p;
 		
 		PositiveNumber baseShifted = toMontgomery(base, shift);
-		//std::chrono::steady_clock::time_point t2 = std::chrono::steady_clock::now();
 		std::string powerBits = power.bitsReverse();
-		//std::chrono::steady_clock::time_point t4 = std::chrono::steady_clock::now();
-		//std::chrono::steady_clock::time_point t3 = std::chrono::steady_clock::now();
-		//std::cout << "PreSet up = " << std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count() << " ms" << std::endl;
-		//std::cout << "Set up = " << std::chrono::duration_cast<std::chrono::microseconds>(t3 - t2).count() << " ms" << std::endl;
-		//std::cout << "Sum = " << std::chrono::duration_cast<std::chrono::microseconds>(t3 - t1).count() << " ms" << std::endl << std::endl;
-		//std::cout << "Bits = " << std::chrono::duration_cast<std::chrono::microseconds>(t4 - t2).count() << " ms" << std::endl << std::endl;
-		for (int i = 0; i < powerBits.length(); i++) {
+		int length = powerBits.length();
+
+		for (int i = 0; i < length; i++) {
 			if (powerBits[i] == '1') {
 				res = res * baseShifted;
 				res = redc2(res, k, rNum, p, shift);
@@ -107,8 +103,7 @@ public:
 	FiniteNumber fastExponention(FiniteNumber base, PositiveNumber power) {
 		PositiveNumber p = base.getP();
 		FiniteNumber res = FiniteNumber("1", p);
-		std::string powerBits = power.bits();
-		reverse(powerBits.begin(), powerBits.end());
+		std::string powerBits = power.bitsReverse();
 		for (int i = 0; i < powerBits.length(); i++) {
 			if (powerBits[i] == '1') {
 				res = base * res;

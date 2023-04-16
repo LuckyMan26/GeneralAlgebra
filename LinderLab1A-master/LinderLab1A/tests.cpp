@@ -192,7 +192,7 @@ TEST_CASE("Exponent") {
 	toMultiply = FiniteNumber("x97 15");
 	toMultiply2 = FiniteNumber("x97 75");
 	CHECK(exp.montgomeryMultiplication(toMultiply, toMultiply2).toString() == "58");
-	exp.montgomeryMultiplication2(toMultiply, toMultiply2).toString();
+	exp.montgomeryMultiplicationDeprecated(toMultiply, toMultiply2).toString();
 
 	FiniteNumber base = FiniteNumber("x257 30");
 	PositiveNumber power = PositiveNumber("5");
