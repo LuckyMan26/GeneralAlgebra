@@ -366,8 +366,13 @@ public:
 	PositiveNumber shift(int numDigits) {
 		PositiveNumber number = PositiveNumber(*this);
 		if (numDigits < 0) {
-			for (int i = 0; i < -numDigits && number.digits.size()>0; i++) {
-				number.digits.erase(number.digits.begin());
+			if (-numDigits < number.digits.size()) {
+				for (int i = 0; i < -numDigits ; i++) {
+					number.digits.erase(number.digits.begin());
+				}
+			}
+			else {
+				number.digits.clear();
 			}
 		}
 		else {
@@ -441,7 +446,12 @@ public:
 		if (digits.empty())
 			return "0";
 		while (current != zero) {
-			result += (current % divideBy).toString();
+			if (current.digits[0] % 2) {
+				result += "1";
+			}
+			else {
+				result += "0";
+			}
 			current = current / divideBy;
 		}
 		reverse(result.begin(), result.end());

@@ -205,26 +205,38 @@ TEST_CASE("Exponent") {
 	CHECK(result.toString() == "8");
 
 
-	base = FiniteNumber("x113 2222222");
+	base = FiniteNumber("x1015843 2222222");
 	power = PositiveNumber("550");
 	//TIMING
 	std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
-	CHECK(exp.montgomeryExponention(base, power).toString() == "99");
+	CHECK(exp.montgomeryExponention(base, power).toString() == "136848");
 	std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
 	std::cout << "Montgomery = " << std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count() << " ms" << std::endl;
 
 	begin = std::chrono::steady_clock::now();
-	CHECK(exp.fastExponention(base, power).toString() == "99");
+	CHECK(exp.fastExponention(base, power).toString() == "136848");
 	end = std::chrono::steady_clock::now();
 	std::cout << "Fast = " << std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count() << " ms" << std::endl;
 
 	begin = std::chrono::steady_clock::now();
-	CHECK(exp.slowExponention(base, power).toString() == "99");
+	CHECK(exp.slowExponention(base, power).toString() == "136848");
 	end = std::chrono::steady_clock::now();
 	std::cout << "Slow = " << std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count() << " ms" << std::endl;
+}
 
-	
-
+TEST_CASE("Exponentiation on random values") {
+	std::random_device rand_dev;
+	std::mt19937 generator(rand_dev());
+	std::uniform_int_distribution<int> baseDistr(0, 2000);
+	std::uniform_int_distribution<int> powDistr(0, 20);
+	Exponentiation exponent;
+	for (int i = 0; i < 200; i++) {
+		int a = baseDistr(generator);
+		int b = powDistr(generator);
+		FiniteNumber aNum = FiniteNumber(std::to_string(a), PositiveNumber("197"));
+		PositiveNumber bNum = PositiveNumber(std::to_string(b));
+		CHECK(exponent.montgomeryExponention(aNum, bNum).toString() == exponent.slowExponention(aNum, bNum).toString());
+	}
 }
 //Tests for bits function
 TEST_CASE("Test binary form") {
