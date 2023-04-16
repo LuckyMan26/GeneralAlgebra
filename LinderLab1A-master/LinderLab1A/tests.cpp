@@ -7,7 +7,7 @@
 
 #include <random>
 #include <string>
-
+#include <chrono>
 
 //Test by M. Tyshchenko
 TEST_CASE("Positive numbers") {
@@ -200,6 +200,28 @@ TEST_CASE("Exponent") {
 	power = PositiveNumber("4");
 	result = exp.montgomeryExponention(base, power);
 	CHECK(result.toString() == "8");
+
+
+	base = FiniteNumber("x113 2222222");
+	power = PositiveNumber("550");
+	//TIMING
+	std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
+	CHECK(exp.montgomeryExponention(base, power).toString() == "99");
+	std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+	std::cout << "Montgomery = " << std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count() << " ms" << std::endl;
+
+	begin = std::chrono::steady_clock::now();
+	CHECK(exp.fastExponention(base, power).toString() == "99");
+	end = std::chrono::steady_clock::now();
+	std::cout << "Fast = " << std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count() << " ms" << std::endl;
+
+	begin = std::chrono::steady_clock::now();
+	CHECK(exp.slowExponention(base, power).toString() == "99");
+	end = std::chrono::steady_clock::now();
+	std::cout << "Slow = " << std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count() << " ms" << std::endl;
+
+	
+
 }
 //Tests for bits function
 TEST_CASE("Test binary form") {

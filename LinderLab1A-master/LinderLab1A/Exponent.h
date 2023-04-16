@@ -21,9 +21,6 @@ private:
 public:
 	Exponentiation() {
 	}
-	FiniteNumber pow(FiniteNumber base, PositiveNumber power) {
-		return FiniteNumber("0");
-	}
 
 	FiniteNumber montgomeryMultiplication(FiniteNumber a, FiniteNumber b) {
 		PositiveNumber rNum = PositiveNumber("10000");
@@ -52,6 +49,36 @@ public:
 				res = montgomeryMultiplication(base, res);
 			}
 			base = montgomeryMultiplication(base, base);
+		}
+		return res;
+	}
+	/**
+	* Exponentation without using montgomery form (for timing test)
+	*/
+	FiniteNumber fastExponention(FiniteNumber base, PositiveNumber power) {
+		PositiveNumber p = base.getP();
+		FiniteNumber res = FiniteNumber("1", p);
+		std::string powerBits = power.bits();
+		reverse(powerBits.begin(), powerBits.end());
+		for (int i = 0; i < powerBits.length(); i++) {
+			if (powerBits[i] == '1') {
+				res = base * res;
+			}
+			base = base * base;
+		}
+		return res;
+	}
+	/**
+	* Exponentation without using fast algorithm (for timing test)
+	*/
+	FiniteNumber slowExponention(FiniteNumber base, PositiveNumber power) {
+		PositiveNumber p = base.getP();
+		FiniteNumber res = FiniteNumber("1", p);
+		PositiveNumber one = PositiveNumber("1");
+		PositiveNumber zero = PositiveNumber("0");
+
+		for (PositiveNumber i = zero; i < power; i = i + one) {
+			res = res * base;
 		}
 		return res;
 	}
