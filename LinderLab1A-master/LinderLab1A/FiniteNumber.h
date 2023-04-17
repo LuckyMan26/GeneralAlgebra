@@ -133,10 +133,10 @@ public:
 			while (s1_pos > p) {
 				s1_pos -= p;
 			}
-			return FiniteNumber((p - s1_pos).toString(), this->p);
+			return FiniteNumber((p - s1_pos), this->p);
 		}
 		else {
-			return FiniteNumber(s1.toString(), this->p);
+			return FiniteNumber(s1, this->p);
 		}
 	}
 

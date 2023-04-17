@@ -8,7 +8,7 @@
 *
 *
 */
-//Created by M.Tyshchenko
+//Created by M.Tyshchenko and V. Avramenko
 class PositiveNumber {
 private:
 	static const int vectorP = 10;
@@ -26,7 +26,6 @@ protected:
 
 	std::vector<int> parseDigits(std::string str) {
 		std::vector<int> digits;
-		std::size_t size = str.size();
 		reverse(str.begin(), str.end());
 		for (char ch : str) {
 			digits.push_back(ch - '0');
@@ -140,7 +139,9 @@ public:
 					return PositiveNumber(result);
 				}
 				else {
-					part = PositiveNumber(part.toString() + n1.toString()[i]);
+					//part = PositiveNumber(part.toString() + n1.toString()[i]);
+					part.digits.insert(part.digits.begin(), n1.digits.end()[-i - 1]);
+					part.trim();
 				}
 			}
 			while (part < n2) {
@@ -151,7 +152,9 @@ public:
 				}
 				else {
 					result.append("0");
-					part = PositiveNumber(part.toString() + n1.toString()[i]);
+					part.digits.insert(part.digits.begin(), n1.digits.end()[-i - 1]);
+					part.trim();
+					//part = PositiveNumber(part.toString() + n1.toString()[i]);
 				}
 			}
 			int j = 0;
