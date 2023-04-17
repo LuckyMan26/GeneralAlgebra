@@ -186,7 +186,7 @@ TEST_CASE("Exponent") {
 	FiniteNumber toMultiply = FiniteNumber("x257 128");
 	FiniteNumber toMultiply2 = FiniteNumber("x257 80");
 	Exponentiation exp = Exponentiation();
-	FiniteNumber result = exp.montgomeryMultiplication(toMultiply, toMultiply2); //217?
+	FiniteNumber result = exp.montgomeryMultiplication(toMultiply, toMultiply2);
 	CHECK(result.toString() == "217");
 
 	toMultiply = FiniteNumber("x97 15");
@@ -205,21 +205,22 @@ TEST_CASE("Exponent") {
 	CHECK(result.toString() == "8");
 
 
-	base = FiniteNumber("x1015843 2222222");
-	power = PositiveNumber("550");
+	base = FiniteNumber("x1015843 222222");
+	power = PositiveNumber("600");
+	std::string expected = "839534";
 	//TIMING
 	std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
-	CHECK(exp.montgomeryExponention(base, power).toString() == "136848");
+	CHECK(exp.montgomeryExponention(base, power).toString() == expected);
 	std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
 	std::cout << "Montgomery = " << std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count() << " ms" << std::endl;
 
 	begin = std::chrono::steady_clock::now();
-	CHECK(exp.fastExponention(base, power).toString() == "136848");
+	CHECK(exp.fastExponention(base, power).toString() == expected);
 	end = std::chrono::steady_clock::now();
 	std::cout << "Fast = " << std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count() << " ms" << std::endl;
 
 	begin = std::chrono::steady_clock::now();
-	CHECK(exp.slowExponention(base, power).toString() == "136848");
+	CHECK(exp.slowExponention(base, power).toString() == expected);
 	end = std::chrono::steady_clock::now();
 	std::cout << "Slow = " << std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count() << " ms" << std::endl;
 }
