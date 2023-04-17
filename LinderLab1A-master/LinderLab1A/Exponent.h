@@ -4,12 +4,8 @@
 class Exponentiation {
 private:
 
-	PositiveNumber toMontgomery(FiniteNumber x, int shiftBy) {
+	FiniteNumber toMontgomery(FiniteNumber x, int shiftBy) {
 		return x.shift(shiftBy);
-	}
-
-	FiniteNumber fromMontgomery(FiniteNumber x, int shiftBy, PositiveNumber P) {
-		return FiniteNumber(x.shift(-shiftBy), P);
 	}
 	
 	PositiveNumber redcSlow(PositiveNumber R, PositiveNumber N, PositiveNumber Ninv, PositiveNumber T, int shiftBy) {
@@ -58,7 +54,7 @@ public:
 		shift += sizeDifference;
 		FiniteNumber rInv = FiniteNumber(rNum, p).inverse();
 		PositiveNumber rInvPositive = rInv;
-		PositiveNumber k = (rInvPositive.shift(shift) - FiniteNumber("1")) / p;
+		PositiveNumber k = (rInvPositive.shift(shift) - PositiveNumber("1")) / p;
 		PositiveNumber aM = toMontgomery(a, shift);
 		PositiveNumber bM = toMontgomery(b, shift);
 		PositiveNumber x = aM * bM;
@@ -70,19 +66,23 @@ public:
 	* Implemented by M. Tyshchenko
 	*/
 	FiniteNumber montgomeryExponention(FiniteNumber base, PositiveNumber power) {
+		//Initializing variables
 		PositiveNumber rNum = PositiveNumber("10000");
 		int shift = 4;
 		PositiveNumber p = base.getP();
 
-		int sizeDifference = p.getDigits().size() - 4;
+		//Setting R greater than P
+		int sizeDifference = p.getDigits().size() - shift;
 		rNum = rNum.shift(sizeDifference);
 		shift += sizeDifference;
 		
+		//Initializing k and R^-1 mod P
 		PositiveNumber res = rNum % p;
 		FiniteNumber rInv = FiniteNumber(res, p).inverse();
 		PositiveNumber rInvPositive = rInv;
-		PositiveNumber k = (rInvPositive.shift(shift) - FiniteNumber("1")) / p;
+		PositiveNumber k = (rInvPositive.shift(shift) - PositiveNumber("1")) / p;
 		
+		//Initializing a*R mod N
 		PositiveNumber baseShifted = toMontgomery(base, shift);
 		std::string powerBits = power.bitsReverse();
 		int length = powerBits.length();
