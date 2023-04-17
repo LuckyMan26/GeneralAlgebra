@@ -4,6 +4,7 @@
 #include "SignedNumber.h"
 #include "FiniteNumber.h"
 #include "Exponent.h"
+#include "Polynomial.h"
 
 #include <random>
 #include <string>
@@ -245,4 +246,11 @@ TEST_CASE("Test binary form") {
 	CHECK(PositiveNumber("0").bits() == "0");
 	CHECK(PositiveNumber("100").bits() == "1100100");
 	CHECK(PositiveNumber("4").bits() == "100");
+}
+
+
+//Tests for polynomial constructor
+TEST_CASE("Test zero") {
+	Polynomial p = Polynomial("100 20 10", PositiveNumber("17"));
+	CHECK(p.toString() == "15 3 10");
 }

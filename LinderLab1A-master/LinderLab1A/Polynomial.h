@@ -20,6 +20,7 @@ public:
 			s.erase(0, pos + delimiter.length());
 			this->coefficients.push_back(FiniteNumber(token, p));
 		}
+		this->coefficients.push_back(FiniteNumber(s, p));
 	}
 	/**
 	* Returns string of coefficients, separated with spaces
