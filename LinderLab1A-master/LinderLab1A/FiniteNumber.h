@@ -1,5 +1,6 @@
 #pragma once
 #include "PositiveNumber.h"
+#include <cassert>
 //Created by M.Tyshchenko
 class FiniteNumber : public PositiveNumber {
 private: 
@@ -24,14 +25,26 @@ public:
 	}
 	/**
 	* Input: string of value "xP N", where P - is field size, N - positive integer
-	*
+	* Alternative: "N xP"
+	* Alternative: "P N"
 	*/
 	FiniteNumber(std::string from) {
-		if (from[0] == 'x') {
-			from = from.substr(1);
+		std::string partOne = from.substr(0, from.find_first_of(' '));
+		std::string partTwo = from.substr(from.find_first_of(' ') + 1);
+		std::string p;
+		std::string n;
+		if (partOne[0] == 'x') {
+			p = partOne.substr(1);
+			n = partTwo;
 		}
-		std::string p = from.substr(0, from.find_first_of(' '));
-		std::string n = from.substr(from.find_first_of(' ')+1);
+		else if (partTwo[0] == 'x') {
+			p = partTwo.substr(1);
+			n = partOne;
+		}
+		else {
+			p = partOne;
+			n = partTwo;
+		}
 		this->digits = parseDigits(n);
 		setP(p);
 	}
