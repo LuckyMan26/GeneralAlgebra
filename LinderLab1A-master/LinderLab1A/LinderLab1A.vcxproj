@@ -133,6 +133,7 @@
     <ClInclude Include="Field.h" />
     <ClInclude Include="FiniteField.h" />
     <ClInclude Include="FiniteNumber.h" />
+    <ClInclude Include="Group.h" />
     <ClInclude Include="Polynomial.h" />
     <ClInclude Include="PositiveNumber.h" />
     <ClInclude Include="SignedNumber.h" />

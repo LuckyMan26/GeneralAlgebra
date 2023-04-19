@@ -60,11 +60,8 @@ public:
 	/*
 	* overloaded operators
 	*/
-	friend FiniteNumber operator+(FiniteNumber left, const FiniteNumber& n) {
-		left.addTo(n);
-		left.toFieldSize();
-		return left;
-	}
+	friend FiniteNumber operator+(FiniteNumber left, const FiniteNumber& n);
+
 	FiniteNumber& operator+=(const FiniteNumber& n) {
 		this->addTo(n);
 		this->toFieldSize();
@@ -216,4 +213,12 @@ public:
 		return FiniteNumber(number, number.p);
 	}
 };
+
+
+FiniteNumber operator+(FiniteNumber left, const FiniteNumber& n)
+{
+	left.addTo(n);
+	left.toFieldSize();
+	return left;
+}
 

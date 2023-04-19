@@ -5,6 +5,7 @@
 #include "FiniteNumber.h"
 #include "Exponent.h"
 #include "Polynomial.h"
+#include "Group.h"
 
 #include <random>
 #include <string>
@@ -253,4 +254,16 @@ TEST_CASE("Test binary form") {
 TEST_CASE("Test zero") {
 	Polynomial p = Polynomial("100 20 10", PositiveNumber("17"));
 	CHECK(p.toString() == "15 3 10");
+}
+
+
+//Created by Y.Kishchuk
+TEST_SUITE("Test Group") {
+	TEST_CASE("Constructor") {
+		FiniteNumber fin1 = FiniteNumber("x2 0");
+		FiniteNumber fin2 = FiniteNumber("x2 1");
+
+		Group g(std::vector<FiniteNumber>({ fin1, fin2 }), operator+);
+	}
+	// TODO:
 }
