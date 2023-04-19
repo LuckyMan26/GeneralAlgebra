@@ -8,11 +8,12 @@
 *
 *
 */
-//Created by M.Tyshchenko
+//Created by M.Tyshchenko and V. Avramenko
 class PositiveNumber {
 private:
 	static const int vectorP = 10;
-
+	
+protected:
 
 	PositiveNumber trim() {
 		while (digits.size() != 0 && digits.back() == 0) {
@@ -21,19 +22,16 @@ private:
 		return (*this);
 	}
 
-protected:
 	std::vector<int> digits; //digits as decimal numbers
 
 	std::vector<int> parseDigits(std::string str) {
 		std::vector<int> digits;
-		std::size_t size = str.size();
 		reverse(str.begin(), str.end());
 		for (char ch : str) {
 			digits.push_back(ch - '0');
 		}
 		return digits;
 	}
-
 	/**
 	* Multiplies number by other using primitive algorithm
 	*/
@@ -58,13 +56,22 @@ protected:
 		}
 		return product.trim();
 	}
-
+	/**
+	* Multiplies number by other using primitive algorithm
+	*/
+	static PositiveNumber simpleMultiplication(PositiveNumber a, PositiveNumber b) {
+		return a.simpleMultiplication(b);
+	}
 
 public:
+	std::vector<int> getDigits() const {
+		return digits;
+	}
 	PositiveNumber() {
 	}
 	PositiveNumber(std::string digitsString) {
 		this->digits = parseDigits(digitsString);
+		this->trim();
 	}
 	int& operator[](int i) {
 		return digits[i];
@@ -112,24 +119,81 @@ public:
 		}
 		return true;
 	}
+	//Implemented by Vlad Avramenko
+	//Division for PositiveNumbers
+	PositiveNumber operator/(PositiveNumber& other) {
+		return divide(*this, other);
+	}
+
+	PositiveNumber divide(PositiveNumber& n1, PositiveNumber& n2) {
+		if (n1 < n2) {
+			return PositiveNumber("0");
+		}
+		int i = n2.digits.size()-1;
+		PositiveNumber part(n1.toString().substr(0, i+1));
+		std::string result;
+		while (i < n1.digits.size()) {
+			if (part < n2) {
+				i++;
+				if (i >= n1.digits.size()) {
+					return PositiveNumber(result);
+				}
+				else {
+					//part = PositiveNumber(part.toString() + n1.toString()[i]);
+					part.digits.insert(part.digits.begin(), n1.digits.end()[-i - 1]);
+					part.trim();
+				}
+			}
+			while (part < n2) {
+				i++;
+				if (i >= n1.digits.size()) {
+					result.append("0");
+					return PositiveNumber(result);
+				}
+				else {
+					result.append("0");
+					part.digits.insert(part.digits.begin(), n1.digits.end()[-i - 1]);
+					part.trim();
+					//part = PositiveNumber(part.toString() + n1.toString()[i]);
+				}
+			}
+			int j = 0;
+			while (part >= n2) {
+				j++;
+				part -= n2;
+			}
+			result.append(std::to_string(j));
+		}
+		return PositiveNumber(result);
+	}
+
+	PositiveNumber remainder(PositiveNumber& n1, PositiveNumber& n2) {
+		return n1 - (n2 * (n1 / n2));
+	}
+
+	PositiveNumber operator%(PositiveNumber& other) {
+		return remainder(*this, other);
+	}
+
 	bool operator>(PositiveNumber& n) const {
 		if (digits.size() > n.digits.size())
 			return true;
 		if (digits.size() < n.digits.size())
 			return false;
-		for (int i = 0; i < digits.size(); i++) {
+		for (int i = digits.size() - 1; i >= 0; i--) {
 			if (digits[i] == n[i])
 				continue;
 			return digits[i] > n[i];
 		}
 		return false;
 	}
+
 	bool operator>=(PositiveNumber& n) const {
 		if (digits.size() > n.digits.size())
 			return true;
 		if (digits.size() < n.digits.size())
 			return false;
-		for (int i = 0; i < digits.size(); i++) {
+		for (int i = digits.size() - 1; i >= 0; i--) {
 			if (digits[i] == n[i])
 				continue;
 			return digits[i] > n[i];
@@ -141,7 +205,7 @@ public:
 			return true;
 		if (digits.size() > n.digits.size())
 			return false;
-		for (int i = 0; i < digits.size(); i++) {
+		for (int i = digits.size() - 1; i >= 0; i--) {
 			if (digits[i] == n[i])
 				continue;
 			return digits[i] < n[i];
@@ -153,7 +217,7 @@ public:
 			return true;
 		if (digits.size() > n.digits.size())
 			return false;
-		for (int i = 0; i < digits.size(); i++) {
+		for (int i = digits.size()-1; i >= 0; i--) {
 			if (digits[i] == n[i])
 				continue;
 			return digits[i] < n[i];
@@ -278,7 +342,59 @@ public:
 		other.multiplyBy(*this);
 		return other;
 	}
-	std::vector<std::pair<PositiveNumber, int>> factorise() {
+
+	/*
+	* Implemented by Vlad Avrmenko
+	*/
+	//Function for finding Greatest Common Divisor for 2 PositiveNumbers 
+	PositiveNumber GCD(PositiveNumber n1, PositiveNumber n2) {
+		while (n1 != n2) {
+			if (n1 > n2) {
+				n1 -= n2;
+			}
+			else {
+				n2 -= n1;
+			}
+		}
+		return n1;
+	}
+	/*
+	* Shifting number left or right (% 10)
+	* Examples: 
+	* 5.shift(2): 5 => 500
+	* 100.shift(-1): 100 => 10
+	* 
+	* Implemented by M. Tyshechenko
+	*/
+	PositiveNumber shift(int numDigits) {
+		PositiveNumber number = PositiveNumber(*this);
+		if (numDigits < 0) {
+			if (-numDigits < number.digits.size()) {
+				for (int i = 0; i < -numDigits ; i++) {
+					number.digits.erase(number.digits.begin());
+				}
+			}
+			else {
+				number.digits.clear();
+			}
+		}
+		else {
+			for (int i = 0; i < numDigits; i++) {
+				number.digits.insert(number.digits.begin(), 0);
+			}
+		}
+		return number;
+	}
+
+	PositiveNumber first(int numDigits) {
+		PositiveNumber number = PositiveNumber(*this);
+		if (numDigits < number.digits.size()) {
+			number.digits.assign(number.digits.begin(), number.digits.begin() + numDigits);
+		}
+		return number.trim();
+	}
+
+	/*std::vector<std::pair<PositiveNumber, int>> factorise() {
 		std::vector<std::pair<PositiveNumber, int>> v;
 		int n;
 		for (int i = 0; i < digits.size(); i++) {
@@ -324,6 +440,28 @@ public:
 	}
 	PositiveNumber phi() {
 		
+	}*/
+	std::string bits() {
+		std::string result = bitsReverse();
+		reverse(result.begin(), result.end());
+		return result;
 	}
-
+	std::string bitsReverse() {
+		PositiveNumber divideBy = PositiveNumber("2");
+		std::string result = "";
+		PositiveNumber current = *this;
+		PositiveNumber zero = PositiveNumber("0");
+		if (digits.empty())
+			return "0";
+		while (current != zero) {
+			if (current.digits[0] % 2) {
+				result += "1";
+			}
+			else {
+				result += "0";
+			}
+			current = current / divideBy;
+		}
+		return result;
+	}
 };

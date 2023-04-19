@@ -128,15 +128,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="doctest.h" />
+    <ClInclude Include="Exponent.h" />
     <ClInclude Include="Field.h" />
     <ClInclude Include="FiniteField.h" />
     <ClInclude Include="FiniteNumber.h" />
+    <ClInclude Include="Polynomial.h" />
     <ClInclude Include="PositiveNumber.h" />
     <ClInclude Include="SignedNumber.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="FiniteField.cpp" />
-    <ClCompile Include="main.cpp" />
+    <ClCompile Include="tests.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
