@@ -93,6 +93,24 @@ public:
 		return left.divide(n);
 	}
 
+
+	/*
+	* Implemented by Y.Kishchuk
+	*/
+
+	bool operator==(const FiniteNumber& n) const {
+		return this->equals(const_cast<FiniteNumber&>(n)) && p.equals(const_cast<FiniteNumber&>(n).p);
+	}
+
+	bool operator!=(const FiniteNumber& n) const {
+		return !(*this == n);
+	}
+
+
+	/*
+	* Implemented by Vlad Avramenko
+	*/
+
 	/*
 	* Find inverse number
 	* if inverse number exist - finds inverse, else - returns 1
