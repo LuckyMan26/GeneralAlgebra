@@ -264,6 +264,7 @@ TEST_SUITE("Test Group") {
 		FiniteNumber fin2 = FiniteNumber("x2 1");
 
 		Group g(std::vector<FiniteNumber>({ fin1, fin2 }), operator+);
+		std::cout << "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n";
 	}
 	// TODO:
 }

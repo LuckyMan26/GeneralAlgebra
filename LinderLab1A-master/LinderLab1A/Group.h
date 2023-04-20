@@ -1,8 +1,9 @@
-#pragma once
+﻿#pragma once
 
 
 #include <vector>
 #include <algorithm>
+#include <functional>
 #include <cassert>
 
 #include "FiniteNumber.h"
@@ -14,8 +15,7 @@ public:
     Group() {};
 
     // Constructor takes a vector of elements and a binary operation
-    // Generate std::runtime_error if group properties are not accepted
-    Group(std::vector<FiniteNumber> elements, FiniteNumber(*op)(FiniteNumber, const FiniteNumber&)) {
+    Group(std::vector<FiniteNumber> elements, std::function<FiniteNumber(FiniteNumber, const FiniteNumber&)> op) {
         this->elements = elements;
         this->op = op;
 
@@ -26,6 +26,7 @@ public:
         assert(isAssociative(), "Group is not associative");
         assert(hasInverse(), "Not every element in the group has an inverse");
         assert(!hasDuplicates(), "Dublicates are found");
+
 
         // Check modulo
         // TODO:
@@ -64,8 +65,43 @@ public:
         return identity;
     }
 
+    void setElements(std::vector<FiniteNumber> elements) {
+        this->elements = elements;
+
+        // Сopying twice is not a crime
+        assert(hasIdentity(), "Group does not have an identity element");
+        this->setIdentity();
+
+        assert(isClosed(), "Group is not closed");
+        assert(isAssociative(), "Group is not associative");
+        assert(hasInverse(), "Not every element in the group has an inverse");
+        assert(!hasDuplicates(), "Dublicates are found");
+    }
+
+    void setGroupBinaryOperation(FiniteNumber(*op)(FiniteNumber, const FiniteNumber&))
+    {
+        this->op = op;
+
+        // Сopying twice is not a crime
+        assert(hasIdentity(), "Group does not have an identity element");
+        this->setIdentity();
+
+        assert(isClosed(), "Group is not closed");
+        assert(isAssociative(), "Group is not associative");
+        assert(hasInverse(), "Not every element in the group has an inverse");
+        assert(!hasDuplicates(), "Dublicates are found");
+    }
+
     // Add an element to the group
     void addElement(const FiniteNumber& element) {
+
+        assert(std::find(elements.begin(), elements.end(), element) == elements.end(), "Element already exists in the group");
+        assert(isClosedWithElement(element), "Adding the element breaks the closure property of the group");
+        assert(isAssociativeWithElement(element), "Adding the element breaks the associativity property of the group");
+        assert(hasIdentityWithElement(element), "Adding the element breaks the identity property of the group");
+        assert(hasInverseWithElement(element), "Adding the element breaks the inverse property of the group");
+
+
         /*// Check if the element already exists in the group
         if (std::find(elements.begin(), elements.end(), element) != elements.end()) {
             throw std::runtime_error("Element already exists in the group");
@@ -86,12 +122,6 @@ public:
             throw std::runtime_error("Adding the element breaks the inverse property of the group");
         }*/
 
-
-        assert(std::find(elements.begin(), elements.end(), element) == elements.end(), "Element already exists in the group");
-        assert(isClosedWithElement(element), "Adding the element breaks the closure property of the group");
-        assert(isAssociativeWithElement(element), "Adding the element breaks the associativity property of the group");
-        assert(hasIdentityWithElement(element), "Adding the element breaks the identity property of the group");
-        assert(hasInverseWithElement(element), "Adding the element breaks the inverse property of the group");
 
         elements.push_back(element);
     }
@@ -232,6 +262,7 @@ private:
         return true;
     }
 
+
     // Check if the elements vector contains any duplicates
     bool hasDuplicates() const {
         std::vector<FiniteNumber> sortedElements = elements; 
@@ -249,6 +280,6 @@ private:
 
     PositiveNumber p;
     std::vector<FiniteNumber> elements;
-    FiniteNumber(*op)(FiniteNumber, const FiniteNumber&);
+    std::function<FiniteNumber(FiniteNumber, const FiniteNumber&)> op; // Group binary function
     FiniteNumber identity = FiniteNumber("10x 1");
 };
