@@ -5,7 +5,7 @@
 #include "FiniteNumber.h"
 #include "Exponent.h"
 #include "Polynomial.h"
-#include "Group.h"
+#include "FiniteGroup.h"
 
 #include <random>
 #include <string>
@@ -261,7 +261,7 @@ TEST_CASE("Test zero") {
 TEST_CASE("Group addition modulo 5") {
 	std::vector<FiniteNumber> elements = { FiniteNumber("0 x5"), FiniteNumber("1 x5"), FiniteNumber("2 x5"), FiniteNumber("3 x5"), FiniteNumber("4 x5") };
 
-	Group group;
+	FiniteGroup group;
 	CHECK_NOTHROW(group.setGroupBinaryOperation(operator+));
 	CHECK_NOTHROW(group.setElements(elements));
 
@@ -292,7 +292,7 @@ TEST_CASE("Group addition modulo 5") {
 TEST_CASE("Group multiplication modulo 7") {
 	std::vector<FiniteNumber> elements = { FiniteNumber("1 x7"), FiniteNumber("2 x7"), FiniteNumber("3 x7"), FiniteNumber("4 x7"), FiniteNumber("5 x7"), FiniteNumber("6 x7") };
 
-	Group group;
+	FiniteGroup group;
 	CHECK_NOTHROW(group.setElements(elements));
 	CHECK_NOTHROW(group.setGroupBinaryOperation(operator*));
 

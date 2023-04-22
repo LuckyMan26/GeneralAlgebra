@@ -10,13 +10,13 @@
 
 
 //Created by Y.Kishchuk
-class Group {
+class FiniteGroup {
 public:
-    Group() {};
+    FiniteGroup() {};
 
     // Constructor takes a vector of elements and a binary operation
     // May thow exceptions
-    Group(std::vector<FiniteNumber> elements, std::function<FiniteNumber(const FiniteNumber&, const FiniteNumber&)> op) {
+    FiniteGroup(std::vector<FiniteNumber> elements, std::function<FiniteNumber(const FiniteNumber&, const FiniteNumber&)> op) {
         assert(elements.size() > 0);
 
         this->elements = elements;
@@ -85,6 +85,11 @@ public:
             // Check if group properties are accepted, otherwise throw exception with details
             this->checkGroupProperties();
         }
+    }
+
+    // Determining the order of a group element
+    size_t ElementOrder(const FiniteNumber& element) const {
+        // TODO:   
     }
 
 private:
