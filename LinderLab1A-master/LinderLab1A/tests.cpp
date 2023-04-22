@@ -258,13 +258,60 @@ TEST_CASE("Test zero") {
 
 
 //Created by Y.Kishchuk
-TEST_SUITE("Test Group") {
-	TEST_CASE("Constructor") {
-		FiniteNumber fin1 = FiniteNumber("x2 0");
-		FiniteNumber fin2 = FiniteNumber("x2 1");
+TEST_CASE("Group addition modulo 5") {
+	std::vector<FiniteNumber> elements = { FiniteNumber("0 x5"), FiniteNumber("1 x5"), FiniteNumber("2 x5"), FiniteNumber("3 x5"), FiniteNumber("4 x5") };
 
-		Group g(std::vector<FiniteNumber>({ fin1, fin2 }), operator+);
-		std::cout << "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n";
-	}
-	// TODO:
+	Group group;
+	CHECK_NOTHROW(group.setGroupBinaryOperation(operator+));
+	CHECK_NOTHROW(group.setElements(elements));
+
+	// Test group properties
+	CHECK(group.getIdentity() == FiniteNumber("0 x5"));
+	auto p5 = PositiveNumber("5");
+	CHECK(group.getP().equals(p5));
+	CHECK(group.getGroupSize() == 5);
+
+	CHECK(group.operate(FiniteNumber("2 x5"), FiniteNumber("3 x5")) == FiniteNumber("0 x5"));
+
+
+	elements = { FiniteNumber("0 x1111"), FiniteNumber("1 x5"), FiniteNumber("2 x5"), FiniteNumber("3 x5"), FiniteNumber("4 x5") };
+	CHECK_THROWS_MESSAGE(group.setElements(elements), "Group has different P");
+
+	elements = { FiniteNumber("0 x5"), FiniteNumber("1 x5"), FiniteNumber("2 x5"), FiniteNumber("3 x5"), FiniteNumber("4 x5"), FiniteNumber("5 x5") };
+	CHECK_THROWS_MESSAGE(group.setElements(elements), "Dublicates are found");
+
+	elements = { FiniteNumber("1 x5"), FiniteNumber("2 x5"), FiniteNumber("3 x5"), FiniteNumber("4 x5") };
+	CHECK_THROWS_MESSAGE(group.setElements(elements), "Group does not have an identity element");
+
+	elements = { FiniteNumber("0 x5"), FiniteNumber("1 x5"), FiniteNumber("2 x5"), FiniteNumber("4 x5") };
+	CHECK_THROWS_MESSAGE(group.setElements(elements), "Group is not closed");
+}
+
+
+// Test Group with multiplication modulo 7
+TEST_CASE("Group multiplication modulo 7") {
+	std::vector<FiniteNumber> elements = { FiniteNumber("1 x7"), FiniteNumber("2 x7"), FiniteNumber("3 x7"), FiniteNumber("4 x7"), FiniteNumber("5 x7"), FiniteNumber("6 x7") };
+
+	Group group;
+	CHECK_NOTHROW(group.setElements(elements));
+	CHECK_NOTHROW(group.setGroupBinaryOperation(operator*));
+
+	CHECK(group.getIdentity() == FiniteNumber("1 x7"));
+	auto p7 = PositiveNumber("7");
+	CHECK(group.getP().equals(p7));
+	CHECK(group.getGroupSize() == 6);
+
+	CHECK(group.operate(FiniteNumber("3 x7"), FiniteNumber("5 x7")) == FiniteNumber("1 x7"));
+
+	elements = { FiniteNumber("1 x7777"), FiniteNumber("2 x7"), FiniteNumber("3 x7"), FiniteNumber("4 x7"), FiniteNumber("5 x7"), FiniteNumber("6 x7") };
+	CHECK_THROWS_MESSAGE(group.setElements(elements), "Group has different P");
+
+	elements = { FiniteNumber("1 x7"), FiniteNumber("8 x7"), FiniteNumber("3 x7"), FiniteNumber("4 x7"), FiniteNumber("5 x7"), FiniteNumber("6 x7") };
+	CHECK_THROWS_MESSAGE(group.setElements(elements), "Dublicates are found");
+
+	elements = { FiniteNumber("2 x7"), FiniteNumber("3 x7"), FiniteNumber("4 x7"), FiniteNumber("5 x7"), FiniteNumber("6 x7") };
+	CHECK_THROWS_MESSAGE(group.setElements(elements), "Group does not have an identity element");
+
+	elements = { FiniteNumber("1 x7"), FiniteNumber("2 x7"), FiniteNumber("3 x7"), FiniteNumber("5 x7"), FiniteNumber("6 x7") };
+	CHECK_THROWS_MESSAGE(group.setElements(elements), "Group is not closed");
 }

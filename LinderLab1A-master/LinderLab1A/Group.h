@@ -15,45 +15,32 @@ public:
     Group() {};
 
     // Constructor takes a vector of elements and a binary operation
-    Group(std::vector<FiniteNumber> elements, std::function<FiniteNumber(FiniteNumber, const FiniteNumber&)> op) {
+    // May thow exceptions
+    Group(std::vector<FiniteNumber> elements, std::function<FiniteNumber(const FiniteNumber&, const FiniteNumber&)> op) {
+        assert(elements.size() > 0);
+
         this->elements = elements;
         this->op = op;
+        this->p = elements[0].getP();
 
-        assert(hasIdentity(), "Group does not have an identity element");
-        this->setIdentity();
-
-        assert(isClosed(), "Group is not closed");
-        assert(isAssociative(), "Group is not associative");
-        assert(hasInverse(), "Not every element in the group has an inverse");
-        assert(!hasDuplicates(), "Dublicates are found");
-
-
-        // Check modulo
-        // TODO:
-
-        /*
-        // Check if group properties are accepted, otherwise throw exception with details
-        if (!isClosed()) {
-            throw std::runtime_error("Group is not closed");
-        }
-        if (!isAssociative()) {
-            throw std::runtime_error("Group is not associative");
-        }
-        if (!hasIdentity()) {
-            throw std::runtime_error("Group does not have an identity element");
-        }
-        this->setIdentity();
-
-        if (!hasInverse()) {
-            throw std::runtime_error("Not every element in the group has an inverse");
-        }
-        if (hasDuplicates())
+        if (hasDuplicates()) {
             throw std::runtime_error("Dublicates are found");
-        */
+        }
+        if (!checkP(this->p)) {
+            throw std::runtime_error("Group has different P");
+        }
+
+        // Check if group properties are accepted, otherwise throw exception with details
+        this->checkGroupProperties();
+
     }
 
     // Binary operation method
     FiniteNumber operate(FiniteNumber a, FiniteNumber b) const {
+        assert(op, "Binary operation didn't set");
+        auto tp = this->p;
+        assert(a.getP().equals(tp) && b.getP().equals(tp));
+
         return op(a, b);
     }
 
@@ -65,50 +52,58 @@ public:
         return identity;
     }
 
-    void setElements(std::vector<FiniteNumber> elements) {
-        this->elements = elements;
-
-        // Сopying twice is not a crime
-        assert(hasIdentity(), "Group does not have an identity element");
-        this->setIdentity();
-
-        assert(isClosed(), "Group is not closed");
-        assert(isAssociative(), "Group is not associative");
-        assert(hasInverse(), "Not every element in the group has an inverse");
-        assert(!hasDuplicates(), "Dublicates are found");
+    PositiveNumber getP() const noexcept {
+        return p;
     }
 
-    void setGroupBinaryOperation(FiniteNumber(*op)(FiniteNumber, const FiniteNumber&))
+    size_t getGroupSize() const noexcept {
+        return elements.size();
+    }
+
+    void setElements(std::vector<FiniteNumber> elements) {
+        assert(elements.size() > 0);
+        this->elements = elements;
+        this->p = elements[0].getP();
+
+        // Check if group properties are accepted, otherwise throw exception with details
+        if (hasDuplicates()) {
+            throw std::runtime_error("Dublicates are found");
+        }
+        if (!checkP(this->p)) {
+            throw std::runtime_error("Group has different P");
+        }
+
+        if (this->op)
+            this->checkGroupProperties();
+    }
+
+    void setGroupBinaryOperation(std::function<FiniteNumber(FiniteNumber, const FiniteNumber&)> op)
     {
         this->op = op;
 
-        // Сopying twice is not a crime
-        assert(hasIdentity(), "Group does not have an identity element");
-        this->setIdentity();
-
-        assert(isClosed(), "Group is not closed");
-        assert(isAssociative(), "Group is not associative");
-        assert(hasInverse(), "Not every element in the group has an inverse");
-        assert(!hasDuplicates(), "Dublicates are found");
+        if (elements.size() > 0) {
+            // Check if group properties are accepted, otherwise throw exception with details
+            this->checkGroupProperties();
+        }
     }
 
+    /*
     // Add an element to the group
     void addElement(const FiniteNumber& element) {
+        if (PositiveNumber().equals(this->p)) // means default value
+            this->p = element.getP();
 
-        assert(std::find(elements.begin(), elements.end(), element) == elements.end(), "Element already exists in the group");
-        assert(isClosedWithElement(element), "Adding the element breaks the closure property of the group");
-        assert(isAssociativeWithElement(element), "Adding the element breaks the associativity property of the group");
-        assert(hasIdentityWithElement(element), "Adding the element breaks the identity property of the group");
-        assert(hasInverseWithElement(element), "Adding the element breaks the inverse property of the group");
+        // Check whether there is a binary function
+        if (!this->op)
+            throw std::runtime_error("Group binary function is missing");
 
-
-        /*// Check if the element already exists in the group
+        // Check if adding the element breaks group properties
+        if (element.getP() != this->p) {
+            throw std::runtime_error("Element has different P than the group");
+        }
         if (std::find(elements.begin(), elements.end(), element) != elements.end()) {
             throw std::runtime_error("Element already exists in the group");
         }
-
-
-        // Check if adding the element breaks group properties
         if (!isClosedWithElement(element)) {
             throw std::runtime_error("Adding the element breaks the closure property of the group");
         }
@@ -120,13 +115,32 @@ public:
         }
         if (!hasInverseWithElement(element)) {
             throw std::runtime_error("Adding the element breaks the inverse property of the group");
-        }*/
-
+        }
 
         elements.push_back(element);
-    }
+    }*/
 
 private:
+    // Check the correctness of the group properties. Sets identity element if found
+    void checkGroupProperties() {
+        if (!hasIdentity()) {
+            throw std::runtime_error("Group does not have an identity element");
+        }
+
+        this->setIdentity();
+
+        if (!isClosed()) {
+            throw std::runtime_error("Group is not closed");
+        }
+        if (!isAssociative()) {
+            throw std::runtime_error("Group is not associative");
+        }
+        if (!hasInverse()) {
+            throw std::runtime_error("Not every element in the group has an inverse");
+        }
+    }
+
+    /*
     // Check if the group is closed with an element
     bool isClosedWithElement(const FiniteNumber& element) const {
         for (const FiniteNumber& a : elements) {
@@ -181,7 +195,7 @@ private:
             }
         }
         return true;
-    }
+    }*/
 
     // Check if the group is closed
     bool isClosed() const {
@@ -278,8 +292,16 @@ private:
         return false;
     }
 
+    // Checks elements for the same P
+    bool checkP(PositiveNumber p) const {
+        for (const auto& elem : elements)
+            if (elem.getP() != p)
+                return false;
+        return true;
+    }
+
     PositiveNumber p;
     std::vector<FiniteNumber> elements;
-    std::function<FiniteNumber(FiniteNumber, const FiniteNumber&)> op; // Group binary function
-    FiniteNumber identity = FiniteNumber("10x 1");
+    std::function<FiniteNumber(const FiniteNumber&, const FiniteNumber&)> op; // Group binary function
+    FiniteNumber identity = FiniteNumber("10x 1"); // HACK: Make a default (or nil) constructor for the FiniteNumber class
 };
