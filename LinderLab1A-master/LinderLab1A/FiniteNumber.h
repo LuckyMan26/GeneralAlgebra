@@ -67,28 +67,23 @@ public:
 		this->toFieldSize();
 		return *this;
 	}
-	FiniteNumber operator*(const FiniteNumber& n) {
-		return this->toFinite(simpleMultiplication(n));
-	}
+
+	friend FiniteNumber operator*(FiniteNumber left, const FiniteNumber& n);
+
 	FiniteNumber operator*=(const FiniteNumber& n) {
 		this->multiplyBy(n);
 		this->toFieldSize();
 		return *this;
 	}
-	friend FiniteNumber operator-(FiniteNumber left, const FiniteNumber& n) {
-		left.substract(n);
-		left.toFieldSize();
-		return left;
-	}
+	friend FiniteNumber operator-(FiniteNumber left, const FiniteNumber& n);
+
 	FiniteNumber& operator-=(const FiniteNumber& n) {
 		this->substract(n);
 		this->toFieldSize();
 		return *this;
 	}
 
-	friend FiniteNumber operator/(FiniteNumber left, const FiniteNumber& n) {
-		return left.divide(n);
-	}
+	friend FiniteNumber operator/(FiniteNumber left, const FiniteNumber& n);
 
 
 	/*
@@ -222,3 +217,17 @@ FiniteNumber operator+(FiniteNumber left, const FiniteNumber& n)
 	return left;
 }
 
+FiniteNumber operator-(FiniteNumber left, const FiniteNumber& n) {
+	left.substract(n);
+	left.toFieldSize();
+	return left;
+}
+
+FiniteNumber operator/(FiniteNumber left, const FiniteNumber& n) {
+	return left.divide(n);
+}
+
+FiniteNumber operator*(FiniteNumber left, const FiniteNumber& n)
+{
+	return left.toFinite(left.simpleMultiplication(n));
+}
