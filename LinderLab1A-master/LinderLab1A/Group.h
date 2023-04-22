@@ -87,39 +87,6 @@ public:
         }
     }
 
-    /*
-    // Add an element to the group
-    void addElement(const FiniteNumber& element) {
-        if (PositiveNumber().equals(this->p)) // means default value
-            this->p = element.getP();
-
-        // Check whether there is a binary function
-        if (!this->op)
-            throw std::runtime_error("Group binary function is missing");
-
-        // Check if adding the element breaks group properties
-        if (element.getP() != this->p) {
-            throw std::runtime_error("Element has different P than the group");
-        }
-        if (std::find(elements.begin(), elements.end(), element) != elements.end()) {
-            throw std::runtime_error("Element already exists in the group");
-        }
-        if (!isClosedWithElement(element)) {
-            throw std::runtime_error("Adding the element breaks the closure property of the group");
-        }
-        if (!isAssociativeWithElement(element)) {
-            throw std::runtime_error("Adding the element breaks the associativity property of the group");
-        }
-        if (!hasIdentityWithElement(element)) {
-            throw std::runtime_error("Adding the element breaks the identity property of the group");
-        }
-        if (!hasInverseWithElement(element)) {
-            throw std::runtime_error("Adding the element breaks the inverse property of the group");
-        }
-
-        elements.push_back(element);
-    }*/
-
 private:
     // Check the correctness of the group properties. Sets identity element if found
     void checkGroupProperties() {
@@ -140,62 +107,6 @@ private:
         }
     }
 
-    /*
-    // Check if the group is closed with an element
-    bool isClosedWithElement(const FiniteNumber& element) const {
-        for (const FiniteNumber& a : elements) {
-            if (std::find(elements.begin(), elements.end(), op(a, element)) == elements.end()) {
-                return false;
-            }
-            if (std::find(elements.begin(), elements.end(), op(element, a)) == elements.end()) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    // Check if the group is associative with an element
-    bool isAssociativeWithElement(const FiniteNumber& element) const {
-        for (const FiniteNumber& a : elements) {
-            for (const FiniteNumber& b : elements) {
-                if (op(op(a, b), element) != op(a, op(b, element))) {
-                    return false;
-                }
-                if (op(element, op(a, b)) != op(op(element, a), b)) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
-    // Check if the group has an identity element with an element
-    bool hasIdentityWithElement(const FiniteNumber& element) const {
-        FiniteNumber result = element;
-        for (const FiniteNumber& a : elements) {
-            if (op(a, element) != a || op(element, a) != a) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    // Check if the group has an inverse for every element with an element
-    bool hasInverseWithElement(const FiniteNumber& element) const {
-        for (const FiniteNumber& a : elements) {
-            bool hasInverse = false;
-            for (const FiniteNumber& b : elements) {
-                if (op(a, b) == element && op(b, a) == element) {
-                    hasInverse = true;
-                    break;
-                }
-            }
-            if (!hasInverse) {
-                return false;
-            }
-        }
-        return true;
-    }*/
 
     // Check if the group is closed
     bool isClosed() const {
