@@ -2,6 +2,7 @@
 #include "PolynomialElement.h"
 #include <string>
 #include <list>
+#include "Exponent.h"
 /*
 * Class for Polynomial Ring
 */
@@ -140,13 +141,16 @@ public:
 		return deriv;
 	}
 	SignedNumber valueAt(SignedNumber x) {
-		
-		SignedNumber current = coefficients.front().getCoefficient();
-		//PositiveNumber prevDegree = PositiveNumber();
-		//for (std::list<PolynomialElement>::iterator iterator = ++coefficients.begin(); iterator != coefficients.end(); iterator++) {
-			//current = (x * current) + coefficients[i];
-		//}
-
+		Exponentiation exp;
+		SignedNumber zero = SignedNumber("0");
+		SignedNumber current = SignedNumber();
+		PolynomialElement prevElement = PolynomialElement(SignedNumber("0"), coefficients.front().getDegree() + PositiveNumber("1"));
+		for (PolynomialElement element : coefficients) {
+			if (current != zero)
+				current = current * exp.fastExponention(x, prevElement.getDegree() - element.getDegree() - PositiveNumber("1"));
+			current = (x * current) + element.getCoefficient();
+			prevElement = element;
+		}
 		return current;
 	}
 };

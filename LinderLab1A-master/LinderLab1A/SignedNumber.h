@@ -20,10 +20,12 @@ public:
 	}
 	friend SignedNumber operator+(SignedNumber left, const SignedNumber& n) {
 		left.addTo(n);
+		left.zeroSignCheck();
 		return left;
 	}
 	SignedNumber& operator+=(const SignedNumber& n) {
 		this->addTo(n);
+		zeroSignCheck();
 		return *this;
 	}
 	SignedNumber operator*(const SignedNumber& n) {
@@ -39,14 +41,17 @@ public:
 	}
 	SignedNumber operator*=(const SignedNumber& n) {
 		this->multiplyBy(n);
+		zeroSignCheck();
 		return *this;
 	}
 	friend PositiveNumber operator-(SignedNumber left, const SignedNumber& n) {
 		left.substractFrom(n);
+		left.zeroSignCheck();
 		return left;
 	}
 	PositiveNumber& operator-=(const SignedNumber& n) {
 		this->substractFrom(n);
+		zeroSignCheck();
 		return *this;
 	}
 	bool isPositive() {
