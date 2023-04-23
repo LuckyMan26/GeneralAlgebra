@@ -4,7 +4,7 @@
 #include <list>
 #include "Exponent.h"
 /*
-* Class for Polynomial Ring
+* Class for Polynomial in Polynomial Ring (signed coefficients)
 */
 class RPolynomial
 {
@@ -71,7 +71,7 @@ public:
 	* Input string format Ax^B-Cx^D+Ex^F+G
 	* if degrees of some terms in sum are identical, their coefficients will be added
 	* Order of terms does not affect the constructor
-	* Zero-coefficients will be removed
+	* Zero coefficients will be removed
 	*/
 	RPolynomial(std::string s) {
 		s=replaceAll(s, " ", ""); //no spaces
@@ -113,8 +113,9 @@ public:
 		trim();
 	}
 	/**
-	* Returns string of coefficients, separated with spaces
-	* { 4 + x^3 } = 4 0 0 1
+	* Returns string representation of the polynomial with degrees in descending oreder.
+	* Example:
+	* x^4-9x^3+x-11
 	*/
 	std::string toString() {
 		if (coefficients.empty())
@@ -129,7 +130,7 @@ public:
 			result = result.substr(1);
 		return result;
 	}
-
+	//Returns derivative of the polynomial
 	RPolynomial derivative() {
 		RPolynomial deriv = RPolynomial();
 		SignedNumber zero = SignedNumber("0");
@@ -140,14 +141,16 @@ public:
 		}
 		return deriv;
 	}
+	//Returns value of the polynomial at X
 	SignedNumber valueAt(SignedNumber x) {
 		Exponentiation exp;
 		SignedNumber zero = SignedNumber("0");
 		SignedNumber current = SignedNumber();
 		PolynomialElement prevElement = PolynomialElement(SignedNumber("0"), coefficients.front().getDegree() + PositiveNumber("1"));
 		for (PolynomialElement element : coefficients) {
-			if (current != zero)
+			if (current != zero) {
 				current = current * exp.fastExponention(x, prevElement.getDegree() - element.getDegree() - PositiveNumber("1"));
+			}
 			current = (x * current) + element.getCoefficient();
 			prevElement = element;
 		}
