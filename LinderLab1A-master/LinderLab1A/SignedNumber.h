@@ -80,8 +80,8 @@ public:
 			PositiveNumber::addTo(other);
 		}
 		else {
-			PositiveNumber::substract(other);
 			this->sign = PositiveNumber::operator>(other) ? this->sign : other.sign;
+			PositiveNumber::substract(other);	
 		}
 
 	}
@@ -115,6 +115,8 @@ public:
 		return s;
 	}
 	void flipSign() {
+		if (this->digits.size() == 0) //is zero
+			this->sign = PLUS;
 		if (this->sign == MINUS)
 			this->sign = PLUS;
 		else

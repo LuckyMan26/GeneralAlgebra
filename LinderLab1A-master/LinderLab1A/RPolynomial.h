@@ -5,6 +5,9 @@ class RPolynomial
 {
 private:
 	std::vector<SignedNumber> coefficients;
+	RPolynomial() {
+		
+	}
 
 public:
 	/**
@@ -37,21 +40,23 @@ public:
 	}
 
 	RPolynomial derivative() {
+		RPolynomial deriv = RPolynomial();
 		auto s = std::vector<SignedNumber>();
 		if (coefficients.size() < 2) {
 			s.push_back(SignedNumber("0"));
 		}
 		else {
-			for (int i = 2; i < coefficients.size(); i++) {
+			for (int i = 1; i < coefficients.size(); i++) {
 				s.push_back(coefficients[i] * SignedNumber(std::to_string(i)));
 			}
 		}
-		this->coefficients = s;
+		deriv.coefficients = s;
+		return deriv;
 	}
 	SignedNumber valueAt(SignedNumber x) {
-		SignedNumber current = SignedNumber("1");
-		for (int i = coefficients.size() - 1; i >= 0;i--) {
-			current = x * current + coefficients[i];
+		SignedNumber current = coefficients.back();
+		for (int i = coefficients.size() - 2; i >= 0; i--) {
+			current = (x * current) + coefficients[i];
 		}
 		return current;
 	}
