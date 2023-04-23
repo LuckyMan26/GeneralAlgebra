@@ -31,6 +31,9 @@ private:
 			coefficients.push_back(toAdd);
 			return;
 		}
+		if (coefficients.back().getDegree() > degree) {
+			coefficients.push_back(toAdd);
+		}
 		for (std::list<PolynomialElement>::iterator iterator = coefficients.begin(); iterator != coefficients.end(); iterator++) {
 			PolynomialElement element = *iterator;
 			if (element.getDegree() == degree) {
@@ -47,11 +50,7 @@ private:
 			element.setCoefficient(element.getCoefficient() + coefficient); //add coefficients with same degree
 			return;
 		}
-		else if (element.getDegree() > degree) {
-			coefficients.emplace(--coefficients.end(), toAdd);
-			return;
-		}
-		coefficients.emplace_back(toAdd);
+		coefficients.emplace(--coefficients.end(), toAdd);
 	}
 	/*Removes all elements, where coefficient equals zero*/
 	void trim() {
