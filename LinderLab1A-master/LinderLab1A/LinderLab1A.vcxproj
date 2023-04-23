@@ -134,6 +134,7 @@
     <ClInclude Include="FiniteField.h" />
     <ClInclude Include="FiniteNumber.h" />
     <ClInclude Include="Polynomial.h" />
+    <ClInclude Include="PolynomialElement.h" />
     <ClInclude Include="PositiveNumber.h" />
     <ClInclude Include="RPolynomial.h" />
     <ClInclude Include="SignedNumber.h" />

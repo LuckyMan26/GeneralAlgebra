@@ -7,6 +7,9 @@ class SignedNumber : public PositiveNumber {
 private:
 	Sign sign = PLUS;
 public:
+	SignedNumber() : PositiveNumber() {
+		sign = PLUS;
+	}
 	friend SignedNumber operator+(SignedNumber left, const SignedNumber& n) {
 		left.addTo(n);
 		return left;
@@ -17,6 +20,9 @@ public:
 	}
 	SignedNumber operator*(const SignedNumber& n) {
 		return SignedNumber (PositiveNumber::simpleMultiplication(*this, n), (this->sign == n.sign) ? PLUS : MINUS);
+	}
+	SignedNumber operator*(const PositiveNumber& n) {
+		return SignedNumber(PositiveNumber::simpleMultiplication(*this, n), this->sign);
 	}
 	SignedNumber operator*=(const SignedNumber& n) {
 		this->multiplyBy(n);
@@ -29,6 +35,12 @@ public:
 	PositiveNumber& operator-=(const SignedNumber& n) {
 		this->substractFrom(n);
 		return *this;
+	}
+	bool isPositive() {
+		return this->sign == PLUS;
+	}
+	bool isNegative() {
+		return this->sign == MINUS;
 	}
 	bool operator==(SignedNumber& n) const {
 		return equals(n);
