@@ -135,10 +135,12 @@
     <ClInclude Include="FiniteNumber.h" />
     <ClInclude Include="Polynomial.h" />
     <ClInclude Include="PositiveNumber.h" />
+    <ClInclude Include="RPolynomial.h" />
     <ClInclude Include="SignedNumber.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="FiniteField.cpp" />
+    <ClCompile Include="RPolynomial.cpp" />
     <ClCompile Include="tests.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
