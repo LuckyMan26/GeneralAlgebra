@@ -33,11 +33,12 @@ private:
 		}
 		if (coefficients.back().getDegree() > degree) {
 			coefficients.push_back(toAdd);
+			return;
 		}
 		for (std::list<PolynomialElement>::iterator iterator = coefficients.begin(); iterator != coefficients.end(); iterator++) {
 			PolynomialElement element = *iterator;
 			if (element.getDegree() == degree) {
-				element.setCoefficient(element.getCoefficient() + coefficient); //add coefficients with same degree
+				iterator->setCoefficient(element.getCoefficient() + coefficient);
 				return;
 			}
 			else if (element.getDegree() < degree) { //push new degree
@@ -67,7 +68,9 @@ private:
 public:
 	/*
 	* Input string format Ax^B-Cx^D+Ex^F+G
-	* 
+	* if degrees of some terms in sum are identical, their coefficients will be added
+	* Order of terms does not affect the constructor
+	* Zero-coefficients will be removed
 	*/
 	RPolynomial(std::string s) {
 		s=replaceAll(s, " ", ""); //no spaces
@@ -128,16 +131,11 @@ public:
 
 	RPolynomial derivative() {
 		RPolynomial deriv = RPolynomial();
-		for (std::list<PolynomialElement>::iterator iterator = coefficients.begin(); iterator != coefficients.end(); iterator++) {
-			PolynomialElement element = *iterator;
+		SignedNumber zero = SignedNumber("0");
+		for (PolynomialElement element : coefficients) {
 			SignedNumber coefficient = element.getCoefficient() * element.getDegree();
-			deriv.coefficients.push_back(PolynomialElement(coefficient, element.getDegree() - PositiveNumber("1")));
-		}
-		PositiveNumber zero = PositiveNumber("0");
-		PolynomialElement back = coefficients.back();
-		if (back.getDegree() != zero) {
-			SignedNumber coefficient = back.getCoefficient() * back.getDegree();
-			deriv.coefficients.push_back(PolynomialElement(coefficient, back.getDegree() - PositiveNumber("1")));
+			if (coefficient != zero)
+				deriv.coefficients.push_back(PolynomialElement(coefficient, element.getDegree() - PositiveNumber("1")));
 		}
 		return deriv;
 	}

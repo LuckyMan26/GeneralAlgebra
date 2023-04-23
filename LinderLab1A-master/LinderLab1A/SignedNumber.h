@@ -6,6 +6,14 @@ enum Sign {PLUS, MINUS};
 class SignedNumber : public PositiveNumber {
 private:
 	Sign sign = PLUS;
+
+
+	void zeroSignCheck() {
+		if (isZero()) {
+			sign = PLUS;
+		}
+	}
+
 public:
 	SignedNumber() : PositiveNumber() {
 		sign = PLUS;
@@ -19,10 +27,15 @@ public:
 		return *this;
 	}
 	SignedNumber operator*(const SignedNumber& n) {
-		return SignedNumber (PositiveNumber::simpleMultiplication(*this, n), (this->sign == n.sign) ? PLUS : MINUS);
+		PositiveNumber p = PositiveNumber::simpleMultiplication(*this, n);
+		SignedNumber result = SignedNumber(p, (this->sign == n.sign) ? PLUS : MINUS);
+		result.zeroSignCheck();
+		return result;
 	}
 	SignedNumber operator*(const PositiveNumber& n) {
-		return SignedNumber(PositiveNumber::simpleMultiplication(*this, n), this->sign);
+		SignedNumber result = SignedNumber(PositiveNumber::simpleMultiplication(*this, n), this->sign);
+		result.zeroSignCheck();
+		return result;
 	}
 	SignedNumber operator*=(const SignedNumber& n) {
 		this->multiplyBy(n);
@@ -118,8 +131,8 @@ public:
 	}
 	SignedNumber(PositiveNumber absolute, Sign sign) {
 		this->sign = sign;
-		this->digits = parseDigits(absolute.toString());
-		
+		this->digits = absolute.getDigits();
+		this->trim();
 	}
 	std::string toString() {
 		std::string s = sign == PLUS ? "" : "-";

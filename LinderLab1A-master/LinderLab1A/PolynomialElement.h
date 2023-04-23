@@ -6,6 +6,16 @@ class PolynomialElement {
 private:
 	PositiveNumber degree;
 	SignedNumber coefficient;
+
+	std::string formatCoefficient() {
+		std::string coef = coefficient.toString();
+		if (coef == "1")
+			coef = "";
+		else if (coef == "-1")
+			coef = "-";
+		return coef;
+	}
+
 public:
 	PolynomialElement(SignedNumber coefficient, PositiveNumber degree) {
 		this->degree = degree;
@@ -31,14 +41,11 @@ public:
 		}
 		PositiveNumber one = PositiveNumber("1");
 		if (this->degree == one) {
-			std::string coef = coefficient.toString();
-			if (coef == "1")
-				coef = "";
+			std::string coef = formatCoefficient();
 			return coef + "x";
 		}
-		std::string coef = coefficient.toString();
-		if (coef == "1")
-			coef = "";
+		std::string coef = formatCoefficient();
 		return coef + "x^" + degree.toString();
 	}
+
 };

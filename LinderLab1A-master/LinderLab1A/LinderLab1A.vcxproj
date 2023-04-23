@@ -141,7 +141,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="FiniteField.cpp" />
-    <ClCompile Include="RPolynomial.cpp" />
+    <ClCompile Include="RPolynomialTest.cpp" />
     <ClCompile Include="tests.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

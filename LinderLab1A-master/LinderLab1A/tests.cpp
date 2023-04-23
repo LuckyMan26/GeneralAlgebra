@@ -132,6 +132,12 @@ TEST_CASE("Signed numbers") {
 	res -= signedM;
 	CHECK(res.toString() == "1855");
 
+
+	SignedNumber a = SignedNumber("-3");
+	SignedNumber b = SignedNumber("0");
+	SignedNumber c = a * b;
+	CHECK(c.toString() == "0");
+
 }
 //Testing FiniteNumbers by Vlad Avramenko
 TEST_CASE("Finite numbers") {

@@ -53,7 +53,7 @@
     <ClCompile Include="tests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="RPolynomial.cpp">
+    <ClCompile Include="RPolynomialTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
