@@ -73,6 +73,10 @@ public:
 		this->digits = parseDigits(digitsString);
 		this->trim();
 	}
+	PositiveNumber(int a) {
+		this->digits = parseDigits(std::to_string(a));
+		this->trim();
+	}
 	int& operator[](int i) {
 		return digits[i];
 	}

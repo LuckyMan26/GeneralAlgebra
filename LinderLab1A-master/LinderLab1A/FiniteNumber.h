@@ -179,7 +179,7 @@ public:
 		}
 		else {
 			n = n % p;
-			this->digits = parseDigits(n.toString());
+			this->digits = n.getDigits();
 		}
 	}
 
