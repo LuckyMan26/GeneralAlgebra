@@ -26,6 +26,11 @@ public:
 		this->digits = parseDigits(from);
 		setP(p);
 	}
+
+	FiniteNumber(int a, int p) : PositiveNumber(a) {
+		this->f = FiniteField(PositiveNumber(p));
+		toFieldSize();
+	}
 	/**
 	* Input: string of value "xP N", where P - is field size, N - positive integer
 	* Alternative: "N xP"
