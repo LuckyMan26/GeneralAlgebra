@@ -3,6 +3,7 @@
 #include <vector>
 #include <cmath>
 #include <string>
+
 /**
 * Class for number in infinite field
 *
@@ -102,6 +103,7 @@ public:
 		this->multiplyBy(n);
 		return *this;
 	}
+
 	friend PositiveNumber operator-(PositiveNumber left, const PositiveNumber& n) {
 		left.substract(n);
 		return left;

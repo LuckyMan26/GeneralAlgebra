@@ -275,3 +275,13 @@ TEST_CASE("Additional operators test") {
 	CHECK(a != c);
 	CHECK(a != d);
 }
+
+TEST_CASE("Additional operators") {
+	FiniteNumber a = FiniteNumber(16, 17);
+	FiniteNumber b = FiniteNumber(14, 17);
+	CHECK(a > b);
+	CHECK(b < a);
+	CHECK(!(a < b));
+	CHECK(!(b > a));
+}
+
