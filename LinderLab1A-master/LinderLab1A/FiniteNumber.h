@@ -161,7 +161,7 @@ public:
 		else {
 			PositiveNumber t = PositiveNumber(*this);
 			t = t % p;
-			this->digits = parseDigits(t.toString());
+			this->digits = t.getDigits();
 		}
 	}
 	// Converts PositiveNumber to FiniteNumber
