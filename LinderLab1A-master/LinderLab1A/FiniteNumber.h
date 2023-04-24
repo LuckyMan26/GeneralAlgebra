@@ -5,7 +5,7 @@
 class FiniteNumber : public PositiveNumber {
 private: 
 	//p stands for field (поле)
-	PositiveNumber p = PositiveNumber("10");
+	PositiveNumber p;
 	void setP(PositiveNumber p) {
 		this->p = p;
 		toFieldSize();
@@ -54,7 +54,7 @@ public:
 	}
 
 	/*
-		* Implemented by Vlad Avramenko
+	* Implemented by Vlad Avramenko
 	*/
 
 	/*
