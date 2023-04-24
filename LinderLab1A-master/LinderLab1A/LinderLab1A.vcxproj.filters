@@ -39,12 +39,21 @@
     <ClInclude Include="Polynomial.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="RPolynomial.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PolynomialElement.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="FiniteField.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="tests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RPolynomialTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

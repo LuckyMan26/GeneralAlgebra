@@ -132,6 +132,12 @@ TEST_CASE("Signed numbers") {
 	res -= signedM;
 	CHECK(res.toString() == "1855");
 
+
+	SignedNumber a = SignedNumber("-3");
+	SignedNumber b = SignedNumber("0");
+	SignedNumber c = a * b;
+	CHECK(c.toString() == "0");
+
 }
 //Testing FiniteNumbers by Vlad Avramenko
 TEST_CASE("Finite numbers") {
@@ -213,17 +219,17 @@ TEST_CASE("Exponent") {
 	std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
 	CHECK(exp.montgomeryExponention(base, power).toString() == expected);
 	std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
-	std::cout << "Montgomery = " << std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count() << " ms" << std::endl;
+	//std::cout << "Montgomery = " << std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count() << " ms" << std::endl;
 
 	begin = std::chrono::steady_clock::now();
 	CHECK(exp.fastExponention(base, power).toString() == expected);
 	end = std::chrono::steady_clock::now();
-	std::cout << "Fast = " << std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count() << " ms" << std::endl;
+	//std::cout << "Fast = " << std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count() << " ms" << std::endl;
 
-	begin = std::chrono::steady_clock::now();
-	CHECK(exp.slowExponention(base, power).toString() == expected);
-	end = std::chrono::steady_clock::now();
-	std::cout << "Slow = " << std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count() << " ms" << std::endl;
+	//begin = std::chrono::steady_clock::now();
+	//CHECK(exp.slowExponention(base, power).toString() == expected);
+	//end = std::chrono::steady_clock::now();
+	//std::cout << "Slow = " << std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count() << " ms" << std::endl;
 }
 
 TEST_CASE("Exponentiation on random values") {

@@ -6,29 +6,59 @@ enum Sign {PLUS, MINUS};
 class SignedNumber : public PositiveNumber {
 private:
 	Sign sign = PLUS;
+
+
+	void zeroSignCheck() {
+		if (isZero()) {
+			sign = PLUS;
+		}
+	}
+
 public:
+	SignedNumber() : PositiveNumber() {
+		sign = PLUS;
+	}
 	friend SignedNumber operator+(SignedNumber left, const SignedNumber& n) {
 		left.addTo(n);
+		left.zeroSignCheck();
 		return left;
 	}
 	SignedNumber& operator+=(const SignedNumber& n) {
 		this->addTo(n);
+		zeroSignCheck();
 		return *this;
 	}
 	SignedNumber operator*(const SignedNumber& n) {
-		return SignedNumber (PositiveNumber::simpleMultiplication(*this, n), (this->sign == n.sign) ? PLUS : MINUS);
+		PositiveNumber p = PositiveNumber::simpleMultiplication(*this, n);
+		SignedNumber result = SignedNumber(p, (this->sign == n.sign) ? PLUS : MINUS);
+		result.zeroSignCheck();
+		return result;
+	}
+	SignedNumber operator*(const PositiveNumber& n) {
+		SignedNumber result = SignedNumber(PositiveNumber::simpleMultiplication(*this, n), this->sign);
+		result.zeroSignCheck();
+		return result;
 	}
 	SignedNumber operator*=(const SignedNumber& n) {
 		this->multiplyBy(n);
+		zeroSignCheck();
 		return *this;
 	}
 	friend PositiveNumber operator-(SignedNumber left, const SignedNumber& n) {
 		left.substractFrom(n);
+		left.zeroSignCheck();
 		return left;
 	}
 	PositiveNumber& operator-=(const SignedNumber& n) {
 		this->substractFrom(n);
+		zeroSignCheck();
 		return *this;
+	}
+	bool isPositive() {
+		return this->sign == PLUS;
+	}
+	bool isNegative() {
+		return this->sign == MINUS;
 	}
 	bool operator==(SignedNumber& n) const {
 		return equals(n);
@@ -80,8 +110,8 @@ public:
 			PositiveNumber::addTo(other);
 		}
 		else {
-			PositiveNumber::substract(other);
 			this->sign = PositiveNumber::operator>(other) ? this->sign : other.sign;
+			PositiveNumber::substract(other);	
 		}
 
 	}
@@ -106,8 +136,8 @@ public:
 	}
 	SignedNumber(PositiveNumber absolute, Sign sign) {
 		this->sign = sign;
-		this->digits = parseDigits(absolute.toString());
-		
+		this->digits = absolute.getDigits();
+		this->trim();
 	}
 	std::string toString() {
 		std::string s = sign == PLUS ? "" : "-";
@@ -115,6 +145,8 @@ public:
 		return s;
 	}
 	void flipSign() {
+		if (this->digits.size() == 0) //is zero
+			this->sign = PLUS;
 		if (this->sign == MINUS)
 			this->sign = PLUS;
 		else

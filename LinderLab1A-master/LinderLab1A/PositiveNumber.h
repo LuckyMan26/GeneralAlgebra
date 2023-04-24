@@ -80,7 +80,9 @@ public:
 		return digits[i];
 	}
 
-
+	bool isZero() {
+		return digits.empty();
+	}
 	friend PositiveNumber operator+(PositiveNumber left, const PositiveNumber& n) {
 		left.addTo(n);
 		return left;
@@ -319,7 +321,7 @@ public:
 	*/
 	virtual std::string toString() {
 		std::string result = "";
-		if (digits.empty())
+		if (isZero())
 			return "0";
 		for (int i : digits) {
 			result += (i + '0');
@@ -464,4 +466,5 @@ public:
 		}
 		return result;
 	}
+
 };
