@@ -255,7 +255,6 @@ TEST_CASE("Test binary form") {
 }
 
 
-//Tests for polynomial constructor
 TEST_CASE("Test Integer Constuctors") {
 	int aInt = 20;
 	int bInt = 44;
@@ -265,4 +264,14 @@ TEST_CASE("Test Integer Constuctors") {
 	
 	FiniteNumber finite1 = FiniteNumber(18, 17);
 	CHECK("1" == finite1.toString());
+}
+
+TEST_CASE("Additional operators test") {
+	FiniteNumber a = FiniteNumber(20, 17);
+	FiniteNumber b = FiniteNumber(3, 17);
+	FiniteNumber c = FiniteNumber(3, 11);
+	FiniteNumber d = FiniteNumber(4, 17);
+	CHECK(a == b);
+	CHECK(a != c);
+	CHECK(a != d);
 }

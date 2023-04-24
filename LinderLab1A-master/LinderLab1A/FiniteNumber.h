@@ -101,6 +101,21 @@ public:
 		return left.divide(n);
 	}
 
+	bool operator==(FiniteNumber& n) const {
+		return equals(n);
+	}
+	bool operator!=(FiniteNumber& n) const {
+		return !equals(n);
+	}
+	bool equals(FiniteNumber& n) const {
+		PositiveNumber p1 = getP();
+		PositiveNumber p2 = n.getP();
+		if (p1 != p2)
+			return false;
+		return PositiveNumber::equals(n);
+	}
+
+
 	/*
 	* Find inverse number
 	* if inverse number exist - finds inverse, else - returns 1

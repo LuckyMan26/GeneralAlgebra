@@ -57,6 +57,7 @@ public:
 		zeroSignCheck();
 		return *this;
 	}
+
 	bool isPositive() {
 		return this->sign == PLUS;
 	}
