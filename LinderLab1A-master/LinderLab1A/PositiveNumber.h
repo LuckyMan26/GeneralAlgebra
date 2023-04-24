@@ -73,7 +73,7 @@ public:
 		this->digits = parseDigits(digitsString);
 		this->trim();
 	}
-	PositiveNumber(int a) {
+	PositiveNumber(long long a) {
 		this->digits = parseDigits(std::to_string(a));
 		this->trim();
 	}

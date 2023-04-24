@@ -18,7 +18,7 @@ public:
 	SignedNumber() : PositiveNumber() {
 		sign = PLUS;
 	}
-	SignedNumber(int s) {
+	SignedNumber(long long s) {
 		this->parseDigits(std::to_string(s));
 	}
 	friend SignedNumber operator+(SignedNumber left, const SignedNumber& n) {

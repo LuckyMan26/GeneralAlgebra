@@ -27,7 +27,7 @@ public:
 		setP(p);
 	}
 
-	FiniteNumber(int a, int p) : PositiveNumber(a) {
+	FiniteNumber(long long a, long long p) : PositiveNumber(a) {
 		this->f = FiniteField(PositiveNumber(p));
 		toFieldSize();
 	}
