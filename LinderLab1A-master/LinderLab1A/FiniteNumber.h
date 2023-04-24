@@ -1,22 +1,25 @@
 #pragma once
 #include "PositiveNumber.h"
 #include <cassert>
+#include "FiniteField.h"
 //Created by M.Tyshchenko
+//Modified by A.Volyk
+
 class FiniteNumber : public PositiveNumber {
 private: 
 	//p stands for field (поле)
-	PositiveNumber p;
+	FiniteField f;
 	void setP(PositiveNumber p) {
-		this->p = p;
+		f.setP(p);
 		toFieldSize();
 	}
 
 public:
 
 	FiniteNumber(PositiveNumber base, PositiveNumber p) {
-		this->p = p;
+		f = (FiniteField(p));
 		this->digits = base.getDigits();
-		this->toFieldSize();
+		toFieldSize();
 	}
 
 	FiniteNumber(std::string from, PositiveNumber p) {
@@ -50,7 +53,7 @@ public:
 	}
 
 	PositiveNumber getP() const {
-		return p;
+		return f.getP();
 	}
 
 	/*
@@ -98,11 +101,12 @@ public:
 	* if inverse number exist - finds inverse, else - returns 1
 	*/
 	FiniteNumber inverse() {
-		PositiveNumber n = p;
+		PositiveNumber p = getP();
+		PositiveNumber n = getP();
 		PositiveNumber g(this->toString());
 		PositiveNumber gcd = GCD(n, g);
 		if (g.toString() == "1" || gcd.toString() != "1") {
-			return FiniteNumber("1", p);
+			return FiniteNumber("1", getP());
 		}
 		// remainder = (t0*n + s0*g) + d*(t1*n + s1*g)
 		// t0 and t1 are omitted because we don`t need them
@@ -130,43 +134,50 @@ public:
 		}
 		if (s1.getSign() == MINUS) {
 			PositiveNumber s1_pos(s1);
+			
 			while (s1_pos > p) {
 				s1_pos -= p;
 			}
-			return FiniteNumber((p - s1_pos), this->p);
+			return FiniteNumber((p - s1_pos), p);
 		}
 		else {
-			return FiniteNumber(s1, this->p);
+			return FiniteNumber(s1, p);
 		}
 	}
 
 	void divideBy(FiniteNumber num) {
-		if (this->p != num.p) {
+		PositiveNumber p1 = getP();
+		PositiveNumber p2 = num.getP();
+		if (p1 != p2) {
 			return;
 		}
 		*this *= num.inverse();
 	}
 
 	FiniteNumber divide(FiniteNumber num) {
-		if (this->p != num.p) {
-			return FiniteNumber("1", this->p);
+		PositiveNumber p1 = getP();
+		PositiveNumber p2 = num.getP();
+		if (p1 != p2) {
+			return FiniteNumber("1", this->getP());
 		}
 		return *this*num.inverse();
 	}
 	//Converts PositiveNumber to field size
 	void toFieldSize() {
+		PositiveNumber p = getP();
 		if (p > *this) {
 			return;
 		}
 		else {
 			PositiveNumber t = PositiveNumber(*this);
-			t = t % p;
-			this->digits = t.getDigits();
+			t = t % (p);
+			this->digits = parseDigits(t.toString());
 		}
 	}
 	// Converts PositiveNumber to FiniteNumber
 	FiniteNumber toFinite(PositiveNumber num) {
-		FiniteNumber res(num.toString(), this->p);
+		PositiveNumber p = getP();
+		FiniteNumber res(num.toString(), p);
 		res.toFieldSize();
 		return res;
 	}
@@ -184,6 +195,7 @@ public:
 	}
 
 	FiniteNumber shift(int numDigits) {
+		PositiveNumber p = getP();
 		FiniteNumber number = FiniteNumber(*this);
 		if (numDigits < 0) {
 			for (int i = 0; i < -numDigits && number.digits.size()>0; i++) {
@@ -195,7 +207,7 @@ public:
 				number.digits.insert(number.digits.begin(), 0);
 			}
 		}
-		return FiniteNumber(number, number.p);
+		return FiniteNumber(number, p);
 	}
 };
 
