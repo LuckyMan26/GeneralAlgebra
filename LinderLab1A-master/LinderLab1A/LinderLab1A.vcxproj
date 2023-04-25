@@ -131,6 +131,7 @@
     <ClInclude Include="doctest.h" />
     <ClInclude Include="Exponent.h" />
     <ClInclude Include="Field.h" />
+    <ClInclude Include="FileIO.h" />
     <ClInclude Include="FiniteField.h" />
     <ClInclude Include="FiniteNumber.h" />
     <ClInclude Include="Polynomial.h" />
