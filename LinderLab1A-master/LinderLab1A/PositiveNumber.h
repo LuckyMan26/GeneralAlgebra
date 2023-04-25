@@ -180,6 +180,34 @@ public:
 	PositiveNumber operator%(PositiveNumber& other) {
 		return remainder(*this, other);
 	}
+	//By V. Avramenko
+	//Inefficient, did not find a way of getting square root (efficiently) in long arithmetics
+	bool is_prime() {
+		PositiveNumber one = PositiveNumber("1");
+		PositiveNumber two = PositiveNumber("2");
+		PositiveNumber zero = PositiveNumber("0");
+		if (remainder(*this, two) == zero) {
+			return false;
+		}
+		PositiveNumber half = *this / two;
+		for (PositiveNumber i = PositiveNumber("3"); i < half; i += one) {
+			if (remainder(*this, i) == zero) {
+				return false;
+			}
+		}
+		return true;
+	}
+	//By V.Avramenko
+	bool is_even() {
+		PositiveNumber two = PositiveNumber("2");
+		PositiveNumber zero = PositiveNumber("0");
+		if (remainder(*this, two) == zero) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
 
 	bool operator>(PositiveNumber& n) const {
 		if (digits.size() > n.digits.size())
