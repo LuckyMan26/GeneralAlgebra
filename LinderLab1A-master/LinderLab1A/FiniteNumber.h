@@ -148,7 +148,7 @@ public:
 
 	/*
 	* Find inverse number
-	* if inverse number exist - finds inverse, else - returns 1
+	* if inverse number exists - finds inverse, else - returns 1
 	*/
 	FiniteNumber inverse() {
 		PositiveNumber p = getP();

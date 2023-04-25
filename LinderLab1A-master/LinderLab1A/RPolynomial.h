@@ -130,6 +130,45 @@ public:
 			result = result.substr(1);
 		return result;
 	}
+
+	//Implemented by V.Avramenko
+
+	/*
+	Cyclotomic Polynomial
+	*/
+
+	friend RPolynomial cyclotomic(PositiveNumber degree) {
+		if (degree.is_prime()) {
+			RPolynomial res = RPolynomial();
+			SignedNumber uno = SignedNumber("1");
+			for (PositiveNumber i = PositiveNumber("0"); i < degree; i += uno) {
+				res.coefficients.push_back(PolynomialElement(uno, i));
+			}
+			return res;
+		}
+		else if (degree.is_even()) {
+			RPolynomial res = RPolynomial();
+			SignedNumber uno = SignedNumber("1");
+			bool switcher = false;
+			for (PositiveNumber i = PositiveNumber("0"); i < degree; i += uno) {
+				if (switcher) {
+					uno.flipSign();
+					res.coefficients.push_back(PolynomialElement(uno, i));
+					uno.flipSign();
+				}
+				else {
+					res.coefficients.push_back(PolynomialElement(uno, i));
+				}
+				switcher = !switcher;
+			}
+		}
+		else {
+			//TO BE CONTINUED
+			//Waiting for var 13 implementation to continue my work
+		}
+	}
+
+
 	//Returns derivative of the polynomial
 	RPolynomial derivative() {
 		RPolynomial deriv = RPolynomial();
