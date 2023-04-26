@@ -258,60 +258,53 @@ TEST_CASE("Test zero") {
 
 
 //Created by Y.Kishchuk
-TEST_CASE("Group addition modulo 5") {
-	std::vector<FiniteNumber> elements = { FiniteNumber("0 x5"), FiniteNumber("1 x5"), FiniteNumber("2 x5"), FiniteNumber("3 x5"), FiniteNumber("4 x5") };
+TEST_CASE("Test setIdentity and getIdentity methods") {
+	FiniteGroup group(PositiveNumber("10"));
 
-	FiniteGroup group;
-	CHECK_NOTHROW(group.setGroupBinaryOperation(operator+));
-	CHECK_NOTHROW(group.setElements(elements));
-
-	// Test group properties
-	CHECK(group.getIdentity() == FiniteNumber("0 x5"));
-	auto p5 = PositiveNumber("5");
-	CHECK(group.getP().equals(p5));
-	CHECK(group.getGroupSize() == 5);
-
-	CHECK(group.operate(FiniteNumber("2 x5"), FiniteNumber("3 x5")) == FiniteNumber("0 x5"));
-
-
-	elements = { FiniteNumber("0 x1111"), FiniteNumber("1 x5"), FiniteNumber("2 x5"), FiniteNumber("3 x5"), FiniteNumber("4 x5") };
-	CHECK_THROWS_MESSAGE(group.setElements(elements), "Group has different P");
-
-	elements = { FiniteNumber("0 x5"), FiniteNumber("1 x5"), FiniteNumber("2 x5"), FiniteNumber("3 x5"), FiniteNumber("4 x5"), FiniteNumber("5 x5") };
-	CHECK_THROWS_MESSAGE(group.setElements(elements), "Dublicates are found");
-
-	elements = { FiniteNumber("1 x5"), FiniteNumber("2 x5"), FiniteNumber("3 x5"), FiniteNumber("4 x5") };
-	CHECK_THROWS_MESSAGE(group.setElements(elements), "Group does not have an identity element");
-
-	elements = { FiniteNumber("0 x5"), FiniteNumber("1 x5"), FiniteNumber("2 x5"), FiniteNumber("4 x5") };
-	CHECK_THROWS_MESSAGE(group.setElements(elements), "Group is not closed");
+	group.setIdentity(FiniteNumber("0 x10"));
+	CHECK(group.getIdentity() == FiniteNumber("0 x10"));
+	CHECK(group.getIdentity() == FiniteNumber("0 x10"));
+	group.setIdentity(FiniteNumber("1 x10"));
+	CHECK(group.getIdentity() == FiniteNumber("1 x10"));
 }
 
+TEST_CASE("Test setGroupBinaryOperation method") {
+	FiniteGroup group(PositiveNumber("10"), operator*);
 
-// Test Group with multiplication modulo 7
-TEST_CASE("Group multiplication modulo 7") {
-	std::vector<FiniteNumber> elements = { FiniteNumber("1 x7"), FiniteNumber("2 x7"), FiniteNumber("3 x7"), FiniteNumber("4 x7"), FiniteNumber("5 x7"), FiniteNumber("6 x7") };
+	// Test if the binary operation is set correctly
+	CHECK(group.operate(FiniteNumber("2 x10"), FiniteNumber("3 x10")) == FiniteNumber("6 x10"));
+}
 
-	FiniteGroup group;
-	CHECK_NOTHROW(group.setElements(elements));
-	CHECK_NOTHROW(group.setGroupBinaryOperation(operator*));
+TEST_CASE("Test operate method") {
+	FiniteGroup group(PositiveNumber("10"), operator+);
 
-	CHECK(group.getIdentity() == FiniteNumber("1 x7"));
-	auto p7 = PositiveNumber("7");
-	CHECK(group.getP().equals(p7));
-	CHECK(group.getGroupSize() == 6);
+	// Test operate method
+	CHECK(group.operate(FiniteNumber("2 x10"), FiniteNumber("3 x10")) == FiniteNumber("5 x10"));
 
-	CHECK(group.operate(FiniteNumber("3 x7"), FiniteNumber("5 x7")) == FiniteNumber("1 x7"));
+	group.setGroupBinaryOperation(operator*);
+	CHECK(group.operate(FiniteNumber("2 x10"), FiniteNumber("3 x10")) == FiniteNumber("6 x10"));
+}
 
-	elements = { FiniteNumber("1 x7777"), FiniteNumber("2 x7"), FiniteNumber("3 x7"), FiniteNumber("4 x7"), FiniteNumber("5 x7"), FiniteNumber("6 x7") };
-	CHECK_THROWS_MESSAGE(group.setElements(elements), "Group has different P");
+TEST_CASE("Test getP method") {
+	FiniteGroup group(PositiveNumber("10"), operator+);
 
-	elements = { FiniteNumber("1 x7"), FiniteNumber("8 x7"), FiniteNumber("3 x7"), FiniteNumber("4 x7"), FiniteNumber("5 x7"), FiniteNumber("6 x7") };
-	CHECK_THROWS_MESSAGE(group.setElements(elements), "Dublicates are found");
+	auto ten = PositiveNumber("10");
+	CHECK(group.getP().equals(ten));
 
-	elements = { FiniteNumber("2 x7"), FiniteNumber("3 x7"), FiniteNumber("4 x7"), FiniteNumber("5 x7"), FiniteNumber("6 x7") };
-	CHECK_THROWS_MESSAGE(group.setElements(elements), "Group does not have an identity element");
+	// Test getP method with a different modulus
+	FiniteGroup group2(PositiveNumber("7"), operator+);
+	auto seven = PositiveNumber("7");
+	CHECK(group2.getP() == seven);
+}
 
-	elements = { FiniteNumber("1 x7"), FiniteNumber("2 x7"), FiniteNumber("3 x7"), FiniteNumber("5 x7"), FiniteNumber("6 x7") };
-	CHECK_THROWS_MESSAGE(group.setElements(elements), "Group is not closed");
+// TODO: Implement group element order
+TEST_CASE("Test ElementOrder method") {
+	FiniteGroup group(PositiveNumber("7"), operator+);
+
+	// Test ElementOrder method
+	CHECK(group.ElementOrder(FiniteNumber("2 x10")) == 5);
+
+	// Test ElementOrder method with a different binary operation
+	group.setGroupBinaryOperation(operator*);
+	CHECK(group.ElementOrder(FiniteNumber("2 x10")) == 4);
 }
