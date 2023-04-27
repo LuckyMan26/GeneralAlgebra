@@ -141,6 +141,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="FiniteField.cpp" />
+    <ClCompile Include="PolynomialElementTest.cpp" />
     <ClCompile Include="RPolynomialTest.cpp" />
     <ClCompile Include="tests.cpp" />
   </ItemGroup>

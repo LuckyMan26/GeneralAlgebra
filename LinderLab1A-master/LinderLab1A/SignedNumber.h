@@ -50,6 +50,13 @@ public:
 		result.zeroSignCheck();
 		return result;
 	}
+	friend SignedNumber operator*(const SignedNumber& left, const SignedNumber& right) {
+		PositiveNumber p = PositiveNumber::simpleMultiplication(left, right);
+		SignedNumber result = SignedNumber(p, (left.sign == right.sign) ? PLUS : MINUS);
+		result.zeroSignCheck();
+		return result;
+	}
+
 	SignedNumber operator*(const PositiveNumber& n) {
 		SignedNumber result = SignedNumber(PositiveNumber::simpleMultiplication(*this, n), this->sign);
 		result.zeroSignCheck();

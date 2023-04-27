@@ -15,6 +15,7 @@ private:
 	}
 
 public:
+	FiniteNumber() {}
 
 	FiniteNumber(PositiveNumber base, PositiveNumber p) {
 		f = (FiniteField(p));
@@ -78,9 +79,12 @@ public:
 		this->toFieldSize();
 		return *this;
 	}
-	FiniteNumber operator*(const FiniteNumber& n) {
-		return this->toFinite(simpleMultiplication(n));
+	friend FiniteNumber operator*(FiniteNumber left, const FiniteNumber& n) {
+		return left.toFinite(left.simpleMultiplication(n));
 	}
+	//FiniteNumber operator*(const FiniteNumber& n) {
+	//	return this->toFinite(simpleMultiplication(n));
+	//}
 	FiniteNumber operator*=(const FiniteNumber& n) {
 		this->multiplyBy(n);
 		this->toFieldSize();

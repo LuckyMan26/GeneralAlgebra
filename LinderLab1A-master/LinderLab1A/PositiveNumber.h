@@ -260,6 +260,12 @@ public:
 		}
 		return true;
 	}
+
+	//Implemented by Y. Kishchuk
+	bool operator==(const PositiveNumber& right) const {
+		return this->equals(const_cast<PositiveNumber&>(right));
+	}
+
 	//Division with remainder 
 	//Implemented by Artem Volyk
 	int operator % (int& n) const {
