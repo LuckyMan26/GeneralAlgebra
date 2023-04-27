@@ -4,8 +4,7 @@
 #include <string>
 #include "PolynomialElement.h"
 
-// Implemented by V.Avramenko and M.Tyshchenko
-// Modified by Y. Kishchuk
+// Implemented by V.Avramenko, M.Tyshchenko and Y. Kishchuk
 template<typename TCoefficient>
 class Polynomial {
 protected:
@@ -130,6 +129,97 @@ public:
 		}
 		if (result[0] == '+')
 			result = result.substr(1);
+		return result;
+	}
+
+	// Implemented by Y. Kishchuk
+
+	Polynomial operator+(const Polynomial& right) const {
+		Polynomial<TCoefficient> result;
+		auto leftIter = coefficients.begin();
+		auto rightIter = right.coefficients.begin();
+
+		while (leftIter != coefficients.end() && rightIter != right.coefficients.end()) {
+			if (leftIter->getDegree() == rightIter->getDegree()) {
+				auto newElement = *leftIter + *rightIter;
+				result.coefficients.push_back(newElement);
+				leftIter++;
+				rightIter++;
+			}
+			else if (leftIter->getDegree() > rightIter->getDegree()) {
+				result.coefficients.push_back(*leftIter);
+				leftIter++;
+			}
+			else {
+				result.coefficients.push_back(*rightIter);
+				rightIter++;
+			}
+		}
+
+		while (leftIter != coefficients.end()) {
+			result.coefficients.push_back(*leftIter);
+			leftIter++;
+		}
+
+		while (rightIter != right.coefficients.end()) {
+			result.coefficients.push_back(*rightIter);
+			rightIter++;
+		}
+
+		result.trim();
+		return result;
+	}
+
+	Polynomial operator-(const Polynomial& right) const {
+		Polynomial<TCoefficient> result;
+		auto leftIter = coefficients.begin();
+		auto rightIter = right.coefficients.begin();
+
+		while (leftIter != coefficients.end() && rightIter != right.coefficients.end()) {
+			if (leftIter->getDegree() == rightIter->getDegree()) {
+				auto newElement = *leftIter * *rightIter;
+				result.coefficients.push_back(newElement);
+				leftIter++;
+				rightIter++;
+			}
+			else if (leftIter->getDegree() > rightIter->getDegree()) {
+				result.coefficients.push_back(*leftIter);
+				leftIter++;
+			}
+			else {
+				auto newCoefficient = rightIter->getCoefficient() * TCoefficient(-1);
+				result.coefficients.push_back(PolynomialElement<TCoefficient>(newCoefficient, rightIter->getDegree()));
+				rightIter++;
+			}
+		}
+
+		while (leftIter != coefficients.end()) {
+			result.coefficients.push_back(*leftIter);
+			leftIter++;
+		}
+
+		while (rightIter != right.coefficients.end()) {
+			auto newCoefficient = rightIter->getCoefficient() * TCoefficient(-1);
+			result.coefficients.push_back(PolynomialElement<TCoefficient>(newCoefficient, rightIter->getDegree()));
+			rightIter++;
+		}
+
+		result.trim();
+		return result;
+	}
+
+	Polynomial operator*(const Polynomial& right) const {
+		Polynomial<TCoefficient> result;
+
+		for (auto leftIter = coefficients.begin(); leftIter != coefficients.end(); leftIter++) {
+			for (auto rightIter = right.coefficients.begin(); rightIter != right.coefficients.end(); rightIter++) {
+				auto newCoefficient = leftIter->getCoefficient() * rightIter->getCoefficient();
+				auto newDegree = leftIter->getDegree() + rightIter->getDegree();
+				result.emplaceDegree(newCoefficient, newDegree);
+			}
+		}
+
+		result.trim();
 		return result;
 	}
 };
