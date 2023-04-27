@@ -9,7 +9,7 @@
 class RPolynomial
 {
 private:
-	std::list<PolynomialElement> coefficients;
+	std::list<PolynomialElement<SignedNumber>> coefficients;
 	RPolynomial() {
 		
 	}
@@ -27,7 +27,7 @@ private:
 	}
 
 	void emplaceDegree(SignedNumber coefficient, PositiveNumber degree) {
-		PolynomialElement toAdd = PolynomialElement(coefficient, degree);
+		auto toAdd = PolynomialElement<SignedNumber>(coefficient, degree);
 		if (coefficients.empty()) {
 			coefficients.push_back(toAdd);
 			return;
@@ -36,8 +36,8 @@ private:
 			coefficients.push_back(toAdd);
 			return;
 		}
-		for (std::list<PolynomialElement>::iterator iterator = coefficients.begin(); iterator != coefficients.end(); iterator++) {
-			PolynomialElement element = *iterator;
+		for (std::list<PolynomialElement<SignedNumber>>::iterator iterator = coefficients.begin(); iterator != coefficients.end(); iterator++) {
+			auto element = *iterator;
 			if (element.getDegree() == degree) {
 				iterator->setCoefficient(element.getCoefficient() + coefficient);
 				return;
@@ -47,7 +47,7 @@ private:
 				return;
 			}
 		}
-		PolynomialElement element = coefficients.back();
+		auto element = coefficients.back();
 		if (element.getDegree() == degree) {
 			element.setCoefficient(element.getCoefficient() + coefficient); //add coefficients with same degree
 			return;
@@ -56,9 +56,9 @@ private:
 	}
 	/*Removes all elements, where coefficient equals zero*/
 	void trim() {
-		std::list<PolynomialElement> newList;
+		std::list<PolynomialElement<SignedNumber>> newList;
 		SignedNumber zero = SignedNumber();
-		for (PolynomialElement element : coefficients) {
+		for (auto element : coefficients) {
 			if (element.getCoefficient() == zero)
 				continue;
 			newList.push_back(element);
@@ -121,7 +121,7 @@ public:
 		if (coefficients.empty())
 			return "0";
 		std::string result = "";
-		for (PolynomialElement n : coefficients) {
+		for (auto n : coefficients) {
 			if (n.getCoefficient().isPositive())
 				result += '+';
 			result += n.toString();
@@ -142,7 +142,7 @@ public:
 			RPolynomial res = RPolynomial();
 			SignedNumber uno = SignedNumber("1");
 			for (PositiveNumber i = PositiveNumber("0"); i < degree; i += uno) {
-				res.coefficients.push_back(PolynomialElement(uno, i));
+				res.coefficients.push_back(PolynomialElement<SignedNumber>(uno, i));
 			}
 			return res;
 		}
@@ -153,11 +153,11 @@ public:
 			for (PositiveNumber i = PositiveNumber("0"); i < degree; i += uno) {
 				if (switcher) {
 					uno.flipSign();
-					res.coefficients.push_back(PolynomialElement(uno, i));
+					res.coefficients.push_back(PolynomialElement<SignedNumber>(uno, i));
 					uno.flipSign();
 				}
 				else {
-					res.coefficients.push_back(PolynomialElement(uno, i));
+					res.coefficients.push_back(PolynomialElement<SignedNumber>(uno, i));
 				}
 				switcher = !switcher;
 			}
@@ -173,10 +173,10 @@ public:
 	RPolynomial derivative() {
 		RPolynomial deriv = RPolynomial();
 		SignedNumber zero = SignedNumber("0");
-		for (PolynomialElement element : coefficients) {
+		for (auto element : coefficients) {
 			SignedNumber coefficient = element.getCoefficient() * element.getDegree();
 			if (coefficient != zero)
-				deriv.coefficients.push_back(PolynomialElement(coefficient, element.getDegree() - PositiveNumber("1")));
+				deriv.coefficients.push_back(PolynomialElement<SignedNumber>(coefficient, element.getDegree() - PositiveNumber("1")));
 		}
 		return deriv;
 	}
@@ -185,8 +185,8 @@ public:
 		Exponentiation exp;
 		SignedNumber zero = SignedNumber("0");
 		SignedNumber current = SignedNumber();
-		PolynomialElement prevElement = PolynomialElement(SignedNumber("0"), coefficients.front().getDegree() + PositiveNumber("1"));
-		for (PolynomialElement element : coefficients) {
+		auto prevElement = PolynomialElement<SignedNumber>(SignedNumber("0"), coefficients.front().getDegree() + PositiveNumber("1"));
+		for (auto element : coefficients) {
 			if (current != zero) {
 				current = current * exp.fastExponention(x, prevElement.getDegree() - element.getDegree() - PositiveNumber("1"));
 			}
