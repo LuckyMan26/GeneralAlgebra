@@ -2,7 +2,12 @@
 
 #include <list>
 #include <string>
+#include <type_traits>
 #include "PolynomialElement.h"
+
+template <typename T>
+class has_isPositive;
+
 
 // Implemented by V.Avramenko, M.Tyshchenko and Y. Kishchuk
 template<typename TCoefficient>
@@ -12,11 +17,11 @@ protected:
 
 	Polynomial() {}
 
-private:
 	/*Removes all elements, where coefficient equals zero*/
 	void trim() {
 		std::list<PolynomialElement<TCoefficient>> newList;
-		TCoefficient zero = TCoefficient();
+		TCoefficient zero = genZeroCoefficient();
+
 		for (auto element : coefficients) {
 			if (element.getCoefficient() == zero)
 				continue;
@@ -25,7 +30,7 @@ private:
 		this->coefficients = newList;
 	}
 
-	std::string replaceAll(std::string origin, std::string target, std::string replacement) {
+	static std::string replaceAll(std::string origin, std::string target, std::string replacement) {
 		int length = target.size();
 		int replacementSize = replacement.size();
 		std::size_t pos = origin.find(target);
@@ -66,6 +71,14 @@ private:
 		coefficients.emplace(--coefficients.end(), toAdd);
 	}
 
+	virtual TCoefficient genZeroCoefficient() const {
+		return TCoefficient();
+	}
+
+	virtual TCoefficient genCoefficient(const std::string& str) const {
+		return TCoefficient(str);
+	}
+
 public:
 	/*
 	* Input string format Ax^B-Cx^D+Ex^F+G
@@ -84,7 +97,7 @@ public:
 		while (pos != std::string::npos)
 		{
 			std::string token = s.substr(1, pos-1);
-			s = s.substr(pos);
+			s = s.substr(pos); 
 			std::size_t degreePos = token.find('^');
 			if (degreePos == std::string::npos) { //no degree sign found : special case
 				if (token[token.size() - 1] == 'x') {
@@ -93,10 +106,10 @@ public:
 						coefficient = "1";
 					else if (coefficient == "-") // -x ~ -1 * x
 						coefficient = "-1";
-					emplaceDegree(coefficient, PositiveNumber("1"));
+					emplaceDegree(genCoefficient(coefficient), PositiveNumber("1"));
 				}
 				else {
-					emplaceDegree(token, PositiveNumber("0"));
+					emplaceDegree(genCoefficient(token), PositiveNumber("0"));
 				}
 			}
 			else {
@@ -106,7 +119,7 @@ public:
 				else if (coefficient == "-") // -x ~ -1 * x
 					coefficient = "-1";
 				std::string degree = token.substr(degreePos + 1);
-				emplaceDegree(TCoefficient(coefficient), PositiveNumber(degree));
+				emplaceDegree(genCoefficient(coefficient), PositiveNumber(degree));
 			}
 			pos = s.find("+", 1);
 		}
@@ -123,8 +136,14 @@ public:
 			return "0";
 		std::string result = "";
 		for (auto &n : coefficients) {
-			if (n.getCoefficient().isPositive())
+			if constexpr (has_isPositive<TCoefficient>::value) { 
+				if (n.getCoefficient().isPositive())
+					result += '+';
+			}
+			else {
 				result += '+';
+			}
+
 			result += n.toString();
 		}
 		if (result[0] == '+')
@@ -204,7 +223,7 @@ public:
 		}
 
 		while (rightIter != right.coefficients.end()) {
-			auto newCoefficient = rightIter->getCoefficient() * TCoefficient(-1);
+			auto newCoefficient = rightIter->getCoefficient() * TCoefficient("1");
 			result.coefficients.push_back(PolynomialElement<TCoefficient>(newCoefficient, rightIter->getDegree()));
 			rightIter++;
 		}
@@ -227,4 +246,19 @@ public:
 		result.trim();
 		return result;
 	}
+};
+
+
+// SFINAE test
+template <typename T>
+class has_isPositive
+{
+	typedef char one;
+	struct two { char x[2]; };
+
+	template <typename C> static one test(decltype(&C::isPositive));
+	template <typename C> static two test(...);
+
+public:
+	enum { value = sizeof(test<T>(0)) == sizeof(char) };
 };

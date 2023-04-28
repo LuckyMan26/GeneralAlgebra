@@ -172,6 +172,10 @@ TEST_CASE("Finite numbers") {
 
 	auto res = fin1 + fin2;
 	CHECK(res.toString() == "1127822179038104809524733176879403005056");
+
+	fin1 = FiniteNumber("-1 x10");
+	fin1.toFieldSize();
+	CHECK(fin1.toString() == "9");
 }
 
 //Tests by M. Tyshchenko
