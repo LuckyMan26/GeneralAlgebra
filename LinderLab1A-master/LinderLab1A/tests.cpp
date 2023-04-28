@@ -5,6 +5,7 @@
 #include "FiniteNumber.h"
 #include "Exponent.h"
 #include "Polynomial.h"
+#include "CalculationOfSquareRoot.h"
 
 #include <random>
 #include <string>
@@ -20,6 +21,7 @@ TEST_CASE("Positive numbers") {
 	CHECK((b - a).toString() == "1135");
 	CHECK((b + a).toString() == "1333");
 	CHECK((a + b).toString() == "1333");
+	
 }
 
 //Test by V.Avramenko
@@ -254,6 +256,34 @@ TEST_CASE("Test binary form") {
 	CHECK(PositiveNumber("4").bits() == "100");
 }
 
+
+//Tests for polynomial constructor
+TEST_CASE("Test zero") {
+	Polynomial p = Polynomial("100 20 10", PositiveNumber("17"));
+	CHECK(p.toString() == "15 3 10");
+}
+
+//Tests by P. Velychko #6
+//TEST_CASE("TestPositive") {
+//	FiniteNumber a("2",11);
+//
+//	FiniteNumber root1 = a.tonelli_shanks();
+//	
+//	CHECK(root1.power_mod(2)==a);
+//}
+
+//TEST_CASE("TestNotQuadraticResidue") {
+//	FiniteNumber a("3", 11);
+//	FiniteNumber b("-1", 11);
+//	CHECK(a.tonelli_shanks()==b);
+//}
+/*
+TEST_CASE("TestLargeNumbers") {
+	FiniteNumber a(999999999999999999, 1000000007);
+	FiniteNumber root1 = a.tonelli_shanks();
+	CHECK(root1.power_mod(2)==a);
+	
+}*/
 
 TEST_CASE("Test Integer Constuctors") {
 	int aInt = 20;

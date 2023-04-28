@@ -127,6 +127,11 @@ public:
 		}
 		return true;
 	}
+	//Implemented by Artem Volyk
+	void operator >>= (int i) {
+		std::rotate(digits.begin(), digits.begin() + 1, digits.end());
+		digits[0] = 0;
+	}
 	//Implemented by Vlad Avramenko
 	//Division for PositiveNumbers
 	PositiveNumber operator/(PositiveNumber& other) {

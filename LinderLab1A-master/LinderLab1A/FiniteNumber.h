@@ -7,7 +7,7 @@
 
 class FiniteNumber : public PositiveNumber {
 private: 
-	//p stands for field (ïîëå)
+	//p stands for field (Ã¯Ã®Ã«Ã¥)
 	FiniteField f;
 	void setP(PositiveNumber p) {
 		f.setP(p);
@@ -21,7 +21,11 @@ public:
 		this->digits = base.getDigits();
 		toFieldSize();
 	}
+	FiniteNumber(std::vector<int> v, FiniteField f_) : f(f_.getP()) {
+		digits = v;
+		toFieldSize();
 
+	}
 	FiniteNumber(std::string from, PositiveNumber p) {
 		this->digits = parseDigits(from);
 		setP(p);
@@ -215,12 +219,22 @@ public:
 	//Converts PositiveNumber to field size
 	void toFieldSize() {
 		PositiveNumber p = getP();
+		PositiveNumber zero("0");
+		if (p > *this && (zero<=*(this))) {
+=======
 		if (p > *this) {
+
 			return;
+		}
+		else if(zero <= *(this)){
+			PositiveNumber t = PositiveNumber(*this);
+			t = t % (p);
+			this->digits = t.getDigits();
 		}
 		else {
 			PositiveNumber t = PositiveNumber(*this);
-			t = t % (p);
+			t = (p-t) % (p);
+
 			this->digits = t.getDigits();
 		}
 	}
@@ -258,6 +272,64 @@ public:
 			}
 		}
 		return FiniteNumber(number, p);
+	}
+	FiniteNumber power_mod(PositiveNumber b) {     // power_mod modulo exponentiation calculation
+		FiniteNumber a(digits,f);
+		FiniteNumber res("1",f.getP());
+		FiniteNumber zero("0", f.getP());
+		PositiveNumber two(2);
+		while (b > zero) {
+			if (b % two==zero) {
+				res = (res * a);
+				
+			}
+			a = (a * a);
+			a.toFieldSize();
+			b >>= 1;
+		}
+	
+		return res;
+	}
+	FiniteNumber tonelli_shanks() {            // tonelli_shanks to calculate the square root
+		PositiveNumber q = f.getP() - 1;      // long long: represents an integer in the range from -9223372036854775808 to +9223372036854775807.
+		PositiveNumber two(2);
+		PositiveNumber zero(0);
+		PositiveNumber four(0);
+		FiniteNumber zeroFinite("0", f.getP());
+		FiniteNumber oneFinite("1", f.getP());
+		int s = 0;
+		FiniteNumber temp(f.getP() - 1, f.getP());
+		while (q % two == zero) {
+			q = q / two;
+			s += 1;
+		}
+		if (s == 1) {
+			return this->power_mod((f.getP()+1)/ four);
+		}
+		FiniteNumber h("2",f.getP());
+		for (;h.power_mod((f.getP()-1)/two) != temp; h=h+oneFinite) {}
+		FiniteNumber c = h.power_mod(q);
+		FiniteNumber r = power_mod((q+oneFinite)/two);
+		FiniteNumber t = power_mod(q);
+		int n = s;
+		while (t != oneFinite) {
+			FiniteNumber tt = t;
+			int i;
+			for (i = 1; i < n; i++) {
+				tt = (tt * tt);
+			
+				if (tt == oneFinite) {
+					break;
+				}
+			}
+			FiniteNumber b = c.power_mod(n-i-1);
+			r = (r * b);
+			c = (b * b);
+			t = (t * c);
+			n = i;
+		}
+		return r;
+
 	}
 };
 

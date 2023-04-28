@@ -11,17 +11,17 @@ class RPolynomial
 private:
 	std::list<PolynomialElement> coefficients;
 	RPolynomial() {
-		
+
 	}
 
 	std::string replaceAll(std::string origin, std::string target, std::string replacement) {
-		int length = target.size();	
+		int length = target.size();
 		int replacementSize = replacement.size();
 		std::size_t pos = origin.find(target);
 		while (pos != std::string::npos)
 		{
 			origin.replace(pos, length, replacement);
-			pos = origin.find(target, pos+replacementSize);
+			pos = origin.find(target, pos + replacementSize);
 		}
 		return origin;
 	}
@@ -74,16 +74,16 @@ public:
 	* Zero coefficients will be removed
 	*/
 	RPolynomial(std::string s) {
-		s=replaceAll(s, " ", ""); //no spaces
-		s=replaceAll(s, "-", "+-"); //for split
-		
-		if (s[0]!='+')
+		s = replaceAll(s, " ", ""); //no spaces
+		s = replaceAll(s, "-", "+-"); //for split
+
+		if (s[0] != '+')
 			s = "+" + s;
 		s = s + '+';
 		size_t pos = s.find("+", 1);
 		while (pos != std::string::npos)
 		{
-			std::string token = s.substr(1, pos-1);
+			std::string token = s.substr(1, pos - 1);
 			s = s.substr(pos);
 			std::size_t degreePos = token.find('^');
 			if (degreePos == std::string::npos) { //no degree sign found : special case
@@ -197,4 +197,3 @@ public:
 		return current;
 	}
 };
-
