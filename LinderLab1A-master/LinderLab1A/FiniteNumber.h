@@ -220,8 +220,6 @@ public:
 	void toFieldSize() {
 		PositiveNumber p = getP();
 		PositiveNumber zero("0");
-		if (p > *this && (zero<=*(this))) {
-=======
 		if (p > *this) {
 
 			return;
