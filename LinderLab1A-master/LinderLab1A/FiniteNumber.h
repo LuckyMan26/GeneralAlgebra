@@ -220,7 +220,7 @@ public:
 	void toFieldSize() {
 		PositiveNumber p = getP();
 		PositiveNumber zero("0");
-		if (p > *this) {
+		if (p > *this && zero <= *(this)) {
 
 			return;
 		}
@@ -231,7 +231,7 @@ public:
 		}
 		else {
 			PositiveNumber t = PositiveNumber(*this);
-			t = (p-t) % (p);
+			t = (p+t) % (p);
 
 			this->digits = t.getDigits();
 		}
@@ -271,38 +271,41 @@ public:
 		}
 		return FiniteNumber(number, p);
 	}
+	// Calculates a^b mod n
+
 	FiniteNumber power_mod(PositiveNumber b) {     // power_mod modulo exponentiation calculation
-		FiniteNumber a(digits,f);
+		FiniteNumber a(*this);
 		FiniteNumber res("1",f.getP());
-		FiniteNumber zero("0", f.getP());
+		FiniteNumber zero("0");
+		PositiveNumber zeroPositive(0);
 		PositiveNumber two(2);
 		while (b > zero) {
-			if (b % two==zero) {
-				res = (res * a);
-				
+			if ((b%two)!=zero) {
+				res = (res * a);	
 			}
 			a = (a * a);
 			a.toFieldSize();
-			b >>= 1;
+			b = b/two;
 		}
-	
+		res.toFieldSize();
 		return res;
 	}
+	// Finds a^((p+1)/2) mod p, where p is a prime number
 	FiniteNumber tonelli_shanks() {            // tonelli_shanks to calculate the square root
 		PositiveNumber q = f.getP() - 1;      // long long: represents an integer in the range from -9223372036854775808 to +9223372036854775807.
 		PositiveNumber two(2);
-		PositiveNumber zero(0);
-		PositiveNumber four(0);
+		PositiveNumber zero("0");
+		PositiveNumber four("4");
 		FiniteNumber zeroFinite("0", f.getP());
 		FiniteNumber oneFinite("1", f.getP());
 		int s = 0;
 		FiniteNumber temp(f.getP() - 1, f.getP());
-		while (q % two == zero) {
+		while ((q % two).isZero()|| (q % two)==zero) {
 			q = q / two;
 			s += 1;
 		}
 		if (s == 1) {
-			return this->power_mod((f.getP()+1)/ four);
+			return this->power_mod((f.getP()+ PositiveNumber("1"))/ four);
 		}
 		FiniteNumber h("2",f.getP());
 		for (;h.power_mod((f.getP()-1)/two) != temp; h=h+oneFinite) {}
