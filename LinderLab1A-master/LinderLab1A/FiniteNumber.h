@@ -6,7 +6,7 @@
 //Modified by A.Volyk
 
 class FiniteNumber : public PositiveNumber {
-private: 
+private:
 	//p stands for field (ïîëå)
 	FiniteField f;
 	void setP(PositiveNumber p) {
@@ -167,7 +167,7 @@ public:
 		SignedNumber s0("0"), s1("1");
 		while (true) {
 			SignedNumber d("0");
-			
+
 			while (n >= g) {
 				n -= g;
 				d.addTo(SignedNumber("-1"));
@@ -188,7 +188,7 @@ public:
 		}
 		if (s1.getSign() == MINUS) {
 			PositiveNumber s1_pos(s1);
-			
+
 			while (s1_pos > p) {
 				s1_pos -= p;
 			}
@@ -214,26 +214,24 @@ public:
 		if (p1 != p2) {
 			return FiniteNumber("1", this->getP());
 		}
-		return *this*num.inverse();
+		return *this * num.inverse();
 	}
 	//Converts PositiveNumber to field size
 	void toFieldSize() {
 		PositiveNumber p = getP();
 		PositiveNumber zero("0");
-
-		if (p > *this) {
 		if (p > *this && zero <= *(this)) {
 
 			return;
 		}
-		else if(zero <= *(this)){
+		else if (zero <= *(this)) {
 			PositiveNumber t = PositiveNumber(*this);
 			t = t % (p);
 			this->digits = t.getDigits();
 		}
 		else {
 			PositiveNumber t = PositiveNumber(*this);
-			t = (p+t) % (p);
+			t = (p + t) % (p);
 
 			this->digits = t.getDigits();
 		}
@@ -277,17 +275,17 @@ public:
 
 	FiniteNumber power_mod(PositiveNumber b) {     // power_mod modulo exponentiation calculation
 		FiniteNumber a(*this);
-		FiniteNumber res("1",f.getP());
+		FiniteNumber res("1", f.getP());
 		FiniteNumber zero("0");
 		PositiveNumber zeroPositive(0);
 		PositiveNumber two(2);
 		while (b > zero) {
-			if ((b%two)!=zero) {
-				res = (res * a);	
+			if ((b % two) != zero) {
+				res = (res * a);
 			}
 			a = (a * a);
 			a.toFieldSize();
-			b = b/two;
+			b = b / two;
 		}
 		res.toFieldSize();
 		return res;
@@ -302,17 +300,17 @@ public:
 		FiniteNumber oneFinite("1", f.getP());
 		int s = 0;
 		FiniteNumber temp(f.getP() - 1, f.getP());
-		while ((q % two).isZero()|| (q % two)==zero) {
+		while ((q % two).isZero() || (q % two) == zero) {
 			q = q / two;
 			s += 1;
 		}
 		if (s == 1) {
-			return this->power_mod((f.getP()+ PositiveNumber("1"))/ four);
+			return this->power_mod((f.getP() + PositiveNumber("1")) / four);
 		}
-		FiniteNumber h("2",f.getP());
-		for (;h.power_mod((f.getP()-1)/two) != temp; h=h+oneFinite) {}
+		FiniteNumber h("2", f.getP());
+		for (; h.power_mod((f.getP() - 1) / two) != temp; h = h + oneFinite) {}
 		FiniteNumber c = h.power_mod(q);
-		FiniteNumber r = power_mod((q+oneFinite)/two);
+		FiniteNumber r = power_mod((q + oneFinite) / two);
 		FiniteNumber t = power_mod(q);
 		int n = s;
 		while (t != oneFinite) {
@@ -320,12 +318,12 @@ public:
 			int i;
 			for (i = 1; i < n; i++) {
 				tt = (tt * tt);
-			
+
 				if (tt == oneFinite) {
 					break;
 				}
 			}
-			FiniteNumber b = c.power_mod(n-i-1);
+			FiniteNumber b = c.power_mod(n - i - 1);
 			r = (r * b);
 			c = (b * b);
 			t = (t * c);
@@ -335,4 +333,3 @@ public:
 
 	}
 };
-
