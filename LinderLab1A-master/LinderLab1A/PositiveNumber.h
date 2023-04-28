@@ -17,10 +17,11 @@ private:
 protected:
 
 	PositiveNumber trim() {
-		while (digits.size() != 0 && digits.back() == 0) {
+		while (!digits.empty() && digits.back() == 0) {
 			this->digits.pop_back();
 		}
-		
+		if (digits.empty())
+			digits.push_back(0);	
 		return (*this);
 	}
 
@@ -87,7 +88,7 @@ public:
 	}
 
 	bool isZero() {
-		return digits.empty();
+		return digits.back()==0;
 	}
 	friend PositiveNumber operator+(PositiveNumber left, const PositiveNumber& n) {
 		left.addTo(n);
@@ -427,6 +428,8 @@ public:
 				number.digits.insert(number.digits.begin(), 0);
 			}
 		}
+		if (number.digits.empty())
+			number.digits.push_back(0);
 		return number;
 	}
 
@@ -495,7 +498,7 @@ public:
 		std::string result = "";
 		PositiveNumber current = *this;
 		PositiveNumber zero = PositiveNumber("0");
-		if (digits.empty())
+		if (isZero())
 			return "0";
 		while (current != zero) {
 			if (current.digits[0] % 2) {
