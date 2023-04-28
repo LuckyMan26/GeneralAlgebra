@@ -26,7 +26,7 @@
 using namespace std;
 
 // Calculates a^b mod n
-long long power_mod(long long a, long long b, long long n) {     // power_mod modulo exponentiation calculation
+/*long long power_mod(long long a, long long b, long long n) {     // power_mod modulo exponentiation calculation
     long long res = 1;
     while (b > 0) {
         if (b & 1) {
@@ -71,19 +71,7 @@ long long tonelli_shanks(long long a, long long p) {            // tonelli_shank
         n = i;
     }
     return r;
-}
+}*/
 
-int main() {                                                                
-    long long a, p;
-    cout << "Enter a and p: ";                              // It is necessary to enter the value of the number a and the prime number p
-    cin >> a >> p;
-    if (power_mod(a, (p - 1) / 2, p) != 1) { 
-        cout << "a is not a quadratic residue mod p" << endl;      // In case a is not a quadratic remainder mod p
-        return 0;
-    }
-    long long root1 = tonelli_shanks(a, p);
-    long long root2 = p - root1;
-    cout << "The square roots of " << a << " mod " << p << " are " << root1 << " and " << root2 << endl;            // Get an answer
-    return 0;
-}
+
 

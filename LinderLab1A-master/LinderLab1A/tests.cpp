@@ -21,6 +21,7 @@ TEST_CASE("Positive numbers") {
 	CHECK((b - a).toString() == "1135");
 	CHECK((b + a).toString() == "1333");
 	CHECK((a + b).toString() == "1333");
+	
 }
 
 //Test by V.Avramenko
@@ -263,27 +264,53 @@ TEST_CASE("Test zero") {
 }
 
 //Tests by P. Velychko #6
-TEST_CASE("TestPositive") {
-	long long a = 2;
-	long long p = 11;
-	long long root1 = tonelli_shanks(a, p);
-	long long root2 = p - root1;
-	CHECK(power_mod(root1, 2, p), a);
-	CHECK(power_mod(root2, 2, p), a);
-}
+//TEST_CASE("TestPositive") {
+//	FiniteNumber a("2",11);
+//
+//	FiniteNumber root1 = a.tonelli_shanks();
+//	
+//	CHECK(root1.power_mod(2)==a);
+//}
 
-TEST_CASE("TestNotQuadraticResidue") {
-	long long a = 3;
-	long long p = 11;
-	CHECK(tonelli_shanks(a, p), -1);
-}
-
+//TEST_CASE("TestNotQuadraticResidue") {
+//	FiniteNumber a("3", 11);
+//	FiniteNumber b("-1", 11);
+//	CHECK(a.tonelli_shanks()==b);
+//}
+/*
 TEST_CASE("TestLargeNumbers") {
-	long long a = 999999999999999999;
-	long long p = 1000000007;
-	long long root1 = tonelli_shanks(a, p);
-	long long root2 = p - root1;
-	CHECK(power_mod(root1, 2, p), a);
-	CHECK(power_mod(root2, 2, p), a);
+	FiniteNumber a(999999999999999999, 1000000007);
+	FiniteNumber root1 = a.tonelli_shanks();
+	CHECK(root1.power_mod(2)==a);
+	
+}*/
+TEST_CASE("Test Integer Constuctors") {
+	int aInt = 20;
+	int bInt = 44;
+	PositiveNumber a = PositiveNumber(aInt);
+	PositiveNumber b = PositiveNumber(bInt);
+	CHECK("64" == (a + b).toString());
+	
+	FiniteNumber finite1 = FiniteNumber(18, 17);
+	CHECK("1" == finite1.toString());
+}
+
+TEST_CASE("Additional operators test") {
+	FiniteNumber a = FiniteNumber(20, 17);
+	FiniteNumber b = FiniteNumber(3, 17);
+	FiniteNumber c = FiniteNumber(3, 11);
+	FiniteNumber d = FiniteNumber(4, 17);
+	CHECK(a == b);
+	CHECK(a != c);
+	CHECK(a != d);
+}
+
+TEST_CASE("Additional operators") {
+	FiniteNumber a = FiniteNumber(16, 17);
+	FiniteNumber b = FiniteNumber(14, 17);
+	CHECK(a > b);
+	CHECK(b < a);
+	CHECK(!(a < b));
+	CHECK(!(b > a));
 }
 

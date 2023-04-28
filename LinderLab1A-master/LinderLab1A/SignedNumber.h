@@ -1,7 +1,7 @@
 #pragma once
 #include "PositiveNumber.h"
 //Created by M.Tyshchenko
-enum Sign {PLUS, MINUS};
+enum Sign { PLUS, MINUS };
 
 class SignedNumber : public PositiveNumber {
 private:
@@ -18,42 +18,101 @@ public:
 	SignedNumber() : PositiveNumber() {
 		sign = PLUS;
 	}
+	SignedNumber(long long s) {
+		this->parseDigits(std::to_string(s));
+	}
+	SignedNumber(std::string str) {
+		if (str[0] == '-') {
+			str = str.substr(1);
+			this->sign = MINUS;
+		}
+		this->digits = parseDigits(str);
+		this->trim();
+	}
+	SignedNumber(PositiveNumber absolute, Sign sign) {
+		this->sign = sign;
+		this->digits = absolute.getDigits();
+		this->trim();
+	}
 	friend SignedNumber operator+(SignedNumber left, const SignedNumber& n) {
 		left.addTo(n);
 		left.zeroSignCheck();
 		return left;
 	}
-	SignedNumber& operator+=(const SignedNumber& n) {
-		this->addTo(n);
-		zeroSignCheck();
-		return *this;
-	}
-	SignedNumber operator*(const SignedNumber& n) {
-		PositiveNumber p = PositiveNumber::simpleMultiplication(*this, n);
-		SignedNumber result = SignedNumber(p, (this->sign == n.sign) ? PLUS : MINUS);
-		result.zeroSignCheck();
-		return result;
-	}
-	SignedNumber operator*(const PositiveNumber& n) {
-		SignedNumber result = SignedNumber(PositiveNumber::simpleMultiplication(*this, n), this->sign);
-		result.zeroSignCheck();
-		return result;
-	}
-	SignedNumber operator*=(const SignedNumber& n) {
-		this->multiplyBy(n);
-		zeroSignCheck();
-		return *this;
-	}
-	friend PositiveNumber operator-(SignedNumber left, const SignedNumber& n) {
-		left.substractFrom(n);
+	friend SignedNumber operator+(SignedNumber left, const PositiveNumber& n) {
+		left.addTo(SignedNumber(n, PLUS));
 		left.zeroSignCheck();
 		return left;
 	}
-	PositiveNumber& operator-=(const SignedNumber& n) {
-		this->substractFrom(n);
-		zeroSignCheck();
+		friend SignedNumber operator+(PositiveNumber left, const SignedNumber & n) {
+			return n + left;
+		}
+		SignedNumber& operator+=(const SignedNumber & n) {
+			this->addTo(n);
+			zeroSignCheck();
+
+			return *this;
+		}
+		SignedNumber& operator+=(const PositiveNumber & n) {
+			this->addTo(SignedNumber(n, PLUS));
+			zeroSignCheck();
+
+			return *this;
+		}
+		SignedNumber operator*(const SignedNumber & n) {
+			PositiveNumber p = PositiveNumber::simpleMultiplication(*this, n);
+			SignedNumber result = SignedNumber(p, (this->sign == n.sign) ? PLUS : MINUS);
+			result.zeroSignCheck();
+			return result;
+		}
+		SignedNumber operator*(const PositiveNumber & n) {
+			SignedNumber result = SignedNumber(PositiveNumber::simpleMultiplication(*this, n), this->sign);
+			result.zeroSignCheck();
+			return result;
+		}
+		SignedNumber operator*=(const SignedNumber & n) {
+			this->multiplyBy(n);
+			zeroSignCheck();
+			return *this;
+		}
+		SignedNumber operator*=(const PositiveNumber & n) {
+			this->multiplyBy(SignedNumber(n, PLUS));
+			zeroSignCheck();
+			return *this;
+		}
+		friend SignedNumber operator-(SignedNumber left, const SignedNumber & n) {
+			left.substractFrom(n);
+			left.zeroSignCheck();
+
+			return left;
+		}
+		friend SignedNumber operator-(SignedNumber left, const PositiveNumber & n) {
+			left.substractFrom(SignedNumber(n, PLUS));
+			left.zeroSignCheck();
+
+
+			return left;
+		}
+		friend SignedNumber operator-(PositiveNumber left, const SignedNumber & n) {
+			SignedNumber result = SignedNumber(left, PLUS);
+			result.substractFrom(n);
+			result.zeroSignCheck();
+			return result;
+		}
+		SignedNumber& operator-=(const SignedNumber & n) {
+			this->substractFrom(n);
+			zeroSignCheck();
+
+			return *this;
+		}
+		SignedNumber& operator-=(const PositiveNumber & n) {
+			this->substractFrom(SignedNumber(n, PLUS));
+			zeroSignCheck();
+			return *this;
+
 		return *this;
 	}
+
 	bool isPositive() {
 		return this->sign == PLUS;
 	}
@@ -66,6 +125,12 @@ public:
 	bool operator!=(SignedNumber& n) const {
 		return !equals(n);
 	}
+	bool operator==(PositiveNumber& n) const {
+		return equals(SignedNumber(n, PLUS));
+	}
+	bool operator!=(PositiveNumber& n) const {
+		return !equals(SignedNumber(n, PLUS));
+	}
 	bool operator>(SignedNumber& n) const {
 		if (n.sign == PLUS && this->sign == MINUS)
 			return false;
@@ -74,7 +139,22 @@ public:
 		}
 		return PositiveNumber::operator>(n);
 	}
-
+	bool operator>(PositiveNumber& n) const {
+		SignedNumber a = SignedNumber(n, PLUS);
+		return operator>(a);
+	}
+	bool operator>=(PositiveNumber& n) const {
+		SignedNumber a = SignedNumber(n, PLUS);
+		return operator>=(a);
+	}
+	bool operator<(PositiveNumber& n) const {
+		SignedNumber a = SignedNumber(n, PLUS);
+		return operator<(a);
+	}
+	bool operator<=(PositiveNumber& n) const {
+		SignedNumber a = SignedNumber(n, PLUS);
+		return operator<=(a);
+	}
 	bool operator>=(SignedNumber& n) const {
 		if (n.sign == PLUS && this->sign == MINUS)
 			return false;
@@ -111,7 +191,7 @@ public:
 		}
 		else {
 			this->sign = PositiveNumber::operator>(other) ? this->sign : other.sign;
-			PositiveNumber::substract(other);	
+			PositiveNumber::substract(other);
 		}
 
 	}
@@ -126,19 +206,7 @@ public:
 			PositiveNumber::addTo(other);
 		}
 	}
-	SignedNumber(std::string str) {
-		if (str[0] == '-') {
-			str = str.substr(1);
-			this->sign = MINUS;
-		}
-		this->digits = parseDigits(str);
-		this->trim();
-	}
-	SignedNumber(PositiveNumber absolute, Sign sign) {
-		this->sign = sign;
-		this->digits = absolute.getDigits();
-		this->trim();
-	}
+
 	std::string toString() {
 		std::string s = sign == PLUS ? "" : "-";
 		s += PositiveNumber::toString();

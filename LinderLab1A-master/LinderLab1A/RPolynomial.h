@@ -11,17 +11,17 @@ class RPolynomial
 private:
 	std::list<PolynomialElement> coefficients;
 	RPolynomial() {
-		
+
 	}
 
 	std::string replaceAll(std::string origin, std::string target, std::string replacement) {
-		int length = target.size();	
+		int length = target.size();
 		int replacementSize = replacement.size();
 		std::size_t pos = origin.find(target);
 		while (pos != std::string::npos)
 		{
 			origin.replace(pos, length, replacement);
-			pos = origin.find(target, pos+replacementSize);
+			pos = origin.find(target, pos + replacementSize);
 		}
 		return origin;
 	}
@@ -74,16 +74,16 @@ public:
 	* Zero coefficients will be removed
 	*/
 	RPolynomial(std::string s) {
-		s=replaceAll(s, " ", ""); //no spaces
-		s=replaceAll(s, "-", "+-"); //for split
-		
-		if (s[0]!='+')
+		s = replaceAll(s, " ", ""); //no spaces
+		s = replaceAll(s, "-", "+-"); //for split
+
+		if (s[0] != '+')
 			s = "+" + s;
 		s = s + '+';
 		size_t pos = s.find("+", 1);
 		while (pos != std::string::npos)
 		{
-			std::string token = s.substr(1, pos-1);
+			std::string token = s.substr(1, pos - 1);
 			s = s.substr(pos);
 			std::size_t degreePos = token.find('^');
 			if (degreePos == std::string::npos) { //no degree sign found : special case
@@ -130,6 +130,46 @@ public:
 			result = result.substr(1);
 		return result;
 	}
+
+
+	//Implemented by V.Avramenko
+
+	/*
+	Cyclotomic Polynomial
+	*/
+
+	friend RPolynomial cyclotomic(PositiveNumber degree) {
+		if (degree.is_prime()) {
+			RPolynomial res = RPolynomial();
+			SignedNumber uno = SignedNumber("1");
+			for (PositiveNumber i = PositiveNumber("0"); i < degree; i += uno) {
+				res.coefficients.push_back(PolynomialElement(uno, i));
+			}
+			return res;
+		}
+		else if (degree.is_even()) {
+			RPolynomial res = RPolynomial();
+			SignedNumber uno = SignedNumber("1");
+			bool switcher = false;
+			for (PositiveNumber i = PositiveNumber("0"); i < degree; i += uno) {
+				if (switcher) {
+					uno.flipSign();
+					res.coefficients.push_back(PolynomialElement(uno, i));
+					uno.flipSign();
+				}
+				else {
+					res.coefficients.push_back(PolynomialElement(uno, i));
+				}
+				switcher = !switcher;
+			}
+		}
+		else {
+			//TO BE CONTINUED
+			//Waiting for var 13 implementation to continue my work
+		}
+	}
+
+
 	//Returns derivative of the polynomial
 	RPolynomial derivative() {
 		RPolynomial deriv = RPolynomial();
@@ -157,4 +197,3 @@ public:
 		return current;
 	}
 };
-
