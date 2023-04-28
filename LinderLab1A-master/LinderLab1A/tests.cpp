@@ -5,6 +5,7 @@
 #include "FiniteNumber.h"
 #include "Exponent.h"
 #include "Polynomial.h"
+#include "CalculationOfSquareRoot.h"
 
 #include <random>
 #include <string>
@@ -260,3 +261,29 @@ TEST_CASE("Test zero") {
 	Polynomial p = Polynomial("100 20 10", PositiveNumber("17"));
 	CHECK(p.toString() == "15 3 10");
 }
+
+//Tests by P. Velychko #6
+TEST_CASE("TestPositive") {
+	long long a = 2;
+	long long p = 11;
+	long long root1 = tonelli_shanks(a, p);
+	long long root2 = p - root1;
+	CHECK(power_mod(root1, 2, p), a);
+	CHECK(power_mod(root2, 2, p), a);
+}
+
+TEST_CASE("TestNotQuadraticResidue") {
+	long long a = 3;
+	long long p = 11;
+	CHECK(tonelli_shanks(a, p), -1);
+}
+
+TEST_CASE("TestLargeNumbers") {
+	long long a = 999999999999999999;
+	long long p = 1000000007;
+	long long root1 = tonelli_shanks(a, p);
+	long long root2 = p - root1;
+	CHECK(power_mod(root1, 2, p), a);
+	CHECK(power_mod(root2, 2, p), a);
+}
+
