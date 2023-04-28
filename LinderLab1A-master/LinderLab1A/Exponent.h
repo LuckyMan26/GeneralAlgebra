@@ -138,4 +138,17 @@ public:
 		}
 		return res;
 	}
+
+	PositiveNumber fastExponention(PositiveNumber base, PositiveNumber power) {
+		PositiveNumber res = PositiveNumber("1");
+		std::string powerBits = power.bitsReverse();
+		for (int i = 0; i < powerBits.length(); i++) {
+			if (powerBits[i] == '1') {
+				res = base * res;
+			}
+			base = base * base;
+		}
+		return res;
+	}
+
 };

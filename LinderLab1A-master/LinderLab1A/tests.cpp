@@ -255,8 +255,33 @@ TEST_CASE("Test binary form") {
 }
 
 
-//Tests for polynomial constructor
-TEST_CASE("Test zero") {
-	Polynomial p = Polynomial("100 20 10", PositiveNumber("17"));
-	CHECK(p.toString() == "15 3 10");
+TEST_CASE("Test Integer Constuctors") {
+	int aInt = 20;
+	int bInt = 44;
+	PositiveNumber a = PositiveNumber(aInt);
+	PositiveNumber b = PositiveNumber(bInt);
+	CHECK("64" == (a + b).toString());
+	
+	FiniteNumber finite1 = FiniteNumber(18, 17);
+	CHECK("1" == finite1.toString());
 }
+
+TEST_CASE("Additional operators test") {
+	FiniteNumber a = FiniteNumber(20, 17);
+	FiniteNumber b = FiniteNumber(3, 17);
+	FiniteNumber c = FiniteNumber(3, 11);
+	FiniteNumber d = FiniteNumber(4, 17);
+	CHECK(a == b);
+	CHECK(a != c);
+	CHECK(a != d);
+}
+
+TEST_CASE("Additional operators") {
+	FiniteNumber a = FiniteNumber(16, 17);
+	FiniteNumber b = FiniteNumber(14, 17);
+	CHECK(a > b);
+	CHECK(b < a);
+	CHECK(!(a < b));
+	CHECK(!(b > a));
+}
+
