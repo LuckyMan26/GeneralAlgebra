@@ -7,7 +7,7 @@
 
 class FiniteNumber : public PositiveNumber {
 private: 
-	//p stands for field (поле)
+	//p stands for field (ГЇГ®Г«ГҐ)
 	FiniteField f;
 	void setP(PositiveNumber p) {
 		f.setP(p);
@@ -24,6 +24,7 @@ public:
 	FiniteNumber(std::vector<int> v, FiniteField f_) : f(f_.getP()) {
 		digits = v;
 		toFieldSize();
+
 	}
 	FiniteNumber(std::string from, PositiveNumber p) {
 		this->digits = parseDigits(from);
@@ -220,6 +221,9 @@ public:
 		PositiveNumber p = getP();
 		PositiveNumber zero("0");
 		if (p > *this && (zero<=*(this))) {
+=======
+		if (p > *this) {
+
 			return;
 		}
 		else if(zero <= *(this)){
@@ -230,6 +234,7 @@ public:
 		else {
 			PositiveNumber t = PositiveNumber(*this);
 			t = (p-t) % (p);
+
 			this->digits = t.getDigits();
 		}
 	}
@@ -324,6 +329,7 @@ public:
 			n = i;
 		}
 		return r;
+
 	}
 };
 
