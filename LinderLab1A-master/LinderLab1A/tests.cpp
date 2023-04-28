@@ -264,26 +264,54 @@ TEST_CASE("Test zero") {
 }
 
 //Tests by P. Velychko #6
-//TEST_CASE("TestPositive") {
-//	FiniteNumber a("2",11);
-//
-//	FiniteNumber root1 = a.tonelli_shanks();
-//	
-//	CHECK(root1.power_mod(2)==a);
-//}
-
-//TEST_CASE("TestNotQuadraticResidue") {
-//	FiniteNumber a("3", 11);
-//	FiniteNumber b("-1", 11);
-//	CHECK(a.tonelli_shanks()==b);
-//}
-/*
-TEST_CASE("TestLargeNumbers") {
-	FiniteNumber a(999999999999999999, 1000000007);
-	FiniteNumber root1 = a.tonelli_shanks();
-	CHECK(root1.power_mod(2)==a);
+TEST_CASE("TestNonQuadraticPositive") {
+	FiniteNumber a("2",11);
+	FiniteNumber one("1", 11);
+	FiniteNumber x(a.power_mod((11 - 1) / 2));
+	if ( x != one) {
+		cout << "a is not a quadratic residue mod p" << endl;
 	
-}*/
+	}
+	else {
+		FiniteNumber root1 = a.tonelli_shanks();
+
+		CHECK(root1.power_mod(2) == a);
+	}
+}
+
+TEST_CASE("TestQuadraticResidue") {
+	FiniteNumber a("3", 11);
+	FiniteNumber b("5", 11);
+	FiniteNumber one("1", 11);
+
+	FiniteNumber x(a.power_mod((11 - 1) / 2));
+
+	if (x != one) {
+		cout << "a is not a quadratic residue mod p" << endl;
+
+	}
+	else {
+		FiniteNumber root(a.tonelli_shanks());
+		CHECK(root == b);
+	}
+}
+
+TEST_CASE("TestQuadraticResidue") {
+	FiniteNumber a("3", 19);
+	
+	FiniteNumber one("1", 19);
+
+	FiniteNumber x(a.power_mod((19 - 1) / 2));
+
+	if (x != one) {
+		cout << "a is not a quadratic residue mod p" << endl;
+
+	}
+	else {
+		FiniteNumber root(a.tonelli_shanks());
+		CHECK(root.power_mod(2) == a);
+	}
+}
 
 TEST_CASE("Test Integer Constuctors") {
 	int aInt = 20;

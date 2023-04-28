@@ -21,7 +21,7 @@ protected:
 			this->digits.pop_back();
 		}
 		if (digits.empty())
-			digits.push_back(0);
+			digits.push_back(0);	
 		return (*this);
 	}
 
@@ -121,6 +121,7 @@ public:
 		return !equals(n);
 	}
 	bool equals(PositiveNumber& n) const {
+		
 		if (digits.size() != n.digits.size())
 			return false;
 		for (int i = 0; i < digits.size(); i++) {
@@ -183,6 +184,7 @@ public:
 	}
 
 	PositiveNumber remainder(PositiveNumber& n1, PositiveNumber& n2) {
+		PositiveNumber rem((n2 * (n1 / n2)));
 		return n1 - (n2 * (n1 / n2));
 	}
 
