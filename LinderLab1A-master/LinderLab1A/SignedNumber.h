@@ -44,7 +44,7 @@ public:
 		left.addTo(SignedNumber(n, PLUS));
 
 		left.zeroSignCheck();
-
+	}
 	friend SignedNumber operator+(SignedNumber left, const SignedNumber& n) {
 		left.addTo(n);
 		left.zeroSignCheck();
