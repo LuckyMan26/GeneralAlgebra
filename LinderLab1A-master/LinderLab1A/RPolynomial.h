@@ -131,6 +131,7 @@ public:
 		return result;
 	}
 
+
 	//Implemented by V.Avramenko
 
 	/*
