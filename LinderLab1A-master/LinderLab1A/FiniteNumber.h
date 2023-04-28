@@ -4,14 +4,15 @@
 #include "FiniteField.h"
 //Created by M.Tyshchenko
 //Modified by A.Volyk
+//Modified by V.Horbanov
 
 class FiniteNumber : public PositiveNumber {
 private: 
 	//p stands for field (поле)
 	FiniteField f;
-	void setP(PositiveNumber p) {
+	void setP(PositiveNumber p, bool gotNegativeBase = false) {
 		f.setP(p);
-		toFieldSize();
+		toFieldSize(gotNegativeBase);
 	}
 
 public:
@@ -24,8 +25,9 @@ public:
 	}
 
 	FiniteNumber(std::string from, PositiveNumber p) {
+		bool negativeBase = parseIsNegative(from);
 		this->digits = parseDigits(from);
-		setP(p);
+		setP(p, negativeBase);
 	}
 
 	FiniteNumber(long long a, long long p) : PositiveNumber(a) {
@@ -54,8 +56,9 @@ public:
 			p = partOne;
 			n = partTwo;
 		}
+		bool negativeBase = parseIsNegative(from);
 		this->digits = parseDigits(n);
-		setP(p);
+		setP(p, negativeBase);
 	}
 
 	PositiveNumber getP() const {
@@ -217,15 +220,23 @@ public:
 		return *this*num.inverse();
 	}
 	//Converts PositiveNumber to field size
-	void toFieldSize() {
+	void toFieldSize(bool gotNegativeBase = false) {
 		PositiveNumber p = getP();
-		if (p > *this) {
-			return;
-		}
-		else {
+
+		if (gotNegativeBase) { //Negative base
 			PositiveNumber t = PositiveNumber(*this);
-			t = t % (p);
+			t = p - (t % (p));
 			this->digits = t.getDigits();
+		}
+		else { //Positive base
+			if (p > *this) { //mod is greater than base
+				return;
+			}
+			else { //otherwise
+				PositiveNumber t = PositiveNumber(*this);
+				t = t % (p);
+				this->digits = t.getDigits();
+			}
 		}
 	}
 	// Converts PositiveNumber to FiniteNumber
@@ -262,6 +273,24 @@ public:
 			}
 		}
 		return FiniteNumber(number, p);
+	}
+
+	static bool parseIsNegative(std::string str) {
+		
+		bool gotMinus = false;
+
+		for (char ch : str) {
+			if (ch == '-') {
+				if (gotMinus) {
+					throw std::runtime_error("Incorrect argument syntax");
+				}
+				else {
+					gotMinus = true;
+				}
+			}
+		}
+
+		return gotMinus;
 	}
 };
 
