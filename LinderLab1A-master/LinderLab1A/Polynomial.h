@@ -176,8 +176,13 @@ public:
 		auto rightIter = right.coefficients.begin();
 
 		while (leftIter != coefficients.end() && rightIter != right.coefficients.end()) {
+			PolynomialElement<TCoefficient> e = *leftIter, e2 = *rightIter;
+
+			std::string left = e.toString(), right = e2.toString();
+
+
 			if (leftIter->getDegree() == rightIter->getDegree()) {
-				auto newElement = *leftIter * *rightIter;
+				auto newElement = *leftIter - *rightIter;
 				result.coefficients.push_back(newElement);
 				leftIter++;
 				rightIter++;
@@ -187,7 +192,7 @@ public:
 				leftIter++;
 			}
 			else {
-				auto newCoefficient = rightIter->getCoefficient() * TCoefficient(-1);
+				auto newCoefficient = rightIter->getCoefficient() * TCoefficient("-1");
 				result.coefficients.push_back(PolynomialElement<TCoefficient>(newCoefficient, rightIter->getDegree()));
 				rightIter++;
 			}

@@ -84,6 +84,12 @@ public:
 	int& operator[](std::size_t i) {
 		return digits[i];
 	}
+	int operator[](int i) const {
+		return digits[i];
+	}
+	int operator[](std::size_t i) const {
+		return digits[i];
+	}
 
 	bool isZero() {
 		return digits.empty();
@@ -211,7 +217,7 @@ public:
 		}
 	}
 
-	bool operator>(PositiveNumber& n) const {
+	bool operator>(const PositiveNumber& n) const {
 		if (digits.size() > n.digits.size())
 			return true;
 		if (digits.size() < n.digits.size())
