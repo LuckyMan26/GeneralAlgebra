@@ -10,6 +10,7 @@ public:
 	//Constructor
 	FiniteField() {
 
+
 	}
 	FiniteField(PositiveNumber p_) {
 		p = p_;

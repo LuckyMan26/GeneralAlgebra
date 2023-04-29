@@ -21,6 +21,7 @@ protected:
 		while (digits.size() != 0 && digits.back() == 0) {
 			this->digits.pop_back();
 		}
+
 		return (*this);
 	}
 
@@ -30,7 +31,7 @@ protected:
 		std::vector<int> digits;
 		reverse(str.begin(), str.end());
 		for (char ch : str) {
-			if(ch >= '0' && ch <= '9')
+			if (ch >= '0' && ch <= '9')
 				digits.push_back(ch - '0');
 		}
 		return digits;
@@ -80,10 +81,10 @@ public:
 		this->digits = parseDigits(std::to_string(a));
 		this->trim();
 	}
-	int operator[](int i) const{
+	int& operator[](int i) {
 		return digits[i];
 	}
-	int operator[](std::size_t i) const {
+	int& operator[](std::size_t i) {
 		return digits[i];
 	}
 	int operator[](int i) const {
@@ -93,8 +94,7 @@ public:
 		return digits[i];
 	}
 
-
-	bool isZero() const {
+	bool isZero() {
 		return digits.empty();
 	}
 	friend PositiveNumber operator+(PositiveNumber left, const PositiveNumber& n) {
@@ -105,7 +105,7 @@ public:
 		this->addTo(n);
 		return *this;
 	}
-	PositiveNumber operator*(const PositiveNumber& n) const{
+	PositiveNumber operator*(const PositiveNumber& n) {
 		return simpleMultiplication(n);
 	}
 	PositiveNumber operator*=(const PositiveNumber& n) {
@@ -121,14 +121,14 @@ public:
 		this->substract(n);
 		return *this;
 	}
-	bool operator==(const PositiveNumber& n) const {
+	bool operator==(PositiveNumber& n) const {
 		return equals(n);
 	}
-	bool operator!=(const PositiveNumber& n) const {
+	bool operator!=(PositiveNumber& n) const {
 		return !equals(n);
 	}
-	bool equals(const PositiveNumber& n) const {
-		
+	bool equals(PositiveNumber& n) const {
+
 		if (digits.size() != n.digits.size())
 			return false;
 		for (int i = 0; i < digits.size(); i++) {
@@ -138,17 +138,17 @@ public:
 		return true;
 	}
 	//Implemented by Artem Volyk
-	void operator >>= (const int i) {
+	void operator >>= (int i) {
 		std::rotate(digits.begin(), digits.begin() + 1, digits.end());
 		digits[0] = 0;
 	}
 	//Implemented by Vlad Avramenko
 	//Division for PositiveNumbers
-	PositiveNumber operator/(const PositiveNumber& other) const {
+	PositiveNumber operator/(PositiveNumber& other) {
 		return divide(*this, other);
 	}
 
-	PositiveNumber divide(const PositiveNumber& n1, const PositiveNumber& n2) const {
+	PositiveNumber divide(PositiveNumber& n1, PositiveNumber& n2) {
 		if (n1 < n2) {
 			return PositiveNumber("0");
 		}
@@ -190,12 +190,12 @@ public:
 		return PositiveNumber(result);
 	}
 
-	PositiveNumber remainder(const PositiveNumber& n1, const PositiveNumber& n2) const{
+	PositiveNumber remainder(PositiveNumber& n1, PositiveNumber& n2) {
 		PositiveNumber rem((n2 * (n1 / n2)));
 		return n1 - (n2 * (n1 / n2));
 	}
 
-	PositiveNumber operator%(const PositiveNumber& other) const {
+	PositiveNumber operator%(PositiveNumber& other) {
 		return remainder(*this, other);
 	}
 	//By V. Avramenko
@@ -240,7 +240,7 @@ public:
 		return false;
 	}
 
-	bool operator>=(const PositiveNumber& n) const {
+	bool operator>=(PositiveNumber& n) const {
 		if (digits.size() > n.digits.size())
 			return true;
 		if (digits.size() < n.digits.size())
@@ -252,7 +252,7 @@ public:
 		}
 		return true;
 	}
-	bool operator<(const PositiveNumber& n) const {
+	bool operator<(PositiveNumber& n) const {
 		if (digits.size() < n.digits.size())
 			return true;
 		if (digits.size() > n.digits.size())
@@ -264,7 +264,7 @@ public:
 		}
 		return false;
 	}
-	bool operator<=(const PositiveNumber& n) const {
+	bool operator<=(PositiveNumber& n) const {
 		if (digits.size() < n.digits.size())
 			return true;
 		if (digits.size() > n.digits.size())
@@ -375,7 +375,7 @@ public:
 	/**
 	* Shows number as printable string
 	*/
-	virtual std::string toString() const{
+	virtual std::string toString() {
 		std::string result = "";
 		if (isZero())
 			return "0";
@@ -403,14 +403,9 @@ public:
 
 	/*
 	* Implemented by Vlad Avrmenko
-	* Modified by Oleksii Onishchenko
 	*/
 	//Function for finding Greatest Common Divisor for 2 PositiveNumbers 
-	static PositiveNumber GCD(PositiveNumber n1, PositiveNumber n2) {
-		if (n1 == 0)
-			return n2;
-		if (n2 == 0)
-			return n1;
+	PositiveNumber GCD(PositiveNumber n1, PositiveNumber n2) {
 		while (n1 != n2) {
 			if (n1 > n2) {
 				n1 -= n2;
