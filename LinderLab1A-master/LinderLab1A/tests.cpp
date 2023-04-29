@@ -6,6 +6,9 @@
 #include "Exponent.h"
 #include "Polynomial.h"
 #include "FiniteGroup.h"
+#include "CalculationOfSquareRoot.h"
+#include "MillerRabin.h"
+#include "Pollard.h"
 
 #include <random>
 #include <string>
@@ -21,6 +24,7 @@ TEST_CASE("Positive numbers") {
 	CHECK((b - a).toString() == "1135");
 	CHECK((b + a).toString() == "1333");
 	CHECK((a + b).toString() == "1333");
+	
 }
 
 //Test by V.Avramenko
@@ -133,6 +137,12 @@ TEST_CASE("Signed numbers") {
 	res -= signedM;
 	CHECK(res.toString() == "1855");
 
+
+	SignedNumber a = SignedNumber("-3");
+	SignedNumber b = SignedNumber("0");
+	SignedNumber c = a * b;
+	CHECK(c.toString() == "0");
+
 }
 //Testing FiniteNumbers by Vlad Avramenko
 TEST_CASE("Finite numbers") {
@@ -161,6 +171,27 @@ TEST_CASE("Finite numbers") {
 	CHECK(fin5.toString() == "3");
 	fin1.divideBy(fin2);
 	CHECK(fin1.toString() == "8");
+
+	fin1 = FiniteNumber("x3769756249765794657934624756924805020202 7489572497584758047073759832659659249572052706703767350683596350");
+	fin2 = FiniteNumber("x3769756249765794657934624756924805020202 4892369322308579824750845027508578529957295624957285624");
+
+	auto res = fin1 + fin2;
+	CHECK(res.toString() == "1127822179038104809524733176879403005056");
+
+	fin1 = FiniteNumber("-1232 x10");
+	CHECK(fin1.toString() == "8");
+
+	fin1 = FiniteNumber("-10 x6");
+	CHECK(fin1.toString() == "2");
+
+	fin1 = FiniteNumber("-1 x10");
+	CHECK(fin1.toString() == "9");
+
+	fin1 = FiniteNumber("-6 x6");
+	CHECK(fin1.toString() == "0");
+
+	fin1 = FiniteNumber("-6 x5");
+	CHECK(fin1.toString() == "4");
 }
 
 //Tests by M. Tyshchenko
@@ -214,17 +245,17 @@ TEST_CASE("Exponent") {
 	std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
 	CHECK(exp.montgomeryExponention(base, power).toString() == expected);
 	std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
-	std::cout << "Montgomery = " << std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count() << " ms" << std::endl;
+	//std::cout << "Montgomery = " << std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count() << " ms" << std::endl;
 
 	begin = std::chrono::steady_clock::now();
 	CHECK(exp.fastExponention(base, power).toString() == expected);
 	end = std::chrono::steady_clock::now();
-	std::cout << "Fast = " << std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count() << " ms" << std::endl;
+	//std::cout << "Fast = " << std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count() << " ms" << std::endl;
 
-	begin = std::chrono::steady_clock::now();
-	CHECK(exp.slowExponention(base, power).toString() == expected);
-	end = std::chrono::steady_clock::now();
-	std::cout << "Slow = " << std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count() << " ms" << std::endl;
+	//begin = std::chrono::steady_clock::now();
+	//CHECK(exp.slowExponention(base, power).toString() == expected);
+	//end = std::chrono::steady_clock::now();
+	//std::cout << "Slow = " << std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count() << " ms" << std::endl;
 }
 
 TEST_CASE("Exponentiation on random values") {
@@ -307,4 +338,162 @@ TEST_CASE("Test ElementOrder method") {
 	// Test ElementOrder method with a different binary operation
 	group.setGroupBinaryOperation(operator*);
 	CHECK(group.ElementOrder(FiniteNumber("2 x10")) == 4);
+}
+//Tests by P. Velychko #6
+TEST_CASE("TestNonQuadraticPositive") {
+	FiniteNumber a("2",11);
+	FiniteNumber one("1", 11);
+	FiniteNumber x(a.power_mod((11 - 1) / 2));
+	if ( x != one) {
+		cout << "a is not a quadratic residue mod p" << endl;
+	
+	}
+	else {
+		FiniteNumber root1 = a.tonelli_shanks();
+
+		CHECK(root1.power_mod(2) == a);
+	}
+}
+
+TEST_CASE("TestQuadraticResidue") {
+	FiniteNumber a("3", 11);
+	FiniteNumber b("5", 11);
+	FiniteNumber one("1", 11);
+
+	FiniteNumber x(a.power_mod((11 - 1) / 2));
+
+	if (x != one) {
+		cout << "a is not a quadratic residue mod p" << endl;
+
+	}
+	else {
+		FiniteNumber root(a.tonelli_shanks());
+		CHECK(root == b);
+	}
+}
+
+TEST_CASE("TestQuadraticResidue") {
+	FiniteNumber a("3", 19);
+	
+	FiniteNumber one("1", 19);
+
+	FiniteNumber x(a.power_mod((19 - 1) / 2));
+
+	if (x != one) {
+		cout << "a is not a quadratic residue mod p" << endl;
+
+	}
+	else {
+		FiniteNumber root(a.tonelli_shanks());
+		CHECK(root.power_mod(2) == a);
+	}
+}
+
+TEST_CASE("Test Integer Constuctors") {
+	int aInt = 20;
+	int bInt = 44;
+	PositiveNumber a = PositiveNumber(aInt);
+	PositiveNumber b = PositiveNumber(bInt);
+	CHECK("64" == (a + b).toString());
+	
+	FiniteNumber finite1 = FiniteNumber(18, 17);
+	CHECK("1" == finite1.toString());
+}
+
+TEST_CASE("Additional operators test") {
+	FiniteNumber a = FiniteNumber(20, 17);
+	FiniteNumber b = FiniteNumber(3, 17);
+	FiniteNumber c = FiniteNumber(3, 11);
+	FiniteNumber d = FiniteNumber(4, 17);
+	CHECK(a == b);
+	CHECK(a != c);
+	CHECK(a != d);
+}
+
+TEST_CASE("Additional operators") {
+	FiniteNumber a = FiniteNumber(16, 17);
+	FiniteNumber b = FiniteNumber(14, 17);
+	CHECK(a > b);
+	CHECK(b < a);
+	CHECK(!(a < b));
+	CHECK(!(b > a));
+}
+
+TEST_CASE("Modular Power") {
+	PositiveNumber a = PositiveNumber(81);
+	PositiveNumber b = PositiveNumber(6);
+	PositiveNumber c = PositiveNumber(12);
+	auto result = mod_power(a, b, c).toString();
+	CHECK("9" == result);
+}
+
+TEST_CASE("Miller-Rabin Primality Test") {
+	CHECK(!MillerRabin::miller_rabin(PositiveNumber("783")));
+	CHECK(!MillerRabin::miller_rabin(PositiveNumber("890")));
+	CHECK(!MillerRabin::miller_rabin(PositiveNumber("320")));
+	CHECK(!MillerRabin::miller_rabin(PositiveNumber("178")));
+
+	CHECK(MillerRabin::miller_rabin(PositiveNumber("2")));
+	CHECK(MillerRabin::miller_rabin(PositiveNumber("3")));
+	CHECK(MillerRabin::miller_rabin(PositiveNumber("5")));
+	CHECK(MillerRabin::miller_rabin(PositiveNumber("7")));
+	CHECK(MillerRabin::miller_rabin(PositiveNumber("11")));
+	CHECK(MillerRabin::miller_rabin(PositiveNumber("13")));
+	CHECK(MillerRabin::miller_rabin(PositiveNumber("17")));
+	CHECK(MillerRabin::miller_rabin(PositiveNumber("19")));
+	CHECK(MillerRabin::miller_rabin(PositiveNumber("23")));
+	CHECK(MillerRabin::miller_rabin(PositiveNumber("61")));
+	CHECK(MillerRabin::miller_rabin(PositiveNumber("617")));
+	CHECK(MillerRabin::miller_rabin(PositiveNumber("547")));
+	CHECK(MillerRabin::miller_rabin(PositiveNumber("941")));
+}
+
+TEST_CASE("Naive Factorization") {
+	PositiveNumber a1 = PositiveNumber("204562");
+	std::map<PositiveNumber, int> result1 = map_factors(a1, naiveFactorization<PositiveNumber>);
+	std::map<PositiveNumber, int> toCheck1 = { std::pair<PositiveNumber,int>(PositiveNumber(2),1),
+		std::pair<PositiveNumber,int>(PositiveNumber(23),1),
+		std::pair<PositiveNumber,int>(PositiveNumber(4447),1) };
+
+	CHECK(result1 == toCheck1);
+
+	PositiveNumber a2 = PositiveNumber("168");
+	std::map<PositiveNumber, int> result2 = map_factors(a2, naiveFactorization<PositiveNumber>);
+	std::map<PositiveNumber, int> toCheck2 = { std::pair<PositiveNumber,int>(PositiveNumber(2),3),
+		std::pair<PositiveNumber,int>(PositiveNumber(3),1),
+		std::pair<PositiveNumber,int>(PositiveNumber(7),1) };
+
+	CHECK(result2 == toCheck2);
+
+	PositiveNumber a3 = PositiveNumber("43");
+	std::map<PositiveNumber, int> result3 = map_factors(a3, naiveFactorization<PositiveNumber>);
+	std::map<PositiveNumber, int> toCheck3 = { std::pair<PositiveNumber,int>(PositiveNumber(43),1) };
+
+	CHECK(result3 == toCheck3);
+
+}
+
+TEST_CASE("Pollard's Rho Factorization") {
+	PositiveNumber a1 = PositiveNumber("204562");
+	std::map<PositiveNumber,int> result1 = map_factors(a1, PollardFactorization::pollardRho<PositiveNumber>);
+	std::map<PositiveNumber, int> toCheck1 = {std::pair<PositiveNumber,int>(PositiveNumber(2),1),
+		std::pair<PositiveNumber,int>(PositiveNumber(23),1),
+		std::pair<PositiveNumber,int>(PositiveNumber(4447),1) };
+	
+	CHECK(result1 == toCheck1);
+
+	PositiveNumber a2 = PositiveNumber("168");
+	std::map<PositiveNumber, int> result2 = map_factors(a2, PollardFactorization::pollardRho<PositiveNumber>);
+	std::map<PositiveNumber, int> toCheck2 = { std::pair<PositiveNumber,int>(PositiveNumber(2),3),
+		std::pair<PositiveNumber,int>(PositiveNumber(3),1),
+		std::pair<PositiveNumber,int>(PositiveNumber(7),1) };
+
+	CHECK(result2 == toCheck2);
+
+	PositiveNumber a3 = PositiveNumber("43");
+	std::map<PositiveNumber, int> result3 = map_factors(a3, PollardFactorization::pollardRho<PositiveNumber>);
+	std::map<PositiveNumber, int> toCheck3 = { std::pair<PositiveNumber,int>(PositiveNumber(43),1) };
+
+	CHECK(result3 == toCheck3);
+
 }
