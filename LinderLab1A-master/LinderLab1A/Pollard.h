@@ -29,25 +29,18 @@ namespace PollardFactorization {
 
 	template<typename NumberType>
 	std::vector<NumberType> pollardRho(NumberType n) {
-		std::srand(time(NULL));
 		std::vector<NumberType> result;
 
-		if (MillerRabin::miller_rabin(n)) {
+		if (n == NumberType(1)) {
 			result.push_back(n);
 			return result;
 		}
 
-		if (n % NumberType(2) == NumberType(0)) {
-			result = pollardRho(n / NumberType(2));
-			result.push_back(NumberType(2));
-			return result;
-		}
-
-		//NumberType x = NumberType(rand()) % ((n - NumberType(2))) + NumberType(2);
-		NumberType x = (NumberType(2));
+		NumberType x = NumberType(rand()) % ((n - NumberType(2))) + NumberType(2);
+		//NumberType x = (NumberType(2));
 		NumberType y = x;
-		//NumberType c = (NumberType(rand()) % (n - NumberType(1))) + NumberType(1);
-		NumberType c = (NumberType(1));
+		NumberType c = (NumberType(rand()) % (n - NumberType(1))) + NumberType(1);
+		//NumberType c = (NumberType(1));
 		NumberType d = NumberType(1);
 
 		while (d == NumberType(1))
@@ -67,7 +60,7 @@ namespace PollardFactorization {
 
 			/* retry if the algorithm fails to find prime factor
 			 * with chosen x and c */
-			if (d == n) return result;
+			if (d == n) break;
 		}
 
 		if (MillerRabin::miller_rabin(d)) {
@@ -91,5 +84,24 @@ namespace PollardFactorization {
 		}
 
 		return result;
+	}
+
+	template<typename NumberType>
+	std::map<NumberType, int> factorizePoll(NumberType n) {
+		std::srand(time(NULL));
+		std::vector<NumberType> result = pollardRho(n);
+		std::sort(result.begin(), result.end());
+		std::map<NumberType, int> mapOfFactors;
+		for (NumberType item : result) {
+			if (item != NumberType(1)) {
+				if (mapOfFactors.find(item) == mapOfFactors.end()) {
+					mapOfFactors.insert(std::pair<NumberType, int>(item, 1));
+				}
+				else {
+					mapOfFactors[item]++;
+				}
+			}
+		}
+		return mapOfFactors;
 	}
 };
