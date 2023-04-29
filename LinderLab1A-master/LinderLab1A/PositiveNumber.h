@@ -87,12 +87,7 @@ public:
 	int operator[](std::size_t i) const {
 		return digits[i];
 	}
-	int operator[](int i) const {
-		return digits[i];
-	}
-	int operator[](std::size_t i) const {
-		return digits[i];
-	}
+
 
 	bool isZero() const {
 		return digits.empty();
@@ -278,9 +273,7 @@ public:
 	}
 
 	//Implemented by Y. Kishchuk
-	bool operator==(const PositiveNumber& right) const {
-		return this->equals(const_cast<PositiveNumber&>(right));
-	}
+
 
 	//Division with remainder 
 	//Implemented by Artem Volyk
