@@ -1,17 +1,13 @@
 #pragma once
 #include "FiniteNumber.h"
+#include "MillerRabin.h"
 #include <vector>
 
-template<typename NumberType>
-class PollardFactorization {
-
-public:
-
-	bool isPrime(NumberType a) {
-		return false;
-	}
-
-	
+/*
+	Implemented by Oleksii Onishchenko and Dmytro Mandziuk 
+*/
+namespace PollardFactorization {
+	template<typename NumberType>
 	NumberType modular_pow(NumberType base, NumberType exponent, NumberType modulus) {
 
 		NumberType result = NumberType(1);
@@ -23,7 +19,7 @@ public:
 				result = (result * base) % modulus;
 
 			/* exponent = exponent/2 */
-			exponent = exponent/NumberType(2);
+			exponent = exponent / NumberType(2);
 
 			/* base = base * base */
 			base = (base * base) % modulus;
@@ -31,20 +27,27 @@ public:
 		return result;
 	}
 
-
-
+	template<typename NumberType>
 	std::vector<NumberType> pollardRho(NumberType n) {
 		std::srand(time(NULL));
 		std::vector<NumberType> result;
 
-		if (n == 1) {
+		if (MillerRabin::miller_rabin(n)) {
 			result.push_back(n);
 			return result;
 		}
-	
-		NumberType x = NumberType(rand()) % ((n - NumberType(2))) + NumberType(2);
+
+		if (n % NumberType(2) == NumberType(0)) {
+			result = pollardRho(n / NumberType(2));
+			result.push_back(NumberType(2));
+			return result;
+		}
+
+		//NumberType x = NumberType(rand()) % ((n - NumberType(2))) + NumberType(2);
+		NumberType x = (NumberType(2));
 		NumberType y = x;
-		NumberType c = (NumberType(rand()) % (n - NumberType(2))) + NumberType(1);
+		//NumberType c = (NumberType(rand()) % (n - NumberType(1))) + NumberType(1);
+		NumberType c = (NumberType(1));
 		NumberType d = NumberType(1);
 
 		while (d == NumberType(1))
@@ -64,27 +67,29 @@ public:
 
 			/* retry if the algorithm fails to find prime factor
 			 * with chosen x and c */
-			if (d == n) return pollardRho(n);
+			if (d == n) return result;
 		}
 
-		result.push_back(d);
-
-		n /= d;
-
-		//TODO (isPrimeCheck)
-		if (isPrime(n)) {
+		if (MillerRabin::miller_rabin(d)) {
 			result.push_back(d);
 		}
+
+		else {
+			std::vector<NumberType> add = pollardRho(d);
+			result.insert(result.end(), add.begin(), add.end());
+		}
+
+		n = n / d;
+
+		if (MillerRabin::miller_rabin(n)) {
+			result.push_back(n);
+		}
+
 		else {
 			std::vector<NumberType> add = pollardRho(n);
-			add.insert(result.end(), add.begin(), add.end());
+			result.insert(result.end(), add.begin(), add.end());
 		}
 
 		return result;
-
 	}
-
-	
-
-
 };
