@@ -10,6 +10,7 @@
 *
 */
 //Created by M.Tyshchenko and V. Avramenko
+//Edited by V.Horbanov
 class PositiveNumber {
 private:
 	static const int vectorP = 10;
@@ -26,11 +27,12 @@ protected:
 
 	std::vector<int> digits; //digits as decimal numbers
 
-	std::vector<int> parseDigits(std::string str) {
+	static std::vector<int> parseDigits(std::string str) {
 		std::vector<int> digits;
 		reverse(str.begin(), str.end());
 		for (char ch : str) {
-			digits.push_back(ch - '0');
+			if(ch >= '0' && ch <= '9')
+				digits.push_back(ch - '0');
 		}
 		return digits;
 	}
@@ -83,6 +85,12 @@ public:
 		return digits[i];
 	}
 	int& operator[](std::size_t i) {
+		return digits[i];
+	}
+	int operator[](int i) const {
+		return digits[i];
+	}
+	int operator[](std::size_t i) const {
 		return digits[i];
 	}
 
@@ -219,7 +227,7 @@ public:
 		}
 	}
 
-	bool operator>(PositiveNumber& n) const {
+	bool operator>(const PositiveNumber& n) const {
 		if (digits.size() > n.digits.size())
 			return true;
 		if (digits.size() < n.digits.size())
@@ -268,6 +276,12 @@ public:
 		}
 		return true;
 	}
+
+	//Implemented by Y. Kishchuk
+	bool operator==(const PositiveNumber& right) const {
+		return this->equals(const_cast<PositiveNumber&>(right));
+	}
+
 	//Division with remainder 
 	//Implemented by Artem Volyk
 	int operator % (int& n) const {
@@ -507,5 +521,4 @@ public:
 		}
 		return result;
 	}
-
 };

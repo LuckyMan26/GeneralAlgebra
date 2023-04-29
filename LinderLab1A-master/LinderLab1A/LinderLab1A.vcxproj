@@ -134,6 +134,7 @@
     <ClInclude Include="Field.h" />
     <ClInclude Include="FiniteField.h" />
     <ClInclude Include="FiniteNumber.h" />
+    <ClInclude Include="FPolynomial.h" />
     <ClInclude Include="Polynomial.h" />
     <ClInclude Include="PolynomialElement.h" />
     <ClInclude Include="PositiveNumber.h" />
@@ -143,6 +144,8 @@
   <ItemGroup>
     <ClCompile Include="CalculationOfSquareRoot.cpp" />
     <ClCompile Include="FiniteField.cpp" />
+    <ClCompile Include="FPolynomialTest.cpp" />
+    <ClCompile Include="PolynomialElementTest.cpp" />
     <ClCompile Include="RPolynomialTest.cpp" />
     <ClCompile Include="tests.cpp" />
   </ItemGroup>
