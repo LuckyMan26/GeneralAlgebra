@@ -14,14 +14,14 @@ namespace PollardFactorization {
 
 		while (exponent > NumberType(0))
 		{
-			/* if y is odd, multiply base with result */
+			// if y is odd, multiply base with result
 			if (exponent % NumberType(2) == NumberType(0))
 				result = (result * base) % modulus;
 
-			/* exponent = exponent/2 */
+			// exponent = exponent/2 
 			exponent = exponent / NumberType(2);
 
-			/* base = base * base */
+			// base = base * base
 			base = (base * base) % modulus;
 		}
 		return result;
@@ -37,10 +37,8 @@ namespace PollardFactorization {
 		}
 
 		NumberType x = NumberType(rand()) % ((n - NumberType(2))) + NumberType(2);
-		//NumberType x = (NumberType(2));
 		NumberType y = x;
 		NumberType c = (NumberType(rand()) % (n - NumberType(1))) + NumberType(1);
-		//NumberType c = (NumberType(1));
 		NumberType d = NumberType(1);
 
 		while (d == NumberType(1))
@@ -58,8 +56,6 @@ namespace PollardFactorization {
 			else
 				d = NumberType::GCD(y - x, n);
 
-			/* retry if the algorithm fails to find prime factor
-			 * with chosen x and c */
 			if (d == n) break;
 		}
 
