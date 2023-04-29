@@ -4,17 +4,19 @@
 #include "FiniteField.h"
 //Created by M.Tyshchenko
 //Modified by A.Volyk
+//Modified by V.Horbanov
 
 class FiniteNumber : public PositiveNumber {
-private:
-	//p stands for field (ïîëå)
+private: 
+	//p stands for field (����)
 	FiniteField f;
-	void setP(PositiveNumber p) {
+	void setP(PositiveNumber p, bool gotNegativeBase = false) {
 		f.setP(p);
-		toFieldSize();
+		toFieldSize(gotNegativeBase);
 	}
 
 public:
+	FiniteNumber() {}
 
 	FiniteNumber(PositiveNumber base, PositiveNumber p) {
 		f = (FiniteField(p));
@@ -27,14 +29,16 @@ public:
 
 	}
 	FiniteNumber(std::string from, PositiveNumber p) {
+		bool negativeBase = parseIsNegative(from);
 		this->digits = parseDigits(from);
-		setP(p);
+		setP(p, negativeBase);
 	}
 
 	FiniteNumber(long long a, long long p) : PositiveNumber(a) {
 		this->f = FiniteField(PositiveNumber(p));
 		toFieldSize();
 	}
+
 	/**
 	* Input: string of value "xP N", where P - is field size, N - positive integer
 	* Alternative: "N xP"
@@ -57,8 +61,9 @@ public:
 			p = partOne;
 			n = partTwo;
 		}
+		bool negativeBase = parseIsNegative(from);
 		this->digits = parseDigits(n);
-		setP(p);
+		setP(p, negativeBase);
 	}
 
 	PositiveNumber getP() const {
@@ -82,9 +87,12 @@ public:
 		this->toFieldSize();
 		return *this;
 	}
-	FiniteNumber operator*(const FiniteNumber& n) {
-		return this->toFinite(simpleMultiplication(n));
+	friend FiniteNumber operator*(FiniteNumber left, const FiniteNumber& n) {
+		return left.toFinite(left.simpleMultiplication(n));
 	}
+	//FiniteNumber operator*(const FiniteNumber& n) {
+	//	return this->toFinite(simpleMultiplication(n));
+	//}
 	FiniteNumber operator*=(const FiniteNumber& n) {
 		this->multiplyBy(n);
 		this->toFieldSize();
@@ -188,7 +196,6 @@ public:
 		}
 		if (s1.getSign() == MINUS) {
 			PositiveNumber s1_pos(s1);
-
 			while (s1_pos > p) {
 				s1_pos -= p;
 			}
@@ -217,23 +224,28 @@ public:
 		return *this * num.inverse();
 	}
 	//Converts PositiveNumber to field size
-	void toFieldSize() {
+	void toFieldSize(bool gotNegativeBase = false) {
 		PositiveNumber p = getP();
-		PositiveNumber zero("0");
-		if (p > *this && zero <= *(this)) {
 
-			return;
-		}
-		else if (zero <= *(this)) {
+		if (gotNegativeBase) { //Negative base
 			PositiveNumber t = PositiveNumber(*this);
-			t = t % (p);
+			if (t == p) {
+				t = t % (p);
+			}
+			else {
+				t = p - (t % (p));
+			}
 			this->digits = t.getDigits();
 		}
-		else {
-			PositiveNumber t = PositiveNumber(*this);
-			t = (p + t) % (p);
-
-			this->digits = t.getDigits();
+		else { //Positive base
+			if (p > *this) { //mod is greater than base
+				return;
+			}
+			else { //otherwise
+				PositiveNumber t = PositiveNumber(*this);
+				t = t % (p);
+				this->digits = t.getDigits();
+			}
 		}
 	}
 	// Converts PositiveNumber to FiniteNumber
@@ -271,8 +283,25 @@ public:
 		}
 		return FiniteNumber(number, p);
 	}
-	// Calculates a^b mod n
 
+	static bool parseIsNegative(std::string str) {
+
+		bool gotMinus = false;
+
+		for (char ch : str) {
+			if (ch == '-') {
+				if (gotMinus) {
+					throw std::runtime_error("Incorrect argument syntax");
+				}
+				else {
+					gotMinus = true;
+				}
+			}
+		}
+
+		return gotMinus;
+	}
+	// Calculates a^b mod n
 	FiniteNumber power_mod(PositiveNumber b) {     // power_mod modulo exponentiation calculation
 		FiniteNumber a(*this);
 		FiniteNumber res("1", f.getP());
@@ -290,6 +319,7 @@ public:
 		res.toFieldSize();
 		return res;
 	}
+    
 	// Finds a^((p+1)/2) mod p, where p is a prime number
 	FiniteNumber tonelli_shanks() {            // tonelli_shanks to calculate the square root
 		PositiveNumber q = f.getP() - 1;      // long long: represents an integer in the range from -9223372036854775808 to +9223372036854775807.

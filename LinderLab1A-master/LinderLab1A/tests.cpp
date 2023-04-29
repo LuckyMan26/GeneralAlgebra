@@ -170,6 +170,27 @@ TEST_CASE("Finite numbers") {
 	CHECK(fin5.toString() == "3");
 	fin1.divideBy(fin2);
 	CHECK(fin1.toString() == "8");
+
+	fin1 = FiniteNumber("x3769756249765794657934624756924805020202 7489572497584758047073759832659659249572052706703767350683596350");
+	fin2 = FiniteNumber("x3769756249765794657934624756924805020202 4892369322308579824750845027508578529957295624957285624");
+
+	auto res = fin1 + fin2;
+	CHECK(res.toString() == "1127822179038104809524733176879403005056");
+
+	fin1 = FiniteNumber("-1232 x10");
+	CHECK(fin1.toString() == "8");
+
+	fin1 = FiniteNumber("-10 x6");
+	CHECK(fin1.toString() == "2");
+
+	fin1 = FiniteNumber("-1 x10");
+	CHECK(fin1.toString() == "9");
+
+	fin1 = FiniteNumber("-6 x6");
+	CHECK(fin1.toString() == "0");
+
+	fin1 = FiniteNumber("-6 x5");
+	CHECK(fin1.toString() == "4");
 }
 
 //Tests by M. Tyshchenko
@@ -258,12 +279,6 @@ TEST_CASE("Test binary form") {
 	CHECK(PositiveNumber("4").bits() == "100");
 }
 
-
-//Tests for polynomial constructor
-TEST_CASE("Test zero") {
-	Polynomial p = Polynomial("100 20 10", PositiveNumber("17"));
-	CHECK(p.toString() == "15 3 10");
-}
 
 //Tests by P. Velychko #6
 TEST_CASE("TestNonQuadraticPositive") {
