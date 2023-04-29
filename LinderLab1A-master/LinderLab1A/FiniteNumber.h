@@ -292,30 +292,7 @@ public:
 			}
 		}
 		return FiniteNumber(number, p);
-	}
 
-
-FiniteNumber operator+(FiniteNumber left, const FiniteNumber& n)
-{
-	left.addTo(n);
-	left.toFieldSize();
-	return left;
-}
-
-FiniteNumber operator-(FiniteNumber left, const FiniteNumber& n) {
-	left.substract(n);
-	left.toFieldSize();
-	return left;
-}
-
-FiniteNumber operator/(FiniteNumber left, const FiniteNumber& n) {
-	return left.divide(n);
-}
-
-FiniteNumber operator*(FiniteNumber left, const FiniteNumber& n)
-{
-	return left.toFinite(left.simpleMultiplication(n));
-}
 	static bool parseIsNegative(std::string str) {
 
 		bool gotMinus = false;

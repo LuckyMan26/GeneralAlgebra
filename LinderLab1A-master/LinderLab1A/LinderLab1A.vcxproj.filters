@@ -40,6 +40,8 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="FiniteGroup.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="RPolynomial.h">
       <Filter>Header Files</Filter>
     </ClInclude>
