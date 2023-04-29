@@ -389,9 +389,14 @@ public:
 
 	/*
 	* Implemented by Vlad Avrmenko
+	* Modified by Oleksii Onishchenko
 	*/
 	//Function for finding Greatest Common Divisor for 2 PositiveNumbers 
 	static PositiveNumber GCD(PositiveNumber n1, PositiveNumber n2) {
+		if (n1 == 0)
+			return n2;
+		if (n2 == 0)
+			return n1;
 		while (n1 != n2) {
 			if (n1 > n2) {
 				n1 -= n2;
