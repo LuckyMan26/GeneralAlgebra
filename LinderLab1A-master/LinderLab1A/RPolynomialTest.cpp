@@ -36,10 +36,20 @@ TEST_CASE("Derivative") {
 // Implemented by Y. Kishchuk
 TEST_CASE("Addition")
 {
-	RPolynomial polinomial = RPolynomial("-2-x-4x^4-9x^3+x^5+2x^2-1"),
-		polinomial2 = RPolynomial("x^10-5x^5+1");
+	RPolynomial polinomial = RPolynomial("-2x^4+x^2+1"),
+		polinomial2 = RPolynomial("2x^4+x^3");
 
 	auto sum = polinomial + polinomial2;
+	CHECK(sum.toString() == "x^3+x^2+1");
+	sum = polinomial2 + polinomial;
+	CHECK(sum.toString() == "x^3+x^2+1");
+
+	polinomial = RPolynomial("-2-x-4x^4-9x^3+x^5+2x^2-1");
+	polinomial2 = RPolynomial("x^10-5x^5+1");
+
+	sum = polinomial + polinomial2;
+	CHECK(sum.toString() == "x^10-4x^5-4x^4-9x^3+2x^2-x-2");
+	sum = polinomial2 + polinomial;
 	CHECK(sum.toString() == "x^10-4x^5-4x^4-9x^3+2x^2-x-2");
 	
 	polinomial = RPolynomial("-2-x-4x^4-7326738238625862586038757037503857353350098852685286358237253276358238625856382x^3+x^5+2x^2-1");
@@ -47,11 +57,15 @@ TEST_CASE("Addition")
 
 	sum = polinomial + polinomial2;
 	CHECK(sum.toString() == "0");
+	sum = polinomial2 + polinomial;
+	CHECK(sum.toString() == "0");
 
 	polinomial = RPolynomial("x^5-4x^4-9x^3+2x^2-x-1");
 	polinomial2 = RPolynomial("x^10-5x^5+1");
 
 	sum = polinomial + polinomial2;
+	CHECK(sum.toString() == "x^10-4x^5-4x^4-9x^3+2x^2-x");
+	sum = polinomial2 + polinomial;
 	CHECK(sum.toString() == "x^10-4x^5-4x^4-9x^3+2x^2-x");
 }
 
@@ -61,33 +75,45 @@ TEST_CASE("Substraction")
 	RPolynomial polinomial = RPolynomial("-2-x-4x^4-9x^3+x^5+2x^2-1"),
 		polinomial2 = RPolynomial("x^10-5x^5+1");
 
-	auto sum = polinomial - polinomial2;
-	CHECK(sum.toString() == "-x^10+6x^5-4x^4-9x^3+2x^2-x-4");
+	auto sub = polinomial - polinomial2;
+	CHECK(sub.toString() == "-x^10+6x^5-4x^4-9x^3+2x^2-x-4");
 
 	polinomial = RPolynomial("-2-x-4x^4-7326738238625862586038757037503857353350098852685286358237253276358238625856382x^3+x^5+2x^2-1");
 	polinomial2 = RPolynomial("-2-x-4x^4-7326738238625862586038757037503857353350098852685286358237253276358238625856382x^3+x^5+2x^2-1");
 
-	sum = polinomial - polinomial2;
-	CHECK(sum.toString() == "0");
+	sub = polinomial - polinomial2;
+	CHECK(sub.toString() == "0");
 
 	polinomial = RPolynomial("x^5-4x^4-9x^3+2x^2-x-1");
 	polinomial2 = RPolynomial("x^10-5x^5+1");
 
-	sum = polinomial - polinomial2;
-	CHECK(sum.toString() == "-x^10+6x^5-4x^4-9x^3+2x^2-x-2");
+	sub = polinomial - polinomial2;
+	CHECK(sub.toString() == "-x^10+6x^5-4x^4-9x^3+2x^2-x-2");
 }
 
-TEST_CASE("Product")
+TEST_CASE("Multiplication")
 {
-	RPolynomial polinomial = RPolynomial("-2-x-4x^4-9x^3+x^5+2x^2-1"),
-		polinomial2 = RPolynomial("x^10-5x^5+1");
+	RPolynomial polinomial = RPolynomial("-x^2+4"),
+		polinomial2 = RPolynomial("6x^8+x");
 
-	auto sum = polinomial * polinomial2;
-	CHECK(sum.toString() == "x^15-4x^14-9x^13+2x^12-x^11-8x^10+20x^9+45x^8-10x^7+5x^6+16x^5-4x^4-9x^3+2x^2-x-3");
+	auto mult = polinomial * polinomial2;
+	CHECK(mult.toString() == "-6x^10+24x^8-x^3+4x");
+	mult = polinomial2 * polinomial;
+	CHECK(mult.toString() == "-6x^10+24x^8-x^3+4x");
+
+	polinomial = RPolynomial("-2-x-4x^4-9x^3+x^5+2x^2-1");
+	polinomial2 = RPolynomial("x^10-5x^5+1");
+
+	mult = polinomial * polinomial2;
+	CHECK(mult.toString() == "x^15-4x^14-9x^13+2x^12-x^11-8x^10+20x^9+45x^8-10x^7+5x^6+16x^5-4x^4-9x^3+2x^2-x-3");
+	mult = polinomial2 * polinomial;
+	CHECK(mult.toString() == "x^15-4x^14-9x^13+2x^12-x^11-8x^10+20x^9+45x^8-10x^7+5x^6+16x^5-4x^4-9x^3+2x^2-x-3");
 
 	polinomial = RPolynomial("x^5-4x^4-9x^3+2x^2-x-1");
 	polinomial2 = RPolynomial("x^10-5x^5+1");
 
-	sum = polinomial * polinomial2;
-	CHECK(sum.toString() == "x^15-4x^14-9x^13+2x^12-x^11-6x^10+20x^9+45x^8-10x^7+5x^6+6x^5-4x^4-9x^3+2x^2-x-1");
+	mult = polinomial * polinomial2;
+	CHECK(mult.toString() == "x^15-4x^14-9x^13+2x^12-x^11-6x^10+20x^9+45x^8-10x^7+5x^6+6x^5-4x^4-9x^3+2x^2-x-1");
+	mult = polinomial2 * polinomial;
+	CHECK(mult.toString() == "x^15-4x^14-9x^13+2x^12-x^11-6x^10+20x^9+45x^8-10x^7+5x^6+6x^5-4x^4-9x^3+2x^2-x-1");
 }

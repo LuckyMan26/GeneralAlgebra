@@ -23,7 +23,6 @@ protected:
 		TCoefficient zero = genZeroCoefficient();
 
 		for (auto element : coefficients) {
-			std::cout << element.getCoefficient().toString() << "\n";
 			if (element.getCoefficient() == zero)
 				continue;
 			newList.push_back(element);
@@ -229,7 +228,7 @@ public:
 				leftIter++;
 			}
 			else {
-				auto newCoefficient = rightIter->getCoefficient() * TCoefficient("-1");
+				auto newCoefficient = rightIter->getCoefficient() * genCoefficient("-1");
 				result.coefficients.push_back(PolynomialElement<TCoefficient>(newCoefficient, rightIter->getDegree()));
 				rightIter++;
 			}
@@ -241,7 +240,7 @@ public:
 		}
 
 		while (rightIter != right.coefficients.end()) {
-			auto newCoefficient = rightIter->getCoefficient() * TCoefficient("1");
+			auto newCoefficient = rightIter->getCoefficient() * genCoefficient("1");
 			result.coefficients.push_back(PolynomialElement<TCoefficient>(newCoefficient, rightIter->getDegree()));
 			rightIter++;
 		}
