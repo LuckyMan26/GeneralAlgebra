@@ -3,32 +3,36 @@
 #include <vector>
 #include <cmath>
 #include <string>
+
 /**
 * Class for number in infinite field
 *
 *
 */
 //Created by M.Tyshchenko and V. Avramenko
+//Edited by V.Horbanov
 class PositiveNumber {
 private:
 	static const int vectorP = 10;
-	
+
 protected:
 
 	PositiveNumber trim() {
 		while (digits.size() != 0 && digits.back() == 0) {
 			this->digits.pop_back();
 		}
+
 		return (*this);
 	}
 
 	std::vector<int> digits; //digits as decimal numbers
 
-	std::vector<int> parseDigits(std::string str) {
+	static std::vector<int> parseDigits(std::string str) {
 		std::vector<int> digits;
 		reverse(str.begin(), str.end());
 		for (char ch : str) {
-			digits.push_back(ch - '0');
+			if (ch >= '0' && ch <= '9')
+				digits.push_back(ch - '0');
 		}
 		return digits;
 	}
@@ -73,14 +77,26 @@ public:
 		this->digits = parseDigits(digitsString);
 		this->trim();
 	}
+	PositiveNumber(long long a) {
+		this->digits = parseDigits(std::to_string(a));
+		this->trim();
+	}
 	int& operator[](int i) {
 		return digits[i];
 	}
 	int& operator[](std::size_t i) {
 		return digits[i];
 	}
+	int operator[](int i) const {
+		return digits[i];
+	}
+	int operator[](std::size_t i) const {
+		return digits[i];
+	}
 
-
+	bool isZero() {
+		return digits.empty();
+	}
 	friend PositiveNumber operator+(PositiveNumber left, const PositiveNumber& n) {
 		left.addTo(n);
 		return left;
@@ -96,6 +112,7 @@ public:
 		this->multiplyBy(n);
 		return *this;
 	}
+
 	friend PositiveNumber operator-(PositiveNumber left, const PositiveNumber& n) {
 		left.substract(n);
 		return left;
@@ -111,6 +128,7 @@ public:
 		return !equals(n);
 	}
 	bool equals(PositiveNumber& n) const {
+
 		if (digits.size() != n.digits.size())
 			return false;
 		for (int i = 0; i < digits.size(); i++) {
@@ -118,6 +136,11 @@ public:
 				return false;
 		}
 		return true;
+	}
+	//Implemented by Artem Volyk
+	void operator >>= (int i) {
+		std::rotate(digits.begin(), digits.begin() + 1, digits.end());
+		digits[0] = 0;
 	}
 	//Implemented by Vlad Avramenko
 	//Division for PositiveNumbers
@@ -129,8 +152,8 @@ public:
 		if (n1 < n2) {
 			return PositiveNumber("0");
 		}
-		int i = n2.digits.size()-1;
-		PositiveNumber part(n1.toString().substr(0, i+1));
+		int i = n2.digits.size() - 1;
+		PositiveNumber part(n1.toString().substr(0, i + 1));
 		std::string result;
 		while (i < n1.digits.size()) {
 			if (part < n2) {
@@ -168,14 +191,43 @@ public:
 	}
 
 	PositiveNumber remainder(PositiveNumber& n1, PositiveNumber& n2) {
+		PositiveNumber rem((n2 * (n1 / n2)));
 		return n1 - (n2 * (n1 / n2));
 	}
 
 	PositiveNumber operator%(PositiveNumber& other) {
 		return remainder(*this, other);
 	}
+	//By V. Avramenko
+	//Inefficient, did not find a way of getting square root (efficiently) in long arithmetics
+	bool is_prime() {
+		PositiveNumber one = PositiveNumber("1");
+		PositiveNumber two = PositiveNumber("2");
+		PositiveNumber zero = PositiveNumber("0");
+		if (remainder(*this, two) == zero) {
+			return false;
+		}
+		PositiveNumber half = *this / two;
+		for (PositiveNumber i = PositiveNumber("3"); i < half; i += one) {
+			if (remainder(*this, i) == zero) {
+				return false;
+			}
+		}
+		return true;
+	}
+	//By V.Avramenko
+	bool is_even() {
+		PositiveNumber two = PositiveNumber("2");
+		PositiveNumber zero = PositiveNumber("0");
+		if (remainder(*this, two) == zero) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
 
-	bool operator>(PositiveNumber& n) const {
+	bool operator>(const PositiveNumber& n) const {
 		if (digits.size() > n.digits.size())
 			return true;
 		if (digits.size() < n.digits.size())
@@ -217,13 +269,19 @@ public:
 			return true;
 		if (digits.size() > n.digits.size())
 			return false;
-		for (int i = digits.size()-1; i >= 0; i--) {
+		for (int i = digits.size() - 1; i >= 0; i--) {
 			if (digits[i] == n[i])
 				continue;
 			return digits[i] < n[i];
 		}
 		return true;
 	}
+
+	//Implemented by Y. Kishchuk
+	bool operator==(const PositiveNumber& right) const {
+		return this->equals(const_cast<PositiveNumber&>(right));
+	}
+
 	//Division with remainder 
 	//Implemented by Artem Volyk
 	int operator % (int& n) const {
@@ -236,7 +294,7 @@ public:
 		}
 		int rest = 0;
 		for (int i = 0; i < parts.size(); i++) {
-			rest += int((pow(10,6*i)*parts[i])) % n;
+			rest += int((pow(10, 6 * i) * parts[i])) % n;
 		}
 		return int(rest) % n;
 	}
@@ -319,7 +377,7 @@ public:
 	*/
 	virtual std::string toString() {
 		std::string result = "";
-		if (digits.empty())
+		if (isZero())
 			return "0";
 		for (int i : digits) {
 			result += (i + '0');
@@ -360,17 +418,17 @@ public:
 	}
 	/*
 	* Shifting number left or right (% 10)
-	* Examples: 
+	* Examples:
 	* 5.shift(2): 5 => 500
 	* 100.shift(-1): 100 => 10
-	* 
+	*
 	* Implemented by M. Tyshechenko
 	*/
 	PositiveNumber shift(int numDigits) {
 		PositiveNumber number = PositiveNumber(*this);
 		if (numDigits < 0) {
 			if (-numDigits < number.digits.size()) {
-				for (int i = 0; i < -numDigits ; i++) {
+				for (int i = 0; i < -numDigits; i++) {
 					number.digits.erase(number.digits.begin());
 				}
 			}
@@ -402,7 +460,7 @@ public:
 		}
 		 uint64_t square = static_cast<uint64_t>(std::sqrt(n));
 	for (std::size_t i = 2; i <= square && i <= n; ++i)
-	{	
+	{
 		PositiveNumber ii = PositiveNumber(std::to_string(i));
 		bool isPrime = true;
 		for (auto p : v)
@@ -417,7 +475,6 @@ public:
 				break;
 			}
 		}
-
 		if (isPrime)
 		{
 			uint64_t count = 0;
@@ -439,7 +496,7 @@ public:
 	}
 	}
 	PositiveNumber phi() {
-		
+
 	}*/
 	std::string bits() {
 		std::string result = bitsReverse();
