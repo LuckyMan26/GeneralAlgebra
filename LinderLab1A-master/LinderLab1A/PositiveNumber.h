@@ -21,7 +21,6 @@ protected:
 		while (digits.size() != 0 && digits.back() == 0) {
 			this->digits.pop_back();
 		}
-		
 		return (*this);
 	}
 
@@ -82,6 +81,12 @@ public:
 		this->trim();
 	}
 	int operator[](int i) const{
+		return digits[i];
+	}
+	int operator[](std::size_t i) const {
+		return digits[i];
+	}
+	int operator[](int i) const {
 		return digits[i];
 	}
 	int operator[](std::size_t i) const {
