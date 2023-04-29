@@ -14,6 +14,7 @@ class RPolynomial : public Polynomial<SignedNumber>
 {
 private:
 	RPolynomial() {	}
+	RPolynomial(const Polynomial& pol) : Polynomial(pol) {}
 
 public:
 	RPolynomial(std::string s) : Polynomial(s) {}
@@ -80,6 +81,21 @@ public:
 			prevElement = element;
 		}
 		return current;
+	}
+
+	RPolynomial operator+(const RPolynomial& right) const {
+		const Polynomial& pol = *this;
+		return RPolynomial(pol + right);
+	}
+
+	RPolynomial operator-(const RPolynomial& right) const {
+		const Polynomial& pol = *this;
+		return RPolynomial(pol - right);
+	}
+
+	RPolynomial operator*(const RPolynomial& right) const {
+		const Polynomial& pol = *this;
+		return RPolynomial(pol * right);
 	}
 };
 

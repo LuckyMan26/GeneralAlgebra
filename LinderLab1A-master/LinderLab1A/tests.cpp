@@ -179,6 +179,10 @@ TEST_CASE("Finite numbers") {
 	fin1 = FiniteNumber("-10 x6");
 	CHECK(fin1.toString() == "2");
 
+	fin1 = FiniteNumber("-1 x10");
+	fin1.toFieldSize();
+	CHECK(fin1.toString() == "9");
+
 	fin1 = FiniteNumber("-6 x6");
 	CHECK(fin1.toString() == "0");
 
