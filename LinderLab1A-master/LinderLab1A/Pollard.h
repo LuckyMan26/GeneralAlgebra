@@ -6,6 +6,43 @@
 /*
 	Implemented by Oleksii Onishchenko and Dmytro Mandziuk 
 */
+template<typename NumberType>
+std::vector<NumberType> naiveFactorization(NumberType n) {
+	std::vector<NumberType> result;
+	NumberType cur_divisor = NumberType(2);
+	while (n != NumberType(1))
+	{ 
+		if ((n % cur_divisor) != 0)
+			cur_divisor += NumberType(1);
+		else
+		{
+			n = n / cur_divisor;
+			result.push_back(cur_divisor);
+		}
+	}
+	return result;
+}
+
+
+template<typename NumberType, typename Function>
+std::map<NumberType, int> map_factors(NumberType n, Function func) {
+	std::srand(time(NULL));
+	std::vector<NumberType> result = func(n);
+	std::sort(result.begin(), result.end());
+	std::map<NumberType, int> mapOfFactors;
+	for (NumberType item : result) {
+		if (item != NumberType(1)) {
+			if (mapOfFactors.find(item) == mapOfFactors.end()) {
+				mapOfFactors.insert(std::pair<NumberType, int>(item, 1));
+			}
+			else {
+				mapOfFactors[item]++;
+			}
+		}
+	}
+	return mapOfFactors;
+}
+
 namespace PollardFactorization {
 	template<typename NumberType>
 	NumberType modular_pow(NumberType base, NumberType exponent, NumberType modulus) {
@@ -80,24 +117,5 @@ namespace PollardFactorization {
 		}
 
 		return result;
-	}
-
-	template<typename NumberType>
-	std::map<NumberType, int> factorizePoll(NumberType n) {
-		std::srand(time(NULL));
-		std::vector<NumberType> result = pollardRho(n);
-		std::sort(result.begin(), result.end());
-		std::map<NumberType, int> mapOfFactors;
-		for (NumberType item : result) {
-			if (item != NumberType(1)) {
-				if (mapOfFactors.find(item) == mapOfFactors.end()) {
-					mapOfFactors.insert(std::pair<NumberType, int>(item, 1));
-				}
-				else {
-					mapOfFactors[item]++;
-				}
-			}
-		}
-		return mapOfFactors;
 	}
 };
