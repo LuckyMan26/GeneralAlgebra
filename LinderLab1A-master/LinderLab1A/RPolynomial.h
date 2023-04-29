@@ -16,6 +16,14 @@ private:
 	RPolynomial() {	}
 	RPolynomial(const Polynomial& pol) : Polynomial(pol) {}
 
+	virtual SignedNumber genZeroCoefficient() const override {
+		return SignedNumber();
+	}
+
+	virtual SignedNumber genCoefficient(const std::string& str) const override {
+		return SignedNumber(str);
+	}
+
 public:
 	RPolynomial(std::string s) : Polynomial(s) {}
 

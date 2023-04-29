@@ -18,11 +18,12 @@ protected:
 	Polynomial() {}
 
 	/*Removes all elements, where coefficient equals zero*/
-	void trim() {
+	virtual void trim() {
 		std::list<PolynomialElement<TCoefficient>> newList;
 		TCoefficient zero = genZeroCoefficient();
 
 		for (auto element : coefficients) {
+			std::cout << element.getCoefficient().toString() << "\n";
 			if (element.getCoefficient() == zero)
 				continue;
 			newList.push_back(element);
@@ -41,7 +42,10 @@ protected:
 		}
 		return origin;
 	}
-
+	/*
+	* Adds a new node to the polynomial in descending order of degree. 
+	* If such a degree already exists, the coefficients are summed
+	*/
 	void emplaceDegree(TCoefficient coefficient, PositiveNumber degree) {
 		auto toAdd = PolynomialElement<TCoefficient>(coefficient, degree);
 		if (coefficients.empty()) {
@@ -71,6 +75,43 @@ protected:
 		coefficients.emplace(--coefficients.end(), toAdd);
 	}
 
+	// Parses PolynomialElements from the given string (string must be formatted, see Polynomial(std::string s) constructor)
+	virtual std::list<PolynomialElement<TCoefficient>> parseTerms(std::string s) const {
+		std::list<PolynomialElement<TCoefficient>> coefficients;
+
+		size_t pos = s.find("+", 1);
+		while (pos != std::string::npos)
+		{
+			std::string token = s.substr(1, pos - 1);
+			s = s.substr(pos);
+			std::size_t degreePos = token.find('^');
+			if (degreePos == std::string::npos) { //no degree sign found : special case
+				if (token[token.size() - 1] == 'x') {
+					std::string coefficient = token.substr(0, token.size() - 1);
+					if (coefficient.empty()) // x ~ 1 * x
+						coefficient = "1";
+					else if (coefficient == "-") // -x ~ -1 * x
+						coefficient = "-1";
+					coefficients.push_back({ genCoefficient(coefficient), PositiveNumber("1") });
+				}
+				else {
+					coefficients.push_back({ genCoefficient(token), PositiveNumber("0") });
+				}
+			}
+			else {
+				std::string coefficient = token.substr(0, degreePos - 1); //x exclusive
+				if (coefficient.empty()) // x ~ 1 * x
+					coefficient = "1";
+				else if (coefficient == "-") // -x ~ -1 * x
+					coefficient = "-1";
+				std::string degree = token.substr(degreePos + 1);
+				coefficients.push_back({ genCoefficient(coefficient), PositiveNumber(degree) });
+			}
+			pos = s.find("+", 1);
+		}
+		return coefficients;
+	}
+
 	virtual TCoefficient genZeroCoefficient() const {
 		return TCoefficient();
 	}
@@ -93,36 +134,12 @@ public:
 		if (s[0]!='+')
 			s = "+" + s;
 		s = s + '+';
-		size_t pos = s.find("+", 1);
-		while (pos != std::string::npos)
-		{
-			std::string token = s.substr(1, pos-1);
-			s = s.substr(pos); 
-			std::size_t degreePos = token.find('^');
-			if (degreePos == std::string::npos) { //no degree sign found : special case
-				if (token[token.size() - 1] == 'x') {
-					std::string coefficient = token.substr(0, token.size() - 1);
-					if (coefficient.empty()) // x ~ 1 * x
-						coefficient = "1";
-					else if (coefficient == "-") // -x ~ -1 * x
-						coefficient = "-1";
-					emplaceDegree(genCoefficient(coefficient), PositiveNumber("1"));
-				}
-				else {
-					emplaceDegree(genCoefficient(token), PositiveNumber("0"));
-				}
-			}
-			else {
-				std::string coefficient = token.substr(0, degreePos - 1); //x exclusive
-				if (coefficient.empty()) // x ~ 1 * x
-					coefficient = "1";
-				else if (coefficient == "-") // -x ~ -1 * x
-					coefficient = "-1";
-				std::string degree = token.substr(degreePos + 1);
-				emplaceDegree(genCoefficient(coefficient), PositiveNumber(degree));
-			}
-			pos = s.find("+", 1);
+
+		auto coefficients = parseTerms(s);
+		for (auto& term : coefficients) {
+			emplaceDegree(term.getCoefficient(), term.getDegree());
 		}
+
 		trim();
 	}
 
@@ -136,6 +153,7 @@ public:
 			return "0";
 		std::string result = "";
 		for (auto &n : coefficients) {
+			// HACK: crutch
 			if constexpr (has_isPositive<TCoefficient>::value) { 
 				if (n.getCoefficient().isPositive())
 					result += '+';
@@ -153,7 +171,7 @@ public:
 
 	// Implemented by Y. Kishchuk
 
-	Polynomial operator+(const Polynomial& right) const {
+	virtual Polynomial operator+(const Polynomial& right) const {
 		Polynomial<TCoefficient> result;
 		auto leftIter = coefficients.begin();
 		auto rightIter = right.coefficients.begin();
@@ -189,7 +207,7 @@ public:
 		return result;
 	}
 
-	Polynomial operator-(const Polynomial& right) const {
+	virtual Polynomial operator-(const Polynomial& right) const {
 		Polynomial<TCoefficient> result;
 		auto leftIter = coefficients.begin();
 		auto rightIter = right.coefficients.begin();
@@ -232,7 +250,7 @@ public:
 		return result;
 	}
 
-	Polynomial operator*(const Polynomial& right) const {
+	virtual Polynomial operator*(const Polynomial& right) const {
 		Polynomial<TCoefficient> result;
 
 		for (auto leftIter = coefficients.begin(); leftIter != coefficients.end(); leftIter++) {
