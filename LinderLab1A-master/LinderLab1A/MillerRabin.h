@@ -56,6 +56,8 @@ namespace MillerRabin {
 	template <typename NumberType>
 	bool miller_rabin(NumberType num, int max_iterations = 4)
 	{
+		std::srand(time(NULL));
+
 		if (num <= NumberType(1) || num == NumberType(4))  return false;
 		if (num <= NumberType(3)) return true;
 
