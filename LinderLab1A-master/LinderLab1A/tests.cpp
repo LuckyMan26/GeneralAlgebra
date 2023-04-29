@@ -6,6 +6,8 @@
 #include "Exponent.h"
 #include "Polynomial.h"
 #include "CalculationOfSquareRoot.h"
+#include "MillerRabin.h"
+#include "Pollard.h"
 
 #include <random>
 #include <string>
@@ -343,3 +345,38 @@ TEST_CASE("Additional operators") {
 	CHECK(!(b > a));
 }
 
+TEST_CASE("Modular Power") {
+	PositiveNumber a = PositiveNumber(81);
+	PositiveNumber b = PositiveNumber(6);
+	PositiveNumber c = PositiveNumber(12);
+	auto result = mod_power(a, b, c).toString();
+	CHECK("9" == result);
+}
+
+TEST_CASE("Miller-Rabin") {
+	CHECK(!MillerRabin::miller_rabin(PositiveNumber("783")));
+	CHECK(!MillerRabin::miller_rabin(PositiveNumber("890")));
+	CHECK(!MillerRabin::miller_rabin(PositiveNumber("320")));
+	CHECK(!MillerRabin::miller_rabin(PositiveNumber("178")));
+
+	CHECK(MillerRabin::miller_rabin(PositiveNumber("2")));
+	CHECK(MillerRabin::miller_rabin(PositiveNumber("3")));
+	CHECK(MillerRabin::miller_rabin(PositiveNumber("5")));
+	CHECK(MillerRabin::miller_rabin(PositiveNumber("7")));
+	CHECK(MillerRabin::miller_rabin(PositiveNumber("11")));
+	CHECK(MillerRabin::miller_rabin(PositiveNumber("13")));
+	CHECK(MillerRabin::miller_rabin(PositiveNumber("17")));
+	CHECK(MillerRabin::miller_rabin(PositiveNumber("19")));
+	CHECK(MillerRabin::miller_rabin(PositiveNumber("23")));
+	CHECK(MillerRabin::miller_rabin(PositiveNumber("61")));
+	CHECK(MillerRabin::miller_rabin(PositiveNumber("79")));
+	CHECK(MillerRabin::miller_rabin(PositiveNumber("83")));
+	CHECK(MillerRabin::miller_rabin(PositiveNumber("2147483647")));
+}
+
+TEST_CASE("Pollard") {
+	PositiveNumber a = PositiveNumber("204562");
+	auto vec = PollardFactorization::pollardRho(a);
+	for (auto item : vec)
+		std::cout << item.toString() << "\n";
+}
