@@ -375,8 +375,26 @@ TEST_CASE("Miller-Rabin") {
 }
 
 TEST_CASE("Pollard") {
-	PositiveNumber a = PositiveNumber("204562");
-	auto vec = PollardFactorization::pollardRho(a);
-	for (auto item : vec)
-		std::cout << item.toString() << "\n";
+	PositiveNumber a1 = PositiveNumber("204562");
+	std::map<PositiveNumber,int> result1 = PollardFactorization::factorizePoll(a1);
+	std::map<PositiveNumber, int> toCheck1 = {std::pair<PositiveNumber,int>(PositiveNumber(2),1),
+		std::pair<PositiveNumber,int>(PositiveNumber(23),1),
+		std::pair<PositiveNumber,int>(PositiveNumber(4447),1) };
+	
+	CHECK(result1 == toCheck1);
+
+	PositiveNumber a2 = PositiveNumber("168");
+	std::map<PositiveNumber, int> result2 = PollardFactorization::factorizePoll(a2);
+	std::map<PositiveNumber, int> toCheck2 = { std::pair<PositiveNumber,int>(PositiveNumber(2),3),
+		std::pair<PositiveNumber,int>(PositiveNumber(3),1),
+		std::pair<PositiveNumber,int>(PositiveNumber(7),1) };
+
+	CHECK(result2 == toCheck2);
+
+	PositiveNumber a3 = PositiveNumber("43");
+	std::map<PositiveNumber, int> result3 = PollardFactorization::factorizePoll(a3);
+	std::map<PositiveNumber, int> toCheck3 = { std::pair<PositiveNumber,int>(PositiveNumber(43),1) };
+
+	CHECK(result3 == toCheck3);
+
 }
