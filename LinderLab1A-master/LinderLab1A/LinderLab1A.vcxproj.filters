@@ -48,6 +48,12 @@
     <ClInclude Include="CalculationOfSquareRoot.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Pollard.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MillerRabin.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="FiniteField.cpp">
