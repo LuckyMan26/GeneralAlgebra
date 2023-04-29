@@ -205,19 +205,6 @@ public:
 			PositiveNumber::addTo(other);
 		}
 	}
-	SignedNumber(std::string str) {
-		if (str[0] == '-') {
-			str = str.substr(1);
-			this->sign = MINUS;
-		}
-		this->digits = parseDigits(str);
-		this->trim();
-	}
-	SignedNumber(PositiveNumber absolute, Sign sign) {
-		this->sign = sign;
-		this->digits = absolute.getDigits();
-		this->trim();
-	}
 	std::string toString() {
 		std::string s = sign == PLUS ? "" : "-";
 		s += PositiveNumber::toString();

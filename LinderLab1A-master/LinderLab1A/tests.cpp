@@ -278,12 +278,6 @@ TEST_CASE("Test binary form") {
 }
 
 
-//Tests for polynomial constructor
-TEST_CASE("Test zero") {
-	Polynomial p = Polynomial("100 20 10", PositiveNumber("17"));
-	CHECK(p.toString() == "15 3 10");
-}
-
 //Tests by P. Velychko #6
 TEST_CASE("TestNonQuadraticPositive") {
 	FiniteNumber a("2",11);

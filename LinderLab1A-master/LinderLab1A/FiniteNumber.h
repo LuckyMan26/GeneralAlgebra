@@ -39,10 +39,6 @@ public:
 		toFieldSize();
 	}
 
-	FiniteNumber(long long a, long long p) : PositiveNumber(a) {
-		this->f = FiniteField(PositiveNumber(p));
-		toFieldSize();
-	}
 	/**
 	* Input: string of value "xP N", where P - is field size, N - positive integer
 	* Alternative: "N xP"
@@ -289,7 +285,7 @@ public:
 	}
 
 	static bool parseIsNegative(std::string str) {
-		
+
 		bool gotMinus = false;
 
 		for (char ch : str) {
@@ -304,7 +300,7 @@ public:
 		}
 
 		return gotMinus;
-    
+	}
 	// Calculates a^b mod n
 	FiniteNumber power_mod(PositiveNumber b) {     // power_mod modulo exponentiation calculation
 		FiniteNumber a(*this);
