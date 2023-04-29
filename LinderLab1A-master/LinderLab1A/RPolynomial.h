@@ -106,4 +106,3 @@ public:
 		return RPolynomial(pol * right);
 	}
 };
-

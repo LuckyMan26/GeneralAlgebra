@@ -128,6 +128,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="CalculationOfSquareRoot.h" />
     <ClInclude Include="doctest.h" />
     <ClInclude Include="Exponent.h" />
     <ClInclude Include="Field.h" />
@@ -141,6 +142,7 @@
     <ClInclude Include="SignedNumber.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CalculationOfSquareRoot.cpp" />
     <ClCompile Include="FiniteField.cpp" />
     <ClCompile Include="FPolynomialTest.cpp" />
     <ClCompile Include="PolynomialElementTest.cpp" />

@@ -8,7 +8,7 @@
 
 class FiniteNumber : public PositiveNumber {
 private: 
-	//p stands for field (поле)
+	//p stands for field (пїЅпїЅпїЅпїЅ)
 	FiniteField f;
 	void setP(PositiveNumber p, bool gotNegativeBase = false) {
 		f.setP(p);
@@ -23,11 +23,20 @@ public:
 		this->digits = base.getDigits();
 		toFieldSize();
 	}
+	FiniteNumber(std::vector<int> v, FiniteField f_) : f(f_.getP()) {
+		digits = v;
+		toFieldSize();
 
+	}
 	FiniteNumber(std::string from, PositiveNumber p) {
 		bool negativeBase = parseIsNegative(from);
 		this->digits = parseDigits(from);
 		setP(p, negativeBase);
+	}
+
+	FiniteNumber(long long a, long long p) : PositiveNumber(a) {
+		this->f = FiniteField(PositiveNumber(p));
+		toFieldSize();
 	}
 
 	FiniteNumber(long long a, long long p) : PositiveNumber(a) {
@@ -170,7 +179,7 @@ public:
 		SignedNumber s0("0"), s1("1");
 		while (true) {
 			SignedNumber d("0");
-			
+
 			while (n >= g) {
 				n -= g;
 				d.addTo(SignedNumber("-1"));
@@ -191,7 +200,6 @@ public:
 		}
 		if (s1.getSign() == MINUS) {
 			PositiveNumber s1_pos(s1);
-			
 			while (s1_pos > p) {
 				s1_pos -= p;
 			}
@@ -217,7 +225,7 @@ public:
 		if (p1 != p2) {
 			return FiniteNumber("1", this->getP());
 		}
-		return *this*num.inverse();
+		return *this * num.inverse();
 	}
 	//Converts PositiveNumber to field size
 	void toFieldSize(bool gotNegativeBase = false) {
@@ -296,6 +304,66 @@ public:
 		}
 
 		return gotMinus;
+    
+	// Calculates a^b mod n
+	FiniteNumber power_mod(PositiveNumber b) {     // power_mod modulo exponentiation calculation
+		FiniteNumber a(*this);
+		FiniteNumber res("1", f.getP());
+		FiniteNumber zero("0");
+		PositiveNumber zeroPositive(0);
+		PositiveNumber two(2);
+		while (b > zero) {
+			if ((b % two) != zero) {
+				res = (res * a);
+			}
+			a = (a * a);
+			a.toFieldSize();
+			b = b / two;
+		}
+		res.toFieldSize();
+		return res;
+	}
+    
+	// Finds a^((p+1)/2) mod p, where p is a prime number
+	FiniteNumber tonelli_shanks() {            // tonelli_shanks to calculate the square root
+		PositiveNumber q = f.getP() - 1;      // long long: represents an integer in the range from -9223372036854775808 to +9223372036854775807.
+		PositiveNumber two(2);
+		PositiveNumber zero("0");
+		PositiveNumber four("4");
+		FiniteNumber zeroFinite("0", f.getP());
+		FiniteNumber oneFinite("1", f.getP());
+		int s = 0;
+		FiniteNumber temp(f.getP() - 1, f.getP());
+		while ((q % two).isZero() || (q % two) == zero) {
+			q = q / two;
+			s += 1;
+		}
+		if (s == 1) {
+			return this->power_mod((f.getP() + PositiveNumber("1")) / four);
+		}
+		FiniteNumber h("2", f.getP());
+		for (; h.power_mod((f.getP() - 1) / two) != temp; h = h + oneFinite) {}
+		FiniteNumber c = h.power_mod(q);
+		FiniteNumber r = power_mod((q + oneFinite) / two);
+		FiniteNumber t = power_mod(q);
+		int n = s;
+		while (t != oneFinite) {
+			FiniteNumber tt = t;
+			int i;
+			for (i = 1; i < n; i++) {
+				tt = (tt * tt);
+
+				if (tt == oneFinite) {
+					break;
+				}
+			}
+			FiniteNumber b = c.power_mod(n - i - 1);
+			r = (r * b);
+			c = (b * b);
+			t = (t * c);
+			n = i;
+		}
+		return r;
+
 	}
 };
-

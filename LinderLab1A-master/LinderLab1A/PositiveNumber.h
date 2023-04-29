@@ -21,6 +21,7 @@ protected:
 		while (digits.size() != 0 && digits.back() == 0) {
 			this->digits.pop_back();
 		}
+		
 		return (*this);
 	}
 
@@ -127,6 +128,7 @@ public:
 		return !equals(n);
 	}
 	bool equals(PositiveNumber& n) const {
+		
 		if (digits.size() != n.digits.size())
 			return false;
 		for (int i = 0; i < digits.size(); i++) {
@@ -134,6 +136,11 @@ public:
 				return false;
 		}
 		return true;
+	}
+	//Implemented by Artem Volyk
+	void operator >>= (int i) {
+		std::rotate(digits.begin(), digits.begin() + 1, digits.end());
+		digits[0] = 0;
 	}
 	//Implemented by Vlad Avramenko
 	//Division for PositiveNumbers
@@ -184,6 +191,7 @@ public:
 	}
 
 	PositiveNumber remainder(PositiveNumber& n1, PositiveNumber& n2) {
+		PositiveNumber rem((n2 * (n1 / n2)));
 		return n1 - (n2 * (n1 / n2));
 	}
 
@@ -467,7 +475,6 @@ public:
 				break;
 			}
 		}
-
 		if (isPrime)
 		{
 			uint64_t count = 0;
@@ -514,5 +521,4 @@ public:
 		}
 		return result;
 	}
-
 };
