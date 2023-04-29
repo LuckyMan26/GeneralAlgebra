@@ -184,6 +184,9 @@ TEST_CASE("Finite numbers") {
 
 	fin1 = FiniteNumber("-6 x6");
 	CHECK(fin1.toString() == "0");
+
+	fin1 = FiniteNumber("-6 x5");
+	CHECK(fin1.toString() == "4");
 }
 
 //Tests by M. Tyshchenko

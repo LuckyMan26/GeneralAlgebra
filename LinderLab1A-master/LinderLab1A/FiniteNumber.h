@@ -225,7 +225,12 @@ public:
 
 		if (gotNegativeBase) { //Negative base
 			PositiveNumber t = PositiveNumber(*this);
-			t = p - (t % (p));
+			if (t == p) {
+				t = t % (p);
+			}
+			else {
+				t = p - (t % (p));
+			}
 			this->digits = t.getDigits();
 		}
 		else { //Positive base
