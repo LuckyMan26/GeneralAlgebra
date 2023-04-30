@@ -119,8 +119,8 @@ public:
 	RPolynomial operator/(/*const*/ RPolynomial& divider) const {
 
 		auto deg1 = PositiveNumber("0"), deg2 = deg1;
-
-		if (divider.degree() <= deg1) {
+		auto nullNum = SignedNumber("0");
+		if (/*divider.degree() <= deg1*/ divider.coefficients.empty() || divider.coefficients.front().getCoefficient() == nullNum) {
 			throw std::invalid_argument("Division by zero");
 		}
 
@@ -155,8 +155,9 @@ public:
 	RPolynomial operator %(const RPolynomial& divider) const {
 
 		auto deg1 = PositiveNumber("0"), deg2 = deg1;
+		auto nullNum = SignedNumber("0");
 
-		if (divider.degree() <= deg1) {
+		if (/*divider.degree() <= deg1*/divider.coefficients.empty() || divider.coefficients.front().getCoefficient() == nullNum) {
 			throw std::invalid_argument("Division by zero");
 		}
 
@@ -169,7 +170,7 @@ public:
 			
 			auto num1 = divident.coefficients.front().getCoefficient().toUnsigned();
 			auto num2 = divider.coefficients.front().getCoefficient().toUnsigned();
-			if (!(num1 % num2 == SignedNumber())) {
+			if (!(num1 % num2 == nullNum)) {
 				return divident;
 			}
 
@@ -188,11 +189,28 @@ public:
 		return divident;
 	}
 
+	friend RPolynomial divideByNum(RPolynomial R, SignedNumber Num) {
+		RPolynomial res;
+		SignedNumber zorro("0");
+		for (auto item : R.coefficients) {
+			if (item.getCoefficient() % Num == zorro) {
+				res.emplaceDegree(item.getCoefficient() / Num, item.getDegree());
+			}
+			else {
+				return R;
+			}
+		}
+		return res;
+	}
+
 	static RPolynomial GCD(const RPolynomial& a, const RPolynomial& b) {
-		
+
 		RPolynomial A = a;
 		RPolynomial B = b;
-
+		if (B.toString() == "0") {
+			return A;
+		}
+		/*
 		auto degA = A.degree(),
 			 degB = B.degree();
 
@@ -212,6 +230,14 @@ public:
 			std::swap(A, B);
 		}
 
-		return A;
+		return A;*/
+		RPolynomial R = A % B;
+		auto DEBUGA = A.toString();
+		auto DEBUGB = B.toString();
+		auto DEBUGR = R.toString();
+		if (R.toString() != "0") {
+			R = divideByNum(R, R.coefficients.front().getCoefficient());
+		}
+		return GCD(B, R);
 	}
 };
