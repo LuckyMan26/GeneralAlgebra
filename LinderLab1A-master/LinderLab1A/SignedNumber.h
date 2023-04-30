@@ -196,8 +196,9 @@ public:
 	}
 	void substractFrom(SignedNumber other) {
 		if (this->sign == other.sign) {
+			bool needsFlip = PositiveNumber::operator<(other);
 			PositiveNumber::substract(other);
-			if (PositiveNumber::operator<(other)) {
+			if (needsFlip) {
 				flipSign();
 			}
 		}
@@ -228,7 +229,7 @@ public:
 	*/
 
 	//Division for SignedNumbers
-	SignedNumber operator/(SignedNumber& other) {
+	SignedNumber operator/(const SignedNumber& other) const{
 		return divide(*this, other);
 	}
 
@@ -241,7 +242,7 @@ public:
 		}
 	}
 
-	SignedNumber divide(SignedNumber n1, SignedNumber n2) {
+	SignedNumber divide(SignedNumber n1, SignedNumber n2) const{
 		PositiveNumber p1 = n1.toUnsigned();
 		PositiveNumber p2 = n2.toUnsigned();
 		PositiveNumber num = PositiveNumber::divide(p1, p2);
