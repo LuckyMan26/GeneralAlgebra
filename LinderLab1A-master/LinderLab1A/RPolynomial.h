@@ -6,14 +6,14 @@
 #include "Exponent.h"
 
 //Implemented by V.Avramenko and M.Tyshchenko
-// Modified by Y. Kishchuk
+// Modified by Y. Kishchuk and V.Horbanov
 /*
 * Class for Polynomial in Polynomial Ring (signed coefficients)
 */
 class RPolynomial : public Polynomial<SignedNumber>
 {
 private:
-	RPolynomial() {	}
+	
 	RPolynomial(const Polynomial& pol) : Polynomial(pol) {}
 
 	virtual SignedNumber genZeroCoefficient() const override {
@@ -25,6 +25,9 @@ private:
 	}
 
 public:
+
+	RPolynomial() {	}
+
 	RPolynomial(std::string s) : Polynomial(s) {}
 
 	//Implemented by V.Avramenko
@@ -61,6 +64,13 @@ public:
 			//TO BE CONTINUED
 			//Waiting for var 13 implementation to continue my work
 		}
+	}
+
+	PositiveNumber degree() const {
+		if (coefficients.empty()) {
+			return PositiveNumber("0");
+		}
+		return coefficients.front().getDegree();
 	}
 
 
@@ -104,5 +114,117 @@ public:
 	RPolynomial operator*(const RPolynomial& right) const {
 		const Polynomial& pol = *this;
 		return RPolynomial(pol * right);
+	}
+
+	RPolynomial operator/(const RPolynomial& divider) const {
+
+		auto deg1 = PositiveNumber("0"), deg2 = deg1;
+		auto nullNum = SignedNumber("0");
+		if (divider.coefficients.empty() || divider.coefficients.front().getCoefficient() == nullNum) {
+			throw std::invalid_argument("Division by zero");
+		}
+
+		auto quotient = RPolynomial();
+		RPolynomial divident = *this;
+		deg1 = divident.degree();
+		deg2 = divider.degree();
+
+		while (deg1 >= deg2 && !divident.coefficients.empty()) {
+			
+			auto num1 = divident.coefficients.front().getCoefficient().toUnsigned();
+			auto num2 = divider.coefficients.front().getCoefficient().toUnsigned();
+			if (!(num1 % num2 == SignedNumber())) {
+				break;
+			}
+			
+			auto leadingElement = divident.coefficients.front() / divider.coefficients.front();
+			auto leadingPolynomial = RPolynomial(); leadingPolynomial.emplaceDegree(leadingElement.getCoefficient(), leadingElement.getDegree());
+			quotient.emplaceDegree(leadingElement.getCoefficient(), leadingElement.getDegree());
+
+			leadingPolynomial = leadingPolynomial * divider;
+		
+			divident = divident - leadingPolynomial;
+
+			deg1 = divident.degree();
+			deg2 = divider.degree();
+		}
+
+		return quotient;
+	}
+
+	RPolynomial operator %(const RPolynomial& divider) const {
+
+		auto deg1 = PositiveNumber("0"), deg2 = deg1;
+		auto nullNum = SignedNumber("0");
+
+		if (/*divider.degree() <= deg1*/divider.coefficients.empty() || divider.coefficients.front().getCoefficient() == nullNum) {
+			throw std::invalid_argument("Division by zero");
+		}
+		auto quotient = RPolynomial();
+		RPolynomial divident = *this;
+		deg1 = divident.degree();
+		deg2 = divider.degree();
+
+		while (deg1 >= deg2 && !divident.coefficients.empty()) {
+			
+			
+
+			auto num1 = divident.coefficients.front().getCoefficient().toUnsigned();
+			auto num2 = divider.coefficients.front().getCoefficient().toUnsigned();
+			if (!(num1 % num2 == nullNum)) {
+				return divident;
+			}
+			
+			auto deb1 = divident.coefficients.front();
+			auto deb2 = divider.coefficients.front();
+
+			auto leadingElement = divident.coefficients.front() / divider.coefficients.front();
+			auto leadingPolynomial = RPolynomial(); leadingPolynomial.emplaceDegree(leadingElement.getCoefficient(), leadingElement.getDegree());
+			
+
+			quotient.emplaceDegree(leadingElement.getCoefficient(), leadingElement.getDegree());
+
+			leadingPolynomial = leadingPolynomial * divider;
+			divident = divident - leadingPolynomial;
+
+			deg1 = divident.degree();
+			deg2 = divider.degree();
+
+
+		}
+
+		return divident;
+	}
+
+	friend RPolynomial divideByNum(RPolynomial R, SignedNumber Num) {
+		RPolynomial res;
+		SignedNumber zorro("0");
+		for (auto item : R.coefficients) {
+			if (item.getCoefficient() % Num == zorro) {
+				res.emplaceDegree(item.getCoefficient() / Num, item.getDegree());
+			}
+			else {
+				return R;
+			}
+		}
+		return res;
+	}
+
+	static RPolynomial GCD(const RPolynomial& a, const RPolynomial& b) {
+
+		RPolynomial A = a;
+		RPolynomial B = b;
+		if (B.toString() == "0") {
+			return A;
+		}
+		
+		RPolynomial R = A % B;
+		auto DEBUGA = A.toString();
+		auto DEBUGB = B.toString();
+		auto DEBUGR = R.toString();
+		if (R.toString() != "0") {
+			R = divideByNum(R, R.coefficients.front().getCoefficient());
+		}
+		return GCD(B, R);
 	}
 };

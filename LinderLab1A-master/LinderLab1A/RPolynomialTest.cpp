@@ -89,6 +89,18 @@ TEST_CASE("Substraction")
 
 	sub = polinomial - polinomial2;
 	CHECK(sub.toString() == "-x^10+6x^5-4x^4-9x^3+2x^2-x-2");
+
+	polinomial = RPolynomial("x^3+x^2");
+	polinomial2 = RPolynomial("x^3+x");
+
+	sub = polinomial - polinomial2;
+	CHECK(sub.toString() == "x^2-x");
+
+	polinomial = RPolynomial("x^3+5x^2");
+	polinomial2 = RPolynomial("x^3+4x^2");
+
+	sub = polinomial - polinomial2;
+	CHECK(sub.toString() == "x^2");
 }
 
 TEST_CASE("Multiplication")
@@ -116,4 +128,97 @@ TEST_CASE("Multiplication")
 	CHECK(mult.toString() == "x^15-4x^14-9x^13+2x^12-x^11-6x^10+20x^9+45x^8-10x^7+5x^6+6x^5-4x^4-9x^3+2x^2-x-1");
 	mult = polinomial2 * polinomial;
 	CHECK(mult.toString() == "x^15-4x^14-9x^13+2x^12-x^11-6x^10+20x^9+45x^8-10x^7+5x^6+6x^5-4x^4-9x^3+2x^2-x-1");
+}
+
+
+//Test implementation by V.Horbanov
+TEST_CASE("Division")
+{
+	RPolynomial pol1 = RPolynomial("x^3+5x^2-2x-6"), 
+				pol2 = RPolynomial("x+1");
+
+	auto res = pol1 / pol2;
+	CHECK(res.toString() == "x^2+4x-6");
+
+
+	pol1 = RPolynomial("x^3-4x^2+5");
+	pol2 = RPolynomial("9x^3+x+1");
+	res = pol1 / pol2;
+	CHECK(res.toString() == "0");
+
+	pol1 = RPolynomial("x^15-4x^14-9x^13+2x^12-x^11-6x^10+20x^9+45x^8-10x^7+5x^6+6x^5-4x^4-9x^3+2x^2-x-1");
+	pol2 = RPolynomial("-4x^14-9x^13+2x^12-x^11-6x^10+20x^9+45x^8-10x^7+5x^6+6x^5-4x^4-9x^3+2x^2-x-1");
+	res = pol1 / pol2;
+	CHECK(res.toString() == "0");
+
+	pol1 = RPolynomial("x^3+x^2");
+	pol2 = RPolynomial("x^2+1");
+	res = pol1 / pol2;
+	CHECK(res.toString() == "x+1");
+
+	pol1 = RPolynomial("x^3+5x^2-2x-6");
+	pol2 = RPolynomial("x+4");
+	res = pol1 / pol2;
+	CHECK(res.toString() == "x^2+x-6");
+}
+
+TEST_CASE("Remainder")
+{
+	RPolynomial pol1 = RPolynomial("3x^3+2x^2-3x-5"),
+				pol2 = RPolynomial("x+4");
+
+	auto res = pol1 % pol2;
+	CHECK(res.toString() == "-153");
+
+	pol1 = RPolynomial("x^3-4x^2+5");
+	pol2 = RPolynomial("9x^3+x+1");
+	res = pol1 % pol2;
+	CHECK(res.toString() == "x^3-4x^2+5");
+
+	pol1 = RPolynomial("x^15-4x^14-9x^13+2x^12-x^11-6x^10+20x^9+45x^8-10x^7+5x^6+6x^5-4x^4-9x^3+2x^2-x-1");
+	pol2 = RPolynomial("-4x^14-9x^13+2x^12-x^11-6x^10+20x^9+45x^8-10x^7+5x^6+6x^5-4x^4-9x^3+2x^2-x-1");
+	res = pol1 % pol2;
+	CHECK(res.toString() == "x^15-4x^14-9x^13+2x^12-x^11-6x^10+20x^9+45x^8-10x^7+5x^6+6x^5-4x^4-9x^3+2x^2-x-1");
+
+	pol1 = RPolynomial("x^3+x^2");
+	pol2 = RPolynomial("x^2+1");
+	res = pol1 % pol2;
+	CHECK(res.toString() == "-x-1");
+
+	pol1 = RPolynomial("x^3+5x^2-2x-6");
+	pol2 = RPolynomial("x+4");
+	res = pol1 % pol2;
+	CHECK(res.toString() == "18");
+}
+
+
+TEST_CASE("GCD") 
+{
+	RPolynomial pol1 = RPolynomial("x^3+5x^2-2x-6"),
+		pol2 = RPolynomial("x^2+4x-6");
+
+	auto res = RPolynomial::GCD(pol1, pol2);
+	CHECK(res.toString() == "x^2+4x-6");
+
+
+	pol1 = RPolynomial("x^3+5x^2-2x-6"),
+	pol2 = RPolynomial("x+4");
+	res = RPolynomial::GCD(pol1, pol2);
+	CHECK(res.toString() == "1");
+
+	pol1 = RPolynomial("x^3+20x^2+127x+252"),
+	pol2 = RPolynomial("x^3+17x^2+79x+63");
+	res = RPolynomial::GCD(pol1, pol2);
+	CHECK(res.toString() == "x^2+16x+63");
+
+	pol1 = RPolynomial("x^2-2x+1"),
+	pol2 = RPolynomial("x-1");
+	res = RPolynomial::GCD(pol1, pol2);
+	CHECK(res.toString() == "x-1");
+
+	pol1 = RPolynomial("x^2+11x+28"),
+	pol2 = RPolynomial("x^2+8x+7");
+	res = RPolynomial::GCD(pol1, pol2);
+	CHECK(res.toString() == "x+7");
+
 }
