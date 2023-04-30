@@ -24,7 +24,6 @@ TEST_CASE("Positive numbers") {
 	CHECK((b - a).toString() == "1135");
 	CHECK((b + a).toString() == "1333");
 	CHECK((a + b).toString() == "1333");
-	
 }
 
 //Test by V.Avramenko
@@ -310,16 +309,33 @@ TEST_CASE("Test getP method") {
 	CHECK(group2.getP() == seven);
 }
 
-// TODO: Implement group element order
 TEST_CASE("Test ElementOrder method") {
 	FiniteGroup group(PositiveNumber("7"));
+	group.setIdentity(FiniteNumber("1 x7"));
 
 	// Test ElementOrder method
-	CHECK(group.ElementOrder(FiniteNumber("2 x10")) == 5);
+	CHECK_THROWS_AS(group.ElementOrder(FiniteNumber("0 x7")).toString(), std::runtime_error);
+	CHECK(group.ElementOrder(FiniteNumber("1 x7")).toString() == PositiveNumber("1").toString());
+	CHECK(group.ElementOrder(FiniteNumber("2 x7")).toString() == PositiveNumber("3").toString());
+	CHECK(group.ElementOrder(FiniteNumber("3 x7")).toString() == PositiveNumber("6").toString());
+	CHECK(group.ElementOrder(FiniteNumber("4 x7")).toString() == PositiveNumber("3").toString());
+	CHECK(group.ElementOrder(FiniteNumber("5 x7")).toString() == PositiveNumber("6").toString());
+	CHECK(group.ElementOrder(FiniteNumber("6 x7")).toString() == PositiveNumber("2").toString());
 
-	// Test ElementOrder method with a different binary operation
-	CHECK(group.ElementOrder(FiniteNumber("2 x10")) == 4);
+	//auto group2 = FiniteGroup(PositiveNumber("10"));
+	//group2.setIdentity(FiniteNumber("1 x10"));
+	//CHECK_THROWS_AS(group2.ElementOrder(FiniteNumber("0 x10")).toString(), std::runtime_error);
+	//CHECK(group2.ElementOrder(FiniteNumber("1 x10")).toString() == PositiveNumber("1").toString());
+	//CHECK(group2.ElementOrder(FiniteNumber("2 x10")).toString() == PositiveNumber("3").toString());
+	//CHECK(group2.ElementOrder(FiniteNumber("3 x10")).toString() == PositiveNumber("6").toString());
+	//CHECK(group2.ElementOrder(FiniteNumber("4 x10")).toString() == PositiveNumber("3").toString());
+	//CHECK(group2.ElementOrder(FiniteNumber("5 x10")).toString() == PositiveNumber("6").toString());
+	//CHECK(group2.ElementOrder(FiniteNumber("6 x10")).toString() == PositiveNumber("2").toString());
+	//CHECK(group2.ElementOrder(FiniteNumber("7 x10")).toString() == PositiveNumber("6").toString());
+	//CHECK(group2.ElementOrder(FiniteNumber("8 x10")).toString() == PositiveNumber("3").toString());
+	//CHECK(group2.ElementOrder(FiniteNumber("9 x10")).toString() == PositiveNumber("6").toString());
 }
+
 //Tests by P. Velychko #6
 TEST_CASE("TestNonQuadraticPositive") {
 	FiniteNumber a("2",11);
