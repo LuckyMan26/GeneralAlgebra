@@ -194,19 +194,6 @@ TEST_CASE("Remainder")
 
 TEST_CASE("GCD") 
 {
-	//RPolynomial pol1 = RPolynomial("x^2+11x+28"),
-	//			pol2 = RPolynomial("x^2+8x+7");
-
-	//RPolynomial res = RPolynomial::GCD(pol1, pol2);
-	//CHECK(res.toString() == "x+7");
-	///*auto res = RPolynomial::GCD(pol1, pol2);
-	//CHECK(res.toString() == "x^2+4x-6");
-	//*/
-	//
-	//pol1 = RPolynomial("x^3+5x^2-2x-6"),
-	//pol2 = RPolynomial("x+4");
-	//res = RPolynomial::GCD(pol1, pol2);
-	//CHECK(res.toString() == "1");
 	RPolynomial pol1 = RPolynomial("x^3+5x^2-2x-6"),
 		pol2 = RPolynomial("x^2+4x-6");
 
