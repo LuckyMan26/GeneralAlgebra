@@ -120,7 +120,7 @@ public:
 
 		auto deg1 = PositiveNumber("0"), deg2 = deg1;
 		auto nullNum = SignedNumber("0");
-		if (/*divider.degree() <= deg1*/ divider.coefficients.empty() || divider.coefficients.front().getCoefficient() == nullNum) {
+		if (divider.coefficients.empty() || divider.coefficients.front().getCoefficient() == nullNum) {
 			throw std::invalid_argument("Division by zero");
 		}
 
