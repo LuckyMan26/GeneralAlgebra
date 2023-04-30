@@ -77,7 +77,11 @@ public:
 	/*
 	* overloaded operators
 	*/
-	friend FiniteNumber operator+(FiniteNumber left, const FiniteNumber& n);
+	friend FiniteNumber operator+(FiniteNumber left, const FiniteNumber& n) {
+		left.addTo(n);
+		left.toFieldSize();
+		return left;
+	}
 
 	FiniteNumber& operator+=(const FiniteNumber& n) {
 		this->addTo(n);
@@ -95,7 +99,11 @@ public:
 		this->toFieldSize();
 		return *this;
 	}
-	friend FiniteNumber operator-(FiniteNumber left, const FiniteNumber& n);
+	friend FiniteNumber operator-(FiniteNumber left, const FiniteNumber& n) {
+		left.substract(n);
+		left.toFieldSize();
+		return left;
+	}
 
 	FiniteNumber& operator-=(const FiniteNumber& n) {
 		this->substract(n);
@@ -103,15 +111,15 @@ public:
 		return *this;
 	}
 
-	friend FiniteNumber operator/(FiniteNumber left, const FiniteNumber& n);
+	friend FiniteNumber operator/(FiniteNumber left, const FiniteNumber& n) {
+		left.divideBy(n);
+		left.toFieldSize();
+		return left;
+	}
 
-
-	/*
-	* Implemented by Y.Kishchuk
-	*/
 
 	bool operator==(const FiniteNumber& n) const {
-		return this->equals(const_cast<FiniteNumber&>(n)) && p.equals(const_cast<FiniteNumber&>(n).p);
+		return this->equals(const_cast<FiniteNumber&>(n)) && this->getP().equals(const_cast<FiniteNumber&>(n).getP());
 	}
 	bool operator>(FiniteNumber& n) const {
 		PositiveNumber p1 = getP();

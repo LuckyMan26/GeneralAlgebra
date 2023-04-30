@@ -292,43 +292,32 @@ TEST_CASE("Test setIdentity and getIdentity methods") {
 }
 
 TEST_CASE("Test setGroupBinaryOperation method") {
-	FiniteGroup group(PositiveNumber("10"), operator*);
+	FiniteGroup group(PositiveNumber("10"));
 
 	// Test if the binary operation is set correctly
 	CHECK(group.operate(FiniteNumber("2 x10"), FiniteNumber("3 x10")) == FiniteNumber("6 x10"));
 }
 
-TEST_CASE("Test operate method") {
-	FiniteGroup group(PositiveNumber("10"), operator+);
-
-	// Test operate method
-	CHECK(group.operate(FiniteNumber("2 x10"), FiniteNumber("3 x10")) == FiniteNumber("5 x10"));
-
-	group.setGroupBinaryOperation(operator*);
-	CHECK(group.operate(FiniteNumber("2 x10"), FiniteNumber("3 x10")) == FiniteNumber("6 x10"));
-}
-
 TEST_CASE("Test getP method") {
-	FiniteGroup group(PositiveNumber("10"), operator+);
+	FiniteGroup group(PositiveNumber("10"));
 
 	auto ten = PositiveNumber("10");
 	CHECK(group.getP().equals(ten));
 
 	// Test getP method with a different modulus
-	FiniteGroup group2(PositiveNumber("7"), operator+);
+	FiniteGroup group2(PositiveNumber("7"));
 	auto seven = PositiveNumber("7");
 	CHECK(group2.getP() == seven);
 }
 
 // TODO: Implement group element order
 TEST_CASE("Test ElementOrder method") {
-	FiniteGroup group(PositiveNumber("7"), operator+);
+	FiniteGroup group(PositiveNumber("7"));
 
 	// Test ElementOrder method
 	CHECK(group.ElementOrder(FiniteNumber("2 x10")) == 5);
 
 	// Test ElementOrder method with a different binary operation
-	group.setGroupBinaryOperation(operator*);
 	CHECK(group.ElementOrder(FiniteNumber("2 x10")) == 4);
 }
 //Tests by P. Velychko #6
