@@ -116,7 +116,7 @@ public:
 		return RPolynomial(pol * right);
 	}
 
-	RPolynomial operator/(/*const*/ RPolynomial& divider) const {
+	RPolynomial operator/(const RPolynomial& divider) const {
 
 		auto deg1 = PositiveNumber("0"), deg2 = deg1;
 		auto nullNum = SignedNumber("0");
@@ -129,8 +129,8 @@ public:
 		deg1 = divident.degree();
 		deg2 = divider.degree();
 
-		while (deg1 >= deg2) {
-			auto DEBUG1 = divident.toString(), DEBUG2 = divider.toString();
+		while (deg1 >= deg2 && !divident.coefficients.empty()) {
+			
 			auto num1 = divident.coefficients.front().getCoefficient().toUnsigned();
 			auto num2 = divider.coefficients.front().getCoefficient().toUnsigned();
 			if (!(num1 % num2 == SignedNumber())) {
@@ -142,7 +142,7 @@ public:
 			quotient.emplaceDegree(leadingElement.getCoefficient(), leadingElement.getDegree());
 
 			leadingPolynomial = leadingPolynomial * divider;
-			auto DEBUG3 = leadingPolynomial.toString();
+		
 			divident = divident - leadingPolynomial;
 
 			deg1 = divident.degree();
@@ -160,22 +160,27 @@ public:
 		if (/*divider.degree() <= deg1*/divider.coefficients.empty() || divider.coefficients.front().getCoefficient() == nullNum) {
 			throw std::invalid_argument("Division by zero");
 		}
-
 		auto quotient = RPolynomial();
 		RPolynomial divident = *this;
 		deg1 = divident.degree();
 		deg2 = divider.degree();
 
-		while (deg1 >= deg2) {
+		while (deg1 >= deg2 && !divident.coefficients.empty()) {
 			
+			
+
 			auto num1 = divident.coefficients.front().getCoefficient().toUnsigned();
 			auto num2 = divider.coefficients.front().getCoefficient().toUnsigned();
 			if (!(num1 % num2 == nullNum)) {
 				return divident;
 			}
+			
+			auto deb1 = divident.coefficients.front();
+			auto deb2 = divider.coefficients.front();
 
 			auto leadingElement = divident.coefficients.front() / divider.coefficients.front();
 			auto leadingPolynomial = RPolynomial(); leadingPolynomial.emplaceDegree(leadingElement.getCoefficient(), leadingElement.getDegree());
+			
 
 			quotient.emplaceDegree(leadingElement.getCoefficient(), leadingElement.getDegree());
 
@@ -184,6 +189,8 @@ public:
 
 			deg1 = divident.degree();
 			deg2 = divider.degree();
+
+
 		}
 
 		return divident;
