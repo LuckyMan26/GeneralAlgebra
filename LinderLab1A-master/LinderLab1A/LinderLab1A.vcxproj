@@ -42,13 +42,13 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -128,18 +128,30 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="CalculationOfSquareRoot.h" />
     <ClInclude Include="doctest.h" />
     <ClInclude Include="Exponent.h" />
     <ClInclude Include="Field.h" />
     <ClInclude Include="FiniteField.h" />
     <ClInclude Include="FiniteNumber.h" />
     <ClInclude Include="FiniteGroup.h" />
+    <ClInclude Include="MillerRabin.h" />
+    <ClInclude Include="Pollard.h" />
+
+    <ClInclude Include="FPolynomial.h" />
+
     <ClInclude Include="Polynomial.h" />
+    <ClInclude Include="PolynomialElement.h" />
     <ClInclude Include="PositiveNumber.h" />
+    <ClInclude Include="RPolynomial.h" />
     <ClInclude Include="SignedNumber.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CalculationOfSquareRoot.cpp" />
     <ClCompile Include="FiniteField.cpp" />
+    <ClCompile Include="FPolynomialTest.cpp" />
+    <ClCompile Include="PolynomialElementTest.cpp" />
+    <ClCompile Include="RPolynomialTest.cpp" />
     <ClCompile Include="tests.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
