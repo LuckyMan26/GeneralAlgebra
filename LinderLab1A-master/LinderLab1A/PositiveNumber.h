@@ -144,11 +144,11 @@ public:
 	}
 	//Implemented by Vlad Avramenko
 	//Division for PositiveNumbers
-	PositiveNumber operator/(PositiveNumber& other) {
-		return divide(*this, other);
+	PositiveNumber operator/(PositiveNumber& other) const{
+		return divide(const_cast<PositiveNumber&>(*this), other);
 	}
 
-	PositiveNumber divide(PositiveNumber& n1, PositiveNumber& n2) {
+	PositiveNumber divide(PositiveNumber& n1, PositiveNumber& n2) const{
 		if (n1 < n2) {
 			return PositiveNumber("0");
 		}
