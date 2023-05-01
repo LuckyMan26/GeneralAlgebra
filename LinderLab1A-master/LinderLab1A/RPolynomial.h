@@ -35,16 +35,27 @@ public:
 	/*
 	Cyclotomic Polynomial
 	*/
-	friend RPolynomial cyclotomic(PositiveNumber degree) {
-		if (degree.is_prime()) {
+	static RPolynomial cyclotomic(PositiveNumber degree) {
+		assert(degree.toString() != "0");
+		
+		if (degree.toString() == "1") {
+			RPolynomial res;
+			res.emplaceDegree(SignedNumber("1"), PositiveNumber("1"));
+			res.emplaceDegree(SignedNumber("-1"), PositiveNumber("0"));
+			return res;
+		}
+		else if (degree.is_prime()) {
 			RPolynomial res = RPolynomial();
 			SignedNumber uno = SignedNumber("1");
-			for (PositiveNumber i = PositiveNumber("0"); i < degree; i += uno) {
+			for (PositiveNumber i = degree - uno; i >= PositiveNumber("0"); i -= uno) {
 				res.coefficients.push_back(PolynomialElement<SignedNumber>(uno, i));
+				if (i.toString() == "0") {
+					break;
+				}
 			}
 			return res;
 		}
-		else if (degree.is_even()) {
+		/*else if (degree.is_even()) {
 			RPolynomial res = RPolynomial();
 			SignedNumber uno = SignedNumber("1");
 			bool switcher = false;
@@ -59,10 +70,29 @@ public:
 				}
 				switcher = !switcher;
 			}
-		}
+		}*/
 		else {
-			//TO BE CONTINUED
-			//Waiting for var 13 implementation to continue my work
+			RPolynomial res;
+			RPolynomial divider;
+			divider.emplaceDegree(SignedNumber("1"), PositiveNumber("1"));
+			divider.emplaceDegree(SignedNumber("-1"), PositiveNumber("0"));
+			RPolynomial dividend;
+			dividend.emplaceDegree(SignedNumber("1"), degree);
+			dividend.emplaceDegree(SignedNumber("-1"), PositiveNumber("0"));
+			PositiveNumber two("2");
+			PositiveNumber zero("0");
+			PositiveNumber uno("1");
+			PositiveNumber half = degree / two;
+			std::string D1 = divider.toString();
+			std::string D2 = dividend.toString();
+			for (PositiveNumber i = two; i <= half; i += uno) {
+				if (degree % i == zero) {
+					divider = divider * RPolynomial::cyclotomic(i);
+				}
+				D1 = divider.toString();
+			}
+			res = dividend / divider;
+			return res;
 		}
 	}
 
