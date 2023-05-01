@@ -77,5 +77,8 @@ TEST_SUITE("FPolynomial")
 		CHECK(fpol2.valueAt(FiniteNumber("x5 2")).toString() == "0");
 		CHECK(fpol2.valueAt(FiniteNumber("x5 0")).toString() == "1");
 		CHECK(fpol2.valueAt(FiniteNumber("x5 3")).toString() == "0");
+
+		CHECK(fpol1.derivative().toString() == "x^3+2x^2+4x+1");
+		CHECK(fpol2.derivative().toString() == "0");
 	}
 }

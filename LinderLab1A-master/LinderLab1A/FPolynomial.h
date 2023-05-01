@@ -103,5 +103,17 @@ public:
 		return current;
 	}
 
+	FPolynomial derivative() {
+		FPolynomial deriv = FPolynomial("0");
+		FiniteNumber zero = FiniteNumber("0");
+		for (auto element : coefficients) {
+			FiniteNumber coefficient = FiniteNumber(element.getCoefficient() * element.getDegree(), f.getP());
+			if (coefficient != zero)
+				deriv.coefficients.push_back(PolynomialElement<FiniteNumber>(coefficient, element.getDegree() - PositiveNumber("1")));
+		}
+		deriv.trim();
+		return deriv;
+	}
+
 
 };

@@ -20,10 +20,9 @@ protected:
 	/*Removes all elements, where coefficient equals zero*/
 	virtual void trim() {
 		std::list<PolynomialElement<TCoefficient>> newList;
-		TCoefficient zero = genZeroCoefficient();
 
 		for (auto element : coefficients) {
-			if (element.getCoefficient() == zero)
+			if (element.getCoefficient().isZero())
 				continue;
 			newList.push_back(element);
 		}
