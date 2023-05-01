@@ -201,7 +201,7 @@ public:
 	//By V. Avramenko
 	//Inefficient, did not find a way of getting square root (efficiently) in long arithmetics
 	bool is_prime() {
-		PositiveNumber one = PositiveNumber("1");
+		/*PositiveNumber one = PositiveNumber("1");
 		PositiveNumber two = PositiveNumber("2");
 		PositiveNumber zero = PositiveNumber("0");
 		if (remainder(*this, two) == zero) {
@@ -213,7 +213,19 @@ public:
 				return false;
 			}
 		}
-		return true;
+		return true;*/
+		PositiveNumber two = PositiveNumber("2");
+		PositiveNumber zero = PositiveNumber("0");
+		PositiveNumber one = PositiveNumber("1");
+		for (PositiveNumber i = two; i < *this; i += 1) {
+			if (remainder(*this, i) == zero) {
+				return false;
+			}
+			if (i * i >= *this) {
+				break;
+			}
+		}
+		return false;
 	}
 	//By V.Avramenko
 	bool is_even() {
