@@ -20,38 +20,38 @@ private:
 		return u < p ? u : u - p;
 	}
 
+	FiniteNumber twoMultiplication(FiniteNumber a, FiniteNumber b) {
+		if (a.isZero())
+			return a;
+		if (b.isZero())
+			return b;
+		return a;
+		
+	}
+
+	FiniteNumber twoExponentiation(FiniteNumber base, PositiveNumber power) {
+		if (power == PositiveNumber("0")) {
+			return FiniteNumber("x2 1");
+		}
+		return base;
+
+	}
+
 
 public:
 	Exponentiation() {
 	}
-	/**
-	* Deprecated;
-	* Use montgomery multiplication instread
-	*/
-	FiniteNumber montgomeryMultiplicationDeprecated(FiniteNumber a, FiniteNumber b) {
-		PositiveNumber rNum = PositiveNumber("10000");
-		int shift = 4;
-		PositiveNumber p = a.getP();
-		while (rNum < p) { //r must be greater than p
-			rNum = rNum.shift(1);
-			shift++;
-		}
-		FiniteNumber rInv = FiniteNumber(rNum, p).inverse();
-		PositiveNumber k =  (rNum * FiniteNumber(rNum, p).inverse() - FiniteNumber("1")) / p;
-		PositiveNumber aM = toMontgomery(a, shift);
-		PositiveNumber bM = toMontgomery(b, shift);
-		PositiveNumber x = aM * bM;
-		PositiveNumber s = x * rInv;
-		return FiniteNumber(redcSlow(rNum, p, k, s, shift), p);
-	}
 
 	FiniteNumber montgomeryMultiplication(FiniteNumber a, FiniteNumber b) {
-		PositiveNumber rNum = PositiveNumber("10000");
-		int shift = 4;
 		PositiveNumber p = a.getP();
 		if (p == PositiveNumber("5")) { //gcd(R, N) must be 1, but for gcd(10^N, 5) it is 5; Therefore using standart multiplication here
 			return FiniteNumber(a*b, p);
 		}
+		if (p == PositiveNumber("2")) {
+			return twoMultiplication(a, b); //10 is divisible by 2, using special function for this case
+		}
+		PositiveNumber rNum = PositiveNumber("10000");
+		int shift = 4;
 		int sizeDifference = p.getDigits().size() - 4;
 		rNum = rNum.shift(sizeDifference);
 		shift += sizeDifference;
@@ -68,13 +68,16 @@ public:
 	* Eponention using Montgomery algorithm
 	* Implemented by M. Tyshchenko
 	*/
-	FiniteNumber montgomeryExponention(FiniteNumber base, PositiveNumber power) {
+	FiniteNumber montgomeryExponentiation(FiniteNumber base, PositiveNumber power) {
 		//Initializing variables
 		PositiveNumber rNum = PositiveNumber("10000");
 		int shift = 4;
 		PositiveNumber p = base.getP();
 		if (p == PositiveNumber("5")) {
-			return fastExponention(base, power); //if we used binary system insted of decimal, working with R = 2^N would be easier
+			return fastExponentiation(base, power); //if we used binary system insted of decimal, working with R = 2^N would be easier
+		}
+		if (p == PositiveNumber("2")) {
+			return twoExponentiation(base, power);
 		}
 		//Setting R greater than P
 		int sizeDifference = p.getDigits().size() - shift;
@@ -104,7 +107,7 @@ public:
 	/**
 	* Exponentation without using montgomery form (for timing test)
 	*/
-	FiniteNumber fastExponention(FiniteNumber base, PositiveNumber power) {
+	FiniteNumber fastExponentiation(FiniteNumber base, PositiveNumber power) {
 		PositiveNumber p = base.getP();
 		FiniteNumber res = FiniteNumber("1", p);
 		std::string powerBits = power.bitsReverse();
@@ -119,7 +122,7 @@ public:
 	/**
 	* Exponentation without using fast algorithm (for timing test)
 	*/
-	FiniteNumber slowExponention(FiniteNumber base, PositiveNumber power) {
+	FiniteNumber slowExponentiation(FiniteNumber base, PositiveNumber power) {
 		PositiveNumber p = base.getP();
 		FiniteNumber res = FiniteNumber("1", p);
 		PositiveNumber one = PositiveNumber("1");
@@ -131,7 +134,7 @@ public:
 		return res;
 	}
 
-	SignedNumber fastExponention(SignedNumber base, PositiveNumber power) {
+	SignedNumber fastExponentiation(SignedNumber base, PositiveNumber power) {
 		SignedNumber res = SignedNumber("1");
 		std::string powerBits = power.bitsReverse();
 		for (int i = 0; i < powerBits.length(); i++) {
@@ -143,7 +146,7 @@ public:
 		return res;
 	}
 
-	PositiveNumber fastExponention(PositiveNumber base, PositiveNumber power) {
+	PositiveNumber fastExponentiation(PositiveNumber base, PositiveNumber power) {
 		PositiveNumber res = PositiveNumber("1");
 		std::string powerBits = power.bitsReverse();
 		for (int i = 0; i < powerBits.length(); i++) {

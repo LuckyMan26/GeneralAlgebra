@@ -95,7 +95,7 @@ public:
 		for (auto element : coefficients) {
 			if (current != zero) {
 				PositiveNumber degree = prevElement.getDegree() - element.getDegree() - one;
-				current = current * exp.montgomeryExponention(x, degree);
+				current = current * exp.montgomeryExponentiation(x, degree);
 			}
 			current = (x * current) + element.getCoefficient();
 			prevElement = element;

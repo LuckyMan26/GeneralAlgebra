@@ -123,7 +123,7 @@ public:
 		auto prevElement = PolynomialElement<SignedNumber>(SignedNumber("0"), coefficients.front().getDegree() + PositiveNumber("1"));
 		for (auto element : coefficients) {
 			if (current != zero) {
-				current = current * exp.fastExponention(x, prevElement.getDegree() - element.getDegree() - PositiveNumber("1"));
+				current = current * exp.fastExponentiation(x, prevElement.getDegree() - element.getDegree() - PositiveNumber("1"));
 			}
 			current = (x * current) + element.getCoefficient();
 			prevElement = element;
