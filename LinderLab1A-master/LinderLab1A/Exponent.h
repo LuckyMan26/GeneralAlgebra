@@ -3,8 +3,7 @@
 
 class Exponentiation {
 private:
-
-	FiniteNumber toMontgomery(FiniteNumber x, int shiftBy) {
+	PositiveNumber toMontgomery(FiniteNumber x, int shiftBy) {
 		return x.shift(shiftBy);
 	}
 	
@@ -21,6 +20,7 @@ private:
 		return u < p ? u : u - p;
 	}
 
+
 public:
 	Exponentiation() {
 	}
@@ -32,7 +32,7 @@ public:
 		PositiveNumber rNum = PositiveNumber("10000");
 		int shift = 4;
 		PositiveNumber p = a.getP();
-		while (rNum < p) { //r has to be greater than p
+		while (rNum < p) { //r must be greater than p
 			rNum = rNum.shift(1);
 			shift++;
 		}
@@ -49,6 +49,9 @@ public:
 		PositiveNumber rNum = PositiveNumber("10000");
 		int shift = 4;
 		PositiveNumber p = a.getP();
+		if (p == PositiveNumber("5")) { //gcd(R, N) must be 1, but for gcd(10^N, 5) it is 5; Therefore using standart multiplication here
+			return FiniteNumber(a*b, p);
+		}
 		int sizeDifference = p.getDigits().size() - 4;
 		rNum = rNum.shift(sizeDifference);
 		shift += sizeDifference;
@@ -70,7 +73,9 @@ public:
 		PositiveNumber rNum = PositiveNumber("10000");
 		int shift = 4;
 		PositiveNumber p = base.getP();
-
+		if (p == PositiveNumber("5")) {
+			return fastExponention(base, power); //if we used binary system insted of decimal, working with R = 2^N would be easier
+		}
 		//Setting R greater than P
 		int sizeDifference = p.getDigits().size() - shift;
 		rNum = rNum.shift(sizeDifference);
@@ -86,7 +91,6 @@ public:
 		PositiveNumber baseShifted = toMontgomery(base, shift);
 		std::string powerBits = power.bitsReverse();
 		int length = powerBits.length();
-
 		for (int i = 0; i < length; i++) {
 			if (powerBits[i] == '1') {
 				res = res * baseShifted;
@@ -150,4 +154,6 @@ public:
 		}
 		return res;
 	}
+
+	
 };

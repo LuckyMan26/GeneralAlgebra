@@ -64,4 +64,18 @@ TEST_SUITE("FPolynomial")
 		mult = fpol2 * fpol1;
 		CHECK(mult.toString() == "x^15+x^14+x^13+2x^12+4x^11+4x^10+x^5+x^4+x^3+2x^2+4x+4");
 	}
+
+	TEST_CASE("Value at X")
+	{
+		FPolynomial fpol1("x^5+4x^4+9x^3+2x^2+x+1", PositiveNumber("5")), fpol2("x^10+5x^5+1", PositiveNumber("5"));
+	
+		CHECK(fpol1.valueAt(FiniteNumber("x5 4")).toString() == "1");
+		CHECK(fpol1.valueAt(FiniteNumber("x5 1")).toString() == "3");
+		CHECK(fpol1.valueAt(FiniteNumber("x5 2")).toString() == "4");
+
+		CHECK(fpol2.valueAt(FiniteNumber("x5 1")).toString() == "2");
+		CHECK(fpol2.valueAt(FiniteNumber("x5 2")).toString() == "0");
+		CHECK(fpol2.valueAt(FiniteNumber("x5 0")).toString() == "1");
+		CHECK(fpol2.valueAt(FiniteNumber("x5 3")).toString() == "0");
+	}
 }

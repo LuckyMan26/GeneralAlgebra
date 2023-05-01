@@ -255,6 +255,11 @@ TEST_CASE("Exponent") {
 	//CHECK(exp.slowExponention(base, power).toString() == expected);
 	//end = std::chrono::steady_clock::now();
 	//std::cout << "Slow = " << std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count() << " ms" << std::endl;
+
+	base = FiniteNumber("x5 9");
+	power = PositiveNumber("1");
+	FiniteNumber res = exp.montgomeryExponention(base, power);
+	CHECK(res.toString() == "4");
 }
 
 TEST_CASE("Exponentiation on random values") {

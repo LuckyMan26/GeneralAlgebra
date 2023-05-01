@@ -6,7 +6,7 @@
 #include "PositiveNumber.h"
 #include "FiniteNumber.h"
 #include "FiniteField.h"
-
+#include "Exponent.h"
 
 class FPolynomial : public Polynomial<FiniteNumber>
 {
@@ -82,4 +82,26 @@ public:
 		res.trim();
 		return res;
 	}
+
+	FiniteNumber valueAt(FiniteNumber x) {
+		if (x.getP() != this->f.getP()) {
+			return FiniteNumber("0"); //illegal arguments
+		}
+		Exponentiation exp;
+		FiniteNumber zero = FiniteNumber("0");
+		FiniteNumber current = FiniteNumber();
+		PositiveNumber one = PositiveNumber("1");
+		auto prevElement = PolynomialElement<FiniteNumber>(FiniteNumber("0"), coefficients.front().getDegree() + PositiveNumber("1"));
+		for (auto element : coefficients) {
+			if (current != zero) {
+				PositiveNumber degree = prevElement.getDegree() - element.getDegree() - one;
+				current = current * exp.montgomeryExponention(x, degree);
+			}
+			current = (x * current) + element.getCoefficient();
+			prevElement = element;
+		}
+		return current;
+	}
+
+
 };
