@@ -120,7 +120,7 @@ public:
 
 		auto deg1 = PositiveNumber("0"), deg2 = deg1;
 		auto nullNum = SignedNumber("0");
-		if (/*divider.degree() <= deg1*/ divider.coefficients.empty() || divider.coefficients.front().getCoefficient() == nullNum) {
+		if (divider.coefficients.empty() || divider.coefficients.front().getCoefficient() == nullNum) {
 			throw std::invalid_argument("Division by zero");
 		}
 
@@ -217,27 +217,7 @@ public:
 		if (B.toString() == "0") {
 			return A;
 		}
-		/*
-		auto degA = A.degree(),
-			 degB = B.degree();
-
-		if (B.degree() > A.degree())
-			std::swap(A, B);
-
-		while (B.degree() > 0) {
-
-			auto num1 = A.coefficients.front().getCoefficient().toUnsigned();
-			auto num2 = B.coefficients.front().getCoefficient().toUnsigned();
-			auto DEBUG1 = A.toString(), DEBUG2 = B.toString();
-			if (!(num1 % num2 == SignedNumber())) {
-				break;
-			}
-
-			A = A % B;
-			std::swap(A, B);
-		}
-
-		return A;*/
+		
 		RPolynomial R = A % B;
 		auto DEBUGA = A.toString();
 		auto DEBUGB = B.toString();

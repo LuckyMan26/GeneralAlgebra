@@ -6,6 +6,8 @@
 #include "Exponent.h"
 #include "Polynomial.h"
 #include "CalculationOfSquareRoot.h"
+#include "MillerRabin.h"
+#include "Pollard.h"
 
 #include <random>
 #include <string>
@@ -358,3 +360,81 @@ TEST_CASE("Additional operators") {
 	CHECK(!(b > a));
 }
 
+TEST_CASE("Modular Power") {
+	PositiveNumber a = PositiveNumber(81);
+	PositiveNumber b = PositiveNumber(6);
+	PositiveNumber c = PositiveNumber(12);
+	auto result = mod_power(a, b, c).toString();
+	CHECK("9" == result);
+}
+
+TEST_CASE("Miller-Rabin Primality Test") {
+	CHECK(!MillerRabin::miller_rabin(PositiveNumber("783")));
+	CHECK(!MillerRabin::miller_rabin(PositiveNumber("890")));
+	CHECK(!MillerRabin::miller_rabin(PositiveNumber("320")));
+	CHECK(!MillerRabin::miller_rabin(PositiveNumber("178")));
+
+	CHECK(MillerRabin::miller_rabin(PositiveNumber("2")));
+	CHECK(MillerRabin::miller_rabin(PositiveNumber("3")));
+	CHECK(MillerRabin::miller_rabin(PositiveNumber("5")));
+	CHECK(MillerRabin::miller_rabin(PositiveNumber("7")));
+	CHECK(MillerRabin::miller_rabin(PositiveNumber("11")));
+	CHECK(MillerRabin::miller_rabin(PositiveNumber("13")));
+	CHECK(MillerRabin::miller_rabin(PositiveNumber("17")));
+	CHECK(MillerRabin::miller_rabin(PositiveNumber("19")));
+	CHECK(MillerRabin::miller_rabin(PositiveNumber("23")));
+	CHECK(MillerRabin::miller_rabin(PositiveNumber("61")));
+	CHECK(MillerRabin::miller_rabin(PositiveNumber("617")));
+	CHECK(MillerRabin::miller_rabin(PositiveNumber("547")));
+	CHECK(MillerRabin::miller_rabin(PositiveNumber("941")));
+}
+
+TEST_CASE("Naive Factorization") {
+	PositiveNumber a1 = PositiveNumber("204562");
+	std::map<PositiveNumber, int> result1 = map_factors(a1, naiveFactorization<PositiveNumber>);
+	std::map<PositiveNumber, int> toCheck1 = { std::pair<PositiveNumber,int>(PositiveNumber(2),1),
+		std::pair<PositiveNumber,int>(PositiveNumber(23),1),
+		std::pair<PositiveNumber,int>(PositiveNumber(4447),1) };
+
+	CHECK(result1 == toCheck1);
+
+	PositiveNumber a2 = PositiveNumber("168");
+	std::map<PositiveNumber, int> result2 = map_factors(a2, naiveFactorization<PositiveNumber>);
+	std::map<PositiveNumber, int> toCheck2 = { std::pair<PositiveNumber,int>(PositiveNumber(2),3),
+		std::pair<PositiveNumber,int>(PositiveNumber(3),1),
+		std::pair<PositiveNumber,int>(PositiveNumber(7),1) };
+
+	CHECK(result2 == toCheck2);
+
+	PositiveNumber a3 = PositiveNumber("43");
+	std::map<PositiveNumber, int> result3 = map_factors(a3, naiveFactorization<PositiveNumber>);
+	std::map<PositiveNumber, int> toCheck3 = { std::pair<PositiveNumber,int>(PositiveNumber(43),1) };
+
+	CHECK(result3 == toCheck3);
+
+}
+
+TEST_CASE("Pollard's Rho Factorization") {
+	PositiveNumber a1 = PositiveNumber("204562");
+	std::map<PositiveNumber,int> result1 = map_factors(a1, PollardFactorization::pollardRho<PositiveNumber>);
+	std::map<PositiveNumber, int> toCheck1 = {std::pair<PositiveNumber,int>(PositiveNumber(2),1),
+		std::pair<PositiveNumber,int>(PositiveNumber(23),1),
+		std::pair<PositiveNumber,int>(PositiveNumber(4447),1) };
+	
+	CHECK(result1 == toCheck1);
+
+	PositiveNumber a2 = PositiveNumber("168");
+	std::map<PositiveNumber, int> result2 = map_factors(a2, PollardFactorization::pollardRho<PositiveNumber>);
+	std::map<PositiveNumber, int> toCheck2 = { std::pair<PositiveNumber,int>(PositiveNumber(2),3),
+		std::pair<PositiveNumber,int>(PositiveNumber(3),1),
+		std::pair<PositiveNumber,int>(PositiveNumber(7),1) };
+
+	CHECK(result2 == toCheck2);
+
+	PositiveNumber a3 = PositiveNumber("43");
+	std::map<PositiveNumber, int> result3 = map_factors(a3, PollardFactorization::pollardRho<PositiveNumber>);
+	std::map<PositiveNumber, int> toCheck3 = { std::pair<PositiveNumber,int>(PositiveNumber(43),1) };
+
+	CHECK(result3 == toCheck3);
+
+}
