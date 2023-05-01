@@ -187,7 +187,7 @@ public:
 	}
 
 	PositiveNumber remainder(const PositiveNumber& n1, const PositiveNumber& n2) const{
-		PositiveNumber rem((n2 * (n1 / n2)));
+		/*PositiveNumber rem((n2 * (n1 / n2)));*/
 		return n1 - (n2 * (n1 / n2));
 	}
 

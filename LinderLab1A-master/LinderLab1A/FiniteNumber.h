@@ -112,6 +112,12 @@ public:
 	friend FiniteNumber operator/(FiniteNumber left, const FiniteNumber& n) {
 		return left.divide(n);
 	}
+
+	//friend FiniteNumber operator%(const FiniteNumber& n1, const FiniteNumber& n2) {
+	//	assert(n1.f.getP() == n2.f.getP());
+	//	return n1 - (n2 * (n1 / n2));
+	//}
+
 	bool operator>(FiniteNumber& n) const {
 		PositiveNumber p1 = getP();
 		PositiveNumber p2 = n.getP();

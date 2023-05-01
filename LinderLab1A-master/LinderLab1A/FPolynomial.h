@@ -12,7 +12,7 @@ class FPolynomial : public Polynomial<FiniteNumber>
 {
 private:
 	FiniteField f;
-
+	FPolynomial() {}
 	FPolynomial(const std::string& str) : Polynomial(str) {};
 	FPolynomial(const Polynomial& pol, const FiniteField& f) : Polynomial(pol), f(f) {}
 
@@ -114,6 +114,118 @@ public:
 		deriv.trim();
 		return deriv;
 	}
+
+	//FPolynomial operator/(const FPolynomial& divider) const {
+
+	//	auto deg1 = PositiveNumber("0"), deg2 = deg1;
+	//	auto nullNum = FiniteNumber("0", f.getP());
+	//	if (divider.coefficients.empty() || divider.coefficients.front().getCoefficient() == nullNum) {
+	//		throw std::invalid_argument("Division by zero");
+	//	}
+
+	//	auto quotient = FPolynomial();
+	//	FPolynomial divident = *this;
+	//	deg1 = divident.degree();
+	//	deg2 = divider.degree();
+
+	//	while (deg1 >= deg2 && !divident.coefficients.empty()) {
+
+	//		FiniteNumber num1 = divident.coefficients.front().getCoefficient();
+	//		FiniteNumber num2 = divider.coefficients.front().getCoefficient();
+	//		if (!((num1 % num2).toString() == "0")) {
+	//			break;
+	//		}
+
+	//		auto leadingElement = divident.coefficients.front() / divider.coefficients.front();
+	//		auto leadingPolynomial = FPolynomial(); leadingPolynomial.emplaceDegree(leadingElement.getCoefficient(), leadingElement.getDegree());
+	//		quotient.emplaceDegree(leadingElement.getCoefficient(), leadingElement.getDegree());
+
+	//		leadingPolynomial = leadingPolynomial * divider;
+
+	//		divident = divident - leadingPolynomial;
+
+	//		deg1 = divident.degree();
+	//		deg2 = divider.degree();
+	//	}
+
+	//	return quotient;
+	//}
+
+	//FPolynomial operator %(const FPolynomial& divider) const {
+
+	//	auto deg1 = PositiveNumber("0"), deg2 = deg1;
+	//	auto nullNum = FiniteNumber("0", f.getP());
+
+	//	if (/*divider.degree() <= deg1*/divider.coefficients.empty() || divider.coefficients.front().getCoefficient() == nullNum) {
+	//		throw std::invalid_argument("Division by zero");
+	//	}
+	//	auto quotient = FPolynomial();
+	//	FPolynomial divident = *this;
+	//	deg1 = divident.degree();
+	//	deg2 = divider.degree();
+
+	//	while (deg1 >= deg2 && !divident.coefficients.empty()) {
+
+
+
+	//		auto num1 = divident.coefficients.front().getCoefficient();
+	//		auto num2 = divider.coefficients.front().getCoefficient();
+	//		if (!((num1 % num2).toString() == "0")) {
+	//			return divident;
+	//		}
+
+	//		auto deb1 = divident.coefficients.front();
+	//		auto deb2 = divider.coefficients.front();
+
+	//		auto leadingElement = divident.coefficients.front() / divider.coefficients.front();
+	//		auto leadingPolynomial = FPolynomial(); leadingPolynomial.emplaceDegree(leadingElement.getCoefficient(), leadingElement.getDegree());
+
+
+	//		quotient.emplaceDegree(leadingElement.getCoefficient(), leadingElement.getDegree());
+
+	//		leadingPolynomial = leadingPolynomial * divider;
+	//		divident = divident - leadingPolynomial;
+
+	//		deg1 = divident.degree();
+	//		deg2 = divider.degree();
+
+
+	//	}
+
+	//	return divident;
+	//}
+
+	//friend FPolynomial divideByNum(FPolynomial R, FiniteNumber Num) {
+	//	FPolynomial res;
+	//	FiniteNumber zorro("0", R.f.getP());
+	//	for (auto item : R.coefficients) {
+	//		if (item.getCoefficient() % Num == zorro) {
+	//			res.emplaceDegree(item.getCoefficient() / Num, item.getDegree());
+	//		}
+	//		else {
+	//			return R;
+	//		}
+	//	}
+	//	return res;
+	//}
+
+	//static FPolynomial GCD(const FPolynomial& a, const FPolynomial& b) {
+
+	//	FPolynomial A = a;
+	//	FPolynomial B = b;
+	//	if (B.toString() == "0") {
+	//		return A;
+	//	}
+
+	//	FPolynomial R = A % B;
+	//	auto DEBUGA = A.toString();
+	//	auto DEBUGB = B.toString();
+	//	auto DEBUGR = R.toString();
+	//	if (R.toString() != "0") {
+	//		R = FPolynomial(R, R.coefficients.front().getCoefficient());
+	//	}
+	//	return GCD(B, R);
+	//}
 
 
 };

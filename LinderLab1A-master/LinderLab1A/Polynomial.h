@@ -29,6 +29,14 @@ protected:
 		this->coefficients = newList;
 	}
 
+
+	PositiveNumber degree() const {
+		if (coefficients.empty()) {
+			return PositiveNumber("0");
+		}
+		return coefficients.front().getDegree();
+	}
+
 	static std::string replaceAll(std::string origin, std::string target, std::string replacement) {
 		int length = target.size();
 		int replacementSize = replacement.size();

@@ -81,4 +81,96 @@ TEST_SUITE("FPolynomial")
 		CHECK(fpol1.derivative().toString() == "x^3+2x^2+4x+1");
 		CHECK(fpol2.derivative().toString() == "0");
 	}
+
+	//TEST_CASE("Division")
+	//{
+	//	FPolynomial pol1 = FPolynomial("5x^2+4x+6", PositiveNumber("7")),
+	//		pol2 = FPolynomial("2x+1", PositiveNumber("7"));
+
+	//	auto res = pol1 / pol2;
+	//	auto DEBUG = res.toString();
+	//	CHECK(res.toString() == "6x+6");
+
+
+	//	/*pol1 = FPolynomial("x^3-4x^2+5");
+	//	pol2 = FPolynomial("9x^3+x+1");
+	//	res = pol1 / pol2;
+	//	CHECK(res.toString() == "0");
+
+	//	pol1 = FPolynomial("x^15-4x^14-9x^13+2x^12-x^11-6x^10+20x^9+45x^8-10x^7+5x^6+6x^5-4x^4-9x^3+2x^2-x-1");
+	//	pol2 = FPolynomial("-4x^14-9x^13+2x^12-x^11-6x^10+20x^9+45x^8-10x^7+5x^6+6x^5-4x^4-9x^3+2x^2-x-1");
+	//	res = pol1 / pol2;
+	//	CHECK(res.toString() == "0");
+
+	//	pol1 = FPolynomial("x^3+x^2");
+	//	pol2 = FPolynomial("x^2+1");
+	//	res = pol1 / pol2;
+	//	CHECK(res.toString() == "x+1");
+
+	//	pol1 = FPolynomial("x^3+5x^2-2x-6");
+	//	pol2 = FPolynomial("x+4");
+	//	res = pol1 / pol2;
+	//	CHECK(res.toString() == "x^2+x-6");*/
+	//}
+
+	//TEST_CASE("Remainder")
+	//{
+	//	FPolynomial pol1 = FPolynomial("3x^3+2x^2-3x-5"),
+	//		pol2 = FPolynomial("x+4");
+
+	//	auto res = pol1 % pol2;
+	//	CHECK(res.toString() == "-153");
+
+	//	pol1 = FPolynomial("x^3-4x^2+5");
+	//	pol2 = FPolynomial("9x^3+x+1");
+	//	res = pol1 % pol2;
+	//	CHECK(res.toString() == "x^3-4x^2+5");
+
+	//	pol1 = FPolynomial("x^15-4x^14-9x^13+2x^12-x^11-6x^10+20x^9+45x^8-10x^7+5x^6+6x^5-4x^4-9x^3+2x^2-x-1");
+	//	pol2 = FPolynomial("-4x^14-9x^13+2x^12-x^11-6x^10+20x^9+45x^8-10x^7+5x^6+6x^5-4x^4-9x^3+2x^2-x-1");
+	//	res = pol1 % pol2;
+	//	CHECK(res.toString() == "x^15-4x^14-9x^13+2x^12-x^11-6x^10+20x^9+45x^8-10x^7+5x^6+6x^5-4x^4-9x^3+2x^2-x-1");
+
+	//	pol1 = FPolynomial("x^3+x^2");
+	//	pol2 = FPolynomial("x^2+1");
+	//	res = pol1 % pol2;
+	//	CHECK(res.toString() == "-x-1");
+
+	//	pol1 = FPolynomial("x^3+5x^2-2x-6");
+	//	pol2 = FPolynomial("x+4");
+	//	res = pol1 % pol2;
+	//	CHECK(res.toString() == "18");
+	//}
+
+
+	//TEST_CASE("GCD")
+	//{
+	//	FPolynomial pol1 = FPolynomial("x^3+5x^2-2x-6"),
+	//		pol2 = FPolynomial("x^2+4x-6");
+
+	//	auto res = FPolynomial::GCD(pol1, pol2);
+	//	CHECK(res.toString() == "x^2+4x-6");
+
+
+	//	pol1 = FPolynomial("x^3+5x^2-2x-6"),
+	//		pol2 = FPolynomial("x+4");
+	//	res = FPolynomial::GCD(pol1, pol2);
+	//	CHECK(res.toString() == "1");
+
+	//	pol1 = FPolynomial("x^3+20x^2+127x+252"),
+	//		pol2 = FPolynomial("x^3+17x^2+79x+63");
+	//	res = FPolynomial::GCD(pol1, pol2);
+	//	CHECK(res.toString() == "x^2+16x+63");
+
+	//	pol1 = FPolynomial("x^2-2x+1"),
+	//		pol2 = FPolynomial("x-1");
+	//	res = FPolynomial::GCD(pol1, pol2);
+	//	CHECK(res.toString() == "x-1");
+
+	//	pol1 = FPolynomial("x^2+11x+28"),
+	//		pol2 = FPolynomial("x^2+8x+7");
+	//	res = FPolynomial::GCD(pol1, pol2);
+	//	CHECK(res.toString() == "x+7");
+
+	//}
 }
