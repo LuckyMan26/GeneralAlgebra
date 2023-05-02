@@ -64,4 +64,19 @@ TEST_SUITE("FPolynomial")
 		mult = fpol2 * fpol1;
 		CHECK(mult.toString() == "x^15+x^14+x^13+2x^12+4x^11+4x^10+x^5+x^4+x^3+2x^2+4x+4");
 	}
+
+	TEST_CASE("Normalization")
+	{
+			FPolynomial fpol("5x^2+6x+2", PositiveNumber("7"));
+		CHECK(fpol.Normalized().toString() == "x^2+4x+6");
+
+		fpol = FPolynomial("x^5+4x^4+9x^3+2x^2+x+1", PositiveNumber("11"));
+		CHECK(fpol.Normalized().toString() == "x^5+4x^4+9x^3+2x^2+x+1");
+
+		fpol = FPolynomial("2x^5+4x^4+8x^3+2x^2+6x", PositiveNumber("11"));
+		CHECK(fpol.Normalized().toString() == "x^5+2x^4+4x^3+x^2+3x");
+
+		fpol = FPolynomial("5x^5+4x^4+8x^3+2x^2+6x+1", PositiveNumber("11"));
+		CHECK(fpol.Normalized().toString() == "x^5+3x^4+6x^3+7x^2+10x+9");
+	}
 }
