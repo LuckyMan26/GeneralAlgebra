@@ -180,6 +180,39 @@ TEST_SUITE("FPolynomial")
 	//	CHECK(res.toString() == "x+7");
 
 	//}
+
+	//Implemented by V.Avramenko
+
+	//A custom testing format for division\remainder until someone can manually create test samples for normal tests
+	TEST_CASE("Combined Division and Remainder Test") {
+		FPolynomial f1 = FPolynomial("x^3+5x^2-2x-6", PositiveNumber("7"));
+		FPolynomial f2 = FPolynomial("x^2+4x-6", PositiveNumber("7"));
+		FPolynomial quotient = f1 / f2;
+		FPolynomial actual_remainder = f1 - quotient * f2;
+		FPolynomial tested_remainder = f1 % f2;
+		CHECK(tested_remainder.toString() == actual_remainder.toString());
+		f1 = FPolynomial("x^5+5x^2-2x-6", PositiveNumber("7"));
+		f2 = FPolynomial("x^5+4x^2-6", PositiveNumber("7"));
+		quotient = f1 / f2;
+		actual_remainder = f1 - quotient * f2;
+		tested_remainder = f1 % f2;
+		CHECK(tested_remainder.toString() == actual_remainder.toString());
+		f1 = FPolynomial("x^2+11x+28", PositiveNumber("29"));
+		f2 = FPolynomial("x^2+8x+7", PositiveNumber("29"));
+		quotient = f1 / f2;
+		actual_remainder = f1 - quotient * f2;
+		tested_remainder = f1 % f2;
+		CHECK(tested_remainder.toString() == actual_remainder.toString());
+		f1 = FPolynomial("x^6-1", PositiveNumber("5"));
+		f2 = FPolynomial("x^3-1", PositiveNumber("5"));
+		quotient = f1 / f2;
+		actual_remainder = f1 - quotient * f2;
+		tested_remainder = f1 % f2;
+		CHECK(tested_remainder.toString() == actual_remainder.toString());
+	}
+	//Works fine so far :)
+
+	//Test for Cyclotomic function in FPolynomial
 	TEST_CASE("Cyclotomic") {
 		FiniteField field(PositiveNumber("7"));
 		FPolynomial test = FPolynomial::cyclotomic(PositiveNumber("25"), field);
