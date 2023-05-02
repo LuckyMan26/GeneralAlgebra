@@ -180,4 +180,34 @@ TEST_SUITE("FPolynomial")
 	//	CHECK(res.toString() == "x+7");
 
 	//}
+	TEST_CASE("Cyclotomic") {
+		FiniteField field(PositiveNumber("7"));
+		FPolynomial test = FPolynomial::cyclotomic(PositiveNumber("25"), field);
+		std::string DEBUG = test.toString();
+		CHECK(test.toString() == "x^20+x^15+x^10+x^5+1");
+		test = FPolynomial::cyclotomic(PositiveNumber("2"), field);
+		DEBUG = test.toString();
+		CHECK(test.toString() == "x+1");
+		test = FPolynomial::cyclotomic(PositiveNumber("3"), field);
+		DEBUG = test.toString();
+		CHECK(test.toString() == "x^2+x+1");
+		test = FPolynomial::cyclotomic(PositiveNumber("6"), field);
+		DEBUG = test.toString();
+		CHECK(test.toString() == "x^2+6x+1");
+		test = FPolynomial::cyclotomic(PositiveNumber("7"), field);
+		DEBUG = test.toString();
+		CHECK(test.toString() == "x^6+x^5+x^4+x^3+x^2+x+1");
+		test = FPolynomial::cyclotomic(PositiveNumber("12"), field);
+		DEBUG = test.toString();
+		CHECK(test.toString() == "x^4+6x^2+1");
+		test = FPolynomial::cyclotomic(PositiveNumber("16"), field);
+		DEBUG = test.toString();
+		CHECK(test.toString() == "x^8+1");
+		test = FPolynomial::cyclotomic(PositiveNumber("30"), field);
+		DEBUG = test.toString();
+		CHECK(test.toString() == "x^8+x^7+6x^5+6x^4+6x^3+x+1");
+		test = FPolynomial::cyclotomic(PositiveNumber("105"), field);
+		DEBUG = test.toString();
+		CHECK(test.toString() == "x^48+x^47+x^46+6x^43+6x^42+5x^41+6x^40+6x^39+x^36+x^35+x^34+x^33+x^32+x^31+6x^28+6x^26+6x^24+6x^22+6x^20+x^17+x^16+x^15+x^14+x^13+x^12+6x^9+6x^8+5x^7+6x^6+6x^5+x^2+x+1");
+	}
 }

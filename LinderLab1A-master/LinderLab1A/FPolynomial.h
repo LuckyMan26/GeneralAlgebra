@@ -124,15 +124,13 @@ public:
 		}
 
 		auto quotient = FPolynomial();
+		quotient.setP(divider.getP());
 		FPolynomial divident = *this;
 		deg1 = divident.degree();
 		deg2 = divider.degree();
 		
 
 		while (deg1 >= deg2 && !divident.coefficients.empty()) {
-			FPolynomial t = divider;
-			auto D1 = divident.toString();
-			auto D2 = t.toString();
 
 			FiniteNumber num1 = divident.coefficients.front().getCoefficient();
 			FiniteNumber num2 = divider.coefficients.front().getCoefficient();
@@ -149,7 +147,6 @@ public:
 
 			deg1 = divident.degree();
 			deg2 = divider.degree();
-			auto D3 = quotient.toString();
 		}
 
 		return quotient;
@@ -164,25 +161,23 @@ public:
 			throw std::invalid_argument("Division by zero");
 		}
 		auto quotient = FPolynomial();
+		quotient.setP(divider.getP());
 		FPolynomial divident = *this;
 		deg1 = divident.degree();
 		deg2 = divider.degree();
 
 		while (deg1 >= deg2 && !divident.coefficients.empty()) {
 
-
-
 			auto num1 = divident.coefficients.front().getCoefficient();
 			auto num2 = divider.coefficients.front().getCoefficient();
-			if (!((num1 % num2).toString() == "0")) {
-				return divident;
-			}
 
 			auto deb1 = divident.coefficients.front();
 			auto deb2 = divider.coefficients.front();
 
 			auto leadingElement = divident.coefficients.front() / divider.coefficients.front();
-			auto leadingPolynomial = FPolynomial(); leadingPolynomial.emplaceDegree(leadingElement.getCoefficient(), leadingElement.getDegree());
+			auto leadingPolynomial = FPolynomial();
+			leadingPolynomial.setP(divider.getP());
+			leadingPolynomial.emplaceDegree(leadingElement.getCoefficient(), leadingElement.getDegree());
 
 
 			quotient.emplaceDegree(leadingElement.getCoefficient(), leadingElement.getDegree());
@@ -201,14 +196,10 @@ public:
 
 	friend FPolynomial divideByNum(FPolynomial R, FiniteNumber Num) {
 		FPolynomial res;
+		res.setP(R.getP());
 		FiniteNumber zorro("0", R.f.getP());
 		for (auto item : R.coefficients) {
-			if (item.getCoefficient() % Num == zorro) {
-				res.emplaceDegree(item.getCoefficient() / Num, item.getDegree());
-			}
-			else {
-				return R;
-			}
+			res.emplaceDegree(item.getCoefficient() / Num, item.getDegree());
 		}
 		return res;
 	}
@@ -222,14 +213,68 @@ public:
 		}
 
 		FPolynomial R = A % B;
-		auto DEBUGA = A.toString();
+		/*auto DEBUGA = A.toString();
 		auto DEBUGB = B.toString();
-		auto DEBUGR = R.toString();
+		auto DEBUGR = R.toString();*/
 		if (R.toString() != "0") {
-			R = FPolynomial(R, R.coefficients.front().getCoefficient());
+			R = divideByNum(R, R.coefficients.front().getCoefficient());
 		}
 		return GCD(B, R);
 	}
 
+	//Implemented by V.Avramenko
+
+	/*
+	Cyclotomic Polynomial
+	*/
+	static FPolynomial cyclotomic(PositiveNumber degree, FiniteField& field) {
+		assert(degree.toString() != "0");
+
+		if (degree.toString() == "1") {
+			FPolynomial res;
+			res.setP(field.getP());
+			res.emplaceDegree(FiniteNumber("1", field.getP()), PositiveNumber("1"));
+			res.emplaceDegree(FiniteNumber("-1", field.getP()), PositiveNumber("0"));
+			return res;
+		}
+		else if (degree.is_prime()) {
+			FPolynomial res = FPolynomial();
+			res.setP(field.getP());
+			FiniteNumber uno = FiniteNumber("1", field.getP());
+			for (PositiveNumber i = degree - uno; i >= PositiveNumber("0"); i -= uno) {
+				res.coefficients.push_back(PolynomialElement<FiniteNumber>(uno, i));
+				if (i.toString() == "0") {
+					break;
+				}
+			}
+			return res;
+		}
+		else {
+			FPolynomial res;
+			FPolynomial divider;
+			divider.setP(field.getP());
+			res.setP(field.getP());
+			divider.emplaceDegree(FiniteNumber("1", field.getP()), PositiveNumber("1"));
+			divider.emplaceDegree(FiniteNumber("-1", field.getP()), PositiveNumber("0"));
+			FPolynomial dividend;
+			dividend.setP(field.getP());
+			dividend.emplaceDegree(FiniteNumber("1", field.getP()), degree);
+			dividend.emplaceDegree(FiniteNumber("-1", field.getP()), PositiveNumber("0"));
+			PositiveNumber two("2");
+			PositiveNumber zero("0");
+			PositiveNumber uno("1");
+			PositiveNumber half = degree / two;
+			std::string D1 = divider.toString();
+			std::string D2 = dividend.toString();
+			for (PositiveNumber i = two; i <= half; i += uno) {
+				if (degree % i == zero) {
+					divider = divider * FPolynomial::cyclotomic(i, field);
+				}
+				D1 = divider.toString();
+			}
+			res = dividend / divider;
+			return res;
+		}
+	}
 
 };

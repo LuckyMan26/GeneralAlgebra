@@ -55,22 +55,6 @@ public:
 			}
 			return res;
 		}
-		/*else if (degree.is_even()) {
-			RPolynomial res = RPolynomial();
-			SignedNumber uno = SignedNumber("1");
-			bool switcher = false;
-			for (PositiveNumber i = PositiveNumber("0"); i < degree; i += uno) {
-				if (switcher) {
-					uno.flipSign();
-					res.coefficients.push_back(PolynomialElement<SignedNumber>(uno, i));
-					uno.flipSign();
-				}
-				else {
-					res.coefficients.push_back(PolynomialElement<SignedNumber>(uno, i));
-				}
-				switcher = !switcher;
-			}
-		}*/
 		else {
 			RPolynomial res;
 			RPolynomial divider;
