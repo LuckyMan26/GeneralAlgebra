@@ -49,7 +49,7 @@ public:
         if (element.toString() == "" || element.toString() == "0")
             throw std::runtime_error("Element is not a member of the group");
 
-        auto n = this->getP() - PositiveNumber("1");
+        auto n = this->getP() - PositiveNumber("1"); // order of the group
 
         if (factorization.empty())
             factorization = map_factors(n, PollardFactorization::pollardRho<PositiveNumber>);
@@ -63,20 +63,14 @@ public:
             while (elem1 != identity) {
                 elem1 = exp.montgomeryExponention(elem1, mult.first);
                 t = t * mult.first;
+
+                if (t > n)
+                    throw std::overflow_error("Infinite order");
             }
         }
 
         return t;
     }
-
-    //FiniteGroup& operator=(const FiniteGroup& group) {
-    //    this->f = group.f;
-    //    this->factorization = group.factorization;
-    //    this->identity = group.identity;
-    //    this->identitySet = group.identitySet;
-
-    //    return *this;
-    //}
 
 private:
     FiniteNumber identity = FiniteNumber("1 x10"); // Identity element
