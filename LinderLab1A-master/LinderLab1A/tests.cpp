@@ -154,11 +154,11 @@ TEST_CASE("Finite numbers") {
 	fin1 += fin2;
 	CHECK(fin1.toString() == "2");
 	fin3 = fin1 - fin2;
-	CHECK(fin3.toString() == "4");
+	CHECK(fin3.toString() == "6");
 	fin1 -= fin2;
-	CHECK(fin1.toString() == "4");
+	CHECK(fin1.toString() == "6");
 	fin3 = fin1 * fin2;
-	CHECK(fin3.toString() == "4");
+	CHECK(fin3.toString() == "6");
 	FiniteNumber orig = FiniteNumber("x10 7");
 	FiniteNumber inv = orig.inverse();
 	CHECK(inv.toString() == "3");

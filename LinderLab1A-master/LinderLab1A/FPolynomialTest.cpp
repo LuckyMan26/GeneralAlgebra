@@ -40,11 +40,18 @@ TEST_SUITE("FPolynomial")
 		auto sub = fpol1 - fpol2;
 		CHECK(sub.toString() == "4x^10+x^5+4x^4+4x^3+2x^2+x");
 
-		fpol1 = FPolynomial("x^10-5x^5+1", PositiveNumber("5"));
+		/*fpol1 = FPolynomial("x^10-5x^5+1", PositiveNumber("5"));
 		fpol2 = FPolynomial("x^5-4x^4-9x^3+2x^2-x-1", PositiveNumber("5"));
 
 		sub = fpol1 - fpol2;
-		CHECK(sub.toString() == "x^10+4x^5+4x^4+4x^3+3x^2+x+3");
+		CHECK(sub.toString() == "x^10+4x^5+4x^4+4x^3+3x^2+x+3");*/
+		fpol1 = FPolynomial("x^10-5x^5+1", PositiveNumber("5"));
+		fpol2 = FPolynomial("x^5-4x^4-4x^3+2x^2-x-1", PositiveNumber("5"));
+		auto D = fpol2.toString();
+
+		sub = fpol1 - fpol2;
+		D = sub.toString();
+		CHECK(sub.toString() == "x^10+4x^5+4x^4+4x^3+3x^2+x+2");
 	}
 
 	TEST_CASE("Multiplication")
@@ -82,36 +89,36 @@ TEST_SUITE("FPolynomial")
 		CHECK(fpol2.derivative().toString() == "0");
 	}
 
-	//TEST_CASE("Division")
-	//{
-	//	FPolynomial pol1 = FPolynomial("5x^2+4x+6", PositiveNumber("7")),
-	//		pol2 = FPolynomial("2x+1", PositiveNumber("7"));
+	TEST_CASE("Division")
+	{
+		FPolynomial pol1 = FPolynomial("5x^2+4x+6", PositiveNumber("7")),
+			pol2 = FPolynomial("2x+1", PositiveNumber("7"));
 
-	//	auto res = pol1 / pol2;
-	//	auto DEBUG = res.toString();
-	//	CHECK(res.toString() == "6x+6");
+		auto res = pol1 / pol2;
+		auto DEBUG = res.toString();
+		CHECK(res.toString() == "6x+6");
 
 
-	//	/*pol1 = FPolynomial("x^3-4x^2+5");
-	//	pol2 = FPolynomial("9x^3+x+1");
-	//	res = pol1 / pol2;
-	//	CHECK(res.toString() == "0");
+		/*pol1 = FPolynomial("x^3-4x^2+5");
+		pol2 = FPolynomial("9x^3+x+1");
+		res = pol1 / pol2;
+		CHECK(res.toString() == "0");
 
-	//	pol1 = FPolynomial("x^15-4x^14-9x^13+2x^12-x^11-6x^10+20x^9+45x^8-10x^7+5x^6+6x^5-4x^4-9x^3+2x^2-x-1");
-	//	pol2 = FPolynomial("-4x^14-9x^13+2x^12-x^11-6x^10+20x^9+45x^8-10x^7+5x^6+6x^5-4x^4-9x^3+2x^2-x-1");
-	//	res = pol1 / pol2;
-	//	CHECK(res.toString() == "0");
+		pol1 = FPolynomial("x^15-4x^14-9x^13+2x^12-x^11-6x^10+20x^9+45x^8-10x^7+5x^6+6x^5-4x^4-9x^3+2x^2-x-1");
+		pol2 = FPolynomial("-4x^14-9x^13+2x^12-x^11-6x^10+20x^9+45x^8-10x^7+5x^6+6x^5-4x^4-9x^3+2x^2-x-1");
+		res = pol1 / pol2;
+		CHECK(res.toString() == "0");
 
-	//	pol1 = FPolynomial("x^3+x^2");
-	//	pol2 = FPolynomial("x^2+1");
-	//	res = pol1 / pol2;
-	//	CHECK(res.toString() == "x+1");
+		pol1 = FPolynomial("x^3+x^2");
+		pol2 = FPolynomial("x^2+1");
+		res = pol1 / pol2;
+		CHECK(res.toString() == "x+1");
 
-	//	pol1 = FPolynomial("x^3+5x^2-2x-6");
-	//	pol2 = FPolynomial("x+4");
-	//	res = pol1 / pol2;
-	//	CHECK(res.toString() == "x^2+x-6");*/
-	//}
+		pol1 = FPolynomial("x^3+5x^2-2x-6");
+		pol2 = FPolynomial("x+4");
+		res = pol1 / pol2;
+		CHECK(res.toString() == "x^2+x-6");*/
+	}
 
 	//TEST_CASE("Remainder")
 	//{
