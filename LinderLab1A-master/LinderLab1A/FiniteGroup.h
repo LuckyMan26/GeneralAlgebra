@@ -7,6 +7,7 @@
 
 #include "FiniteNumber.h"
 #include "Pollard.h"
+#include "MillerRabin.h"
 #include "Exponent.h"
 
 
@@ -16,7 +17,8 @@ public:
     FiniteGroup(const FiniteField& f) : factorization(*(new std::map<PositiveNumber, int>()))
     {
         this->f = f;
-        this->identitySet = false;
+        this->identitySet = true;
+        this->identity = FiniteNumber(PositiveNumber("1"), f.getP());
     }
 
     // Binary operation method
@@ -50,7 +52,7 @@ public:
             throw std::runtime_error("Element is not a member of the group");
 
         auto n = this->getP() - PositiveNumber("1"); // order of the group
-
+        
         if (factorization.empty())
             factorization = map_factors(n, PollardFactorization::pollardRho<PositiveNumber>);
 
@@ -76,7 +78,16 @@ private:
     FiniteNumber identity = FiniteNumber("1 x10"); // Identity element
     bool identitySet = false; // Flag to indicate if the identity element is set
     FiniteField f;
+    PositiveNumber order; // Order of the group
 
     // Prime factorization of the group order
     std::map<PositiveNumber, int>& factorization;
+
+    void setGroupOrder() {
+        if (MillerRabin::miller_rabin(f.getP()))
+            order = f.getP() - PositiveNumber("1");
+        else {
+            // TODO: Needs euler funtion
+        }
+    }
 };
