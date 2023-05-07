@@ -465,3 +465,16 @@ TEST_CASE("Euler")
 	CHECK(Euler(value3).toString() == "32");
 	CHECK(Euler(value4).toString() == "1");
 }
+
+TEST_CASE("Carmichel")
+{
+	PositiveNumber value1("9");
+	PositiveNumber value2("32");
+	PositiveNumber value3("36");
+	PositiveNumber value4("169");
+
+	CHECK(Carmichel(value1).toString() == "6");
+	CHECK(Carmichel(value2).toString() == "8");
+	CHECK(Carmichel(value3).toString() == "6");
+	CHECK(Carmichel(value4).toString() == "156");
+}
