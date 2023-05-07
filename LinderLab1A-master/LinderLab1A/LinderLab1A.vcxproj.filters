@@ -54,6 +54,12 @@
     <ClInclude Include="MillerRabin.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="FPolynomial.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Euler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="FiniteField.cpp">
@@ -66,6 +72,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="CalculationOfSquareRoot.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FPolynomialTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PolynomialElementTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
