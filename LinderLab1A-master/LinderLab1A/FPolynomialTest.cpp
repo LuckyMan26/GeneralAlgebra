@@ -79,4 +79,17 @@ TEST_SUITE("FPolynomial")
 		fpol = FPolynomial("5x^5+4x^4+8x^3+2x^2+6x+1", PositiveNumber("11"));
 		CHECK(fpol.Normalized().toString() == "x^5+3x^4+6x^3+7x^2+10x+9");
 	}
+
+
+	TEST_CASE("Fast Exponentiation")
+	{
+		FPolynomial fpol("6x+2", PositiveNumber("11"));
+
+		CHECK(fpol.fastExponentiation(PositiveNumber("3")).toString() == "7x^3+7x^2+6x+8");
+		CHECK(fpol.fastExponentiation(PositiveNumber("5")).toString() == "10x^5+2x^4+5x^3+9x^2+7x+10");
+
+		FPolynomial fpol2("7x^3+6x+2", PositiveNumber("154"));
+		CHECK(fpol2.fastExponentiation(PositiveNumber("5")).toString() == "21x^15+112x^13+140x^12+126x^11+84x^10+56x^9+42x^8+98x^7+28x^6+132x^5+122x^4+114x^3+108x^2+18x+32");		
+		CHECK(fpol2.fastExponentiation(PositiveNumber("0")).toString() == "1");
+	}
 }

@@ -86,4 +86,28 @@ public:
 		res.trim();
 		return res;
 	}
+
+	FPolynomial fastExponentiation(PositiveNumber degree)
+	{
+		std::string binDegree = degree.bitsReverse();
+		FPolynomial answer("1",f.getP());
+		FPolynomial temp(*this);
+
+		const int countOfIterations = binDegree.size() - 1;
+
+		for (int i = countOfIterations; i > 0; i--)
+		{
+			if (binDegree[i] == '1')
+			{
+				answer = answer * temp;
+			}
+
+			answer = answer * answer;
+		}
+
+		if (binDegree[0] == '1')
+			answer = answer * temp;
+
+		return answer;
+	}
 };
