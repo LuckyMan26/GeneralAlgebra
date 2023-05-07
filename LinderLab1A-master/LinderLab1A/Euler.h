@@ -45,3 +45,33 @@ PositiveNumber Euler(PositiveNumber number)
         return answer;
     }
 }
+PositiveNumber CarmichelForPrimePower(PositiveNumber prime,PositiveNumber degree) {
+    if (prime == PositiveNumber("2") && prime == PositiveNumber("2") || prime == PositiveNumber("4"))
+        return (EulerForPrimeValues(prime, degree));
+    if (prime != PositiveNumber("2") || prime == PositiveNumber("2") || prime == PositiveNumber("4"))
+        return (EulerForPrimeValues(prime, degree));
+}
+PositiveNumber Carmichel(PositiveNumber number) {
+
+    std::map<PositiveNumber, int> factorization = map_factors(number, PollardFactorization::pollardRho<PositiveNumber>);
+
+    if (factorization.size()==1  && factorization.begin()->first == PositiveNumber("2") && factorization.begin()->second > 2)
+        return (EulerForPrimeValues(PositiveNumber("2"), factorization.begin()->second)/2);
+    if (factorization.size() == 1 && factorization.begin()->first != PositiveNumber("2") || number==PositiveNumber("2") || number == PositiveNumber("4"))
+        return (EulerForPrimeValues(factorization.begin()->first, factorization.begin()->second));
+
+    else
+    {
+        PositiveNumber answer("1");
+        int counter = 1;
+
+        for (auto it = factorization.begin(); it != factorization.end(); ++it)
+        {
+
+            answer = PositiveNumber::LCM(CarmichelForPrimePower(it->first,it->second), answer);
+
+        }
+
+        return answer;
+    }
+}
