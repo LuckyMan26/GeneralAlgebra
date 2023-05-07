@@ -22,6 +22,7 @@ HEADERS += \
     mainwindow.h
 
 FORMS += \
+    FiniteFieldWindow.ui \
     mainwindow.ui
 
 # Default rules for deployment.
