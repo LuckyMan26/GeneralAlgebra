@@ -11,7 +11,7 @@
 #include "Exponent.h"
 
 
-// Created by Y.Kishchuk
+// Created by Y.Kishchuk and T.Pysarenkov
 class FiniteGroup {
 public:
     FiniteGroup(const FiniteField& f) : factorization(*(new std::map<PositiveNumber, int>()))
@@ -72,6 +72,28 @@ public:
         }
 
         return t;
+    }
+
+    //Determining whether the input element is a generator of a multiplicative group
+    bool isGenerator(const FiniteNumber& element) const {
+        assert(identitySet);
+        assert(element.getP() == this->getP());
+        if (element.toString() == "" || element.toString() == "0")
+            throw std::runtime_error("Element is not a member of the group");
+
+        auto n = this->getP() - PositiveNumber("1");
+
+        if (factorization.empty())
+            factorization = map_factors(n, PollardFactorization::pollardRho<PositiveNumber>);
+
+        auto t = n;
+        Exponentiation exp;
+        for (const auto& mult : factorization) {
+            auto b = exp.montgomeryExponention(element, n / mult.first);
+            if (b == 1)
+                return false;
+        }
+        return true;
     }
 
 private:
