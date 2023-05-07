@@ -27,21 +27,21 @@
      <item>
       <widget class="QPushButton" name="PRBtn">
        <property name="text">
-        <string>Операції на скінченному полі</string>
+        <string>Кільце многочленів</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButton_3">
+      <widget class="QPushButton" name="PFBtn">
        <property name="text">
-        <string>Кільце многочленів</string>
+        <string>Поле многочленів</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="FiniteFieldBtn">
        <property name="text">
-        <string>Поле многочленів</string>
+        <string>Операції на скінченному полі</string>
        </property>
       </widget>
      </item>

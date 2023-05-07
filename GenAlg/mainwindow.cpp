@@ -1,17 +1,24 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-
+#include "finitefieldwindow.h"
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
 
     ui->setupUi(this);
-    connect()
+
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+
+void MainWindow::on_PRBtn_clicked()
+{
+    FiniteFieldWindow window(this);
+    window.exec();
 }
 
