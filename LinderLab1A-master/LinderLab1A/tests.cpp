@@ -3,11 +3,12 @@
 
 #include "SignedNumber.h"
 #include "FiniteNumber.h"
-#include "Exponent.h"
+//#include "Exponent.h"
 #include "Polynomial.h"
 #include "CalculationOfSquareRoot.h"
 #include "MillerRabin.h"
-#include "Pollard.h"
+//#include "Pollard.h"
+#include "Euler.h"
 
 #include <random>
 #include <string>
@@ -437,4 +438,30 @@ TEST_CASE("Pollard's Rho Factorization") {
 
 	CHECK(result3 == toCheck3);
 
+}
+
+TEST_CASE("Euler For Prime Values")
+{
+	PositiveNumber value1("2");
+	PositiveNumber answer1("1");
+
+	PositiveNumber value2("23");
+	PositiveNumber degree2("3");
+	PositiveNumber answer2("11638");
+
+	CHECK(EulerForPrimeValues(value1) == answer1);
+	CHECK(EulerForPrimeValues(value2, degree2) == answer2);
+}
+
+TEST_CASE("Euler")
+{
+	PositiveNumber value1("36");
+	PositiveNumber value2("12345678");
+	PositiveNumber value3("64");
+	PositiveNumber value4("2");
+
+	CHECK(Euler(value1).toString() == "12");
+	CHECK(Euler(value2).toString() == "4027392");
+	CHECK(Euler(value3).toString() == "32");
+	CHECK(Euler(value4).toString() == "1");
 }
