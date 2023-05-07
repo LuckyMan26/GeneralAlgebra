@@ -9,7 +9,7 @@ template <typename T>
 class has_isPositive;
 
 
-// Implemented by V.Avramenko, M.Tyshchenko and Y. Kishchuk
+// Implemented by V.Avramenko, M.Tyshchenko, Y. Kishchuk and V.Horbanov
 template<typename TCoefficient>
 class Polynomial {
 protected:
@@ -119,7 +119,6 @@ protected:
 		return TCoefficient(str);
 	}
 
-public:
 	/*
 	* Input string format Ax^B-Cx^D+Ex^F+G
 	* if degrees of some terms in sum are identical, their coefficients will be added
@@ -142,6 +141,12 @@ public:
 		trim();
 	}
 
+	Polynomial(std::list<PolynomialElement<TCoefficient>> elementList) {
+		this->coefficients = elementList;
+		this->emplaceDegree();
+	}
+
+public:
 	/**
 	* Returns string representation of the polynomial with degrees in descending oreder.
 	* Example:
@@ -240,7 +245,7 @@ public:
 		}
 
 		while (rightIter != right.coefficients.end()) {
-			auto newCoefficient = rightIter->getCoefficient() * genCoefficient("1");
+			auto newCoefficient = rightIter->getCoefficient() * genCoefficient("-1");
 			result.coefficients.push_back(PolynomialElement<TCoefficient>(newCoefficient, rightIter->getDegree()));
 			rightIter++;
 		}

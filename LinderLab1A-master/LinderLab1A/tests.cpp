@@ -3,33 +3,48 @@
 
 #include "SignedNumber.h"
 #include "FiniteNumber.h"
-#include "Exponent.h"
+//#include "Exponent.h"
 #include "Polynomial.h"
 #include "FiniteGroup.h"
 #include "CalculationOfSquareRoot.h"
 #include "MillerRabin.h"
-#include "Pollard.h"
+//#include "Pollard.h"
+#include "Euler.h"
 
 #include <random>
 #include <string>
 #include <chrono>
-
+#include <fstream>
 //Test by M. Tyshchenko
 TEST_CASE("Positive numbers") {
-	PositiveNumber a = PositiveNumber("1234");
-	PositiveNumber b = PositiveNumber("99");
+	std::ifstream f;
+	f.open("../Positive numbers Test.txt");
+
+	//PositiveNumber a = PositiveNumber("1234");
+	//PositiveNumber b = PositiveNumber("99");
+	std::string aStr,bStr;
+	f >> aStr >> bStr;
+	PositiveNumber a(aStr);
+	PositiveNumber b(bStr);
 	CHECK((a * b).toString() == "122166");
 	CHECK((b * a).toString() == "122166");
 	CHECK((a - b).toString() == "1135");
 	CHECK((b - a).toString() == "1135");
 	CHECK((b + a).toString() == "1333");
 	CHECK((a + b).toString() == "1333");
+
+	f.close();
 }
 
 //Test by V.Avramenko
 TEST_CASE("Division Test for PositiveNumber") {
-	PositiveNumber p1("12");
-	PositiveNumber p2("3");
+	std::ifstream f;
+	f.open("../Division Test for PositiveNumber.txt");
+	std::string p1Str, p2Str;
+	f >> p1Str >> p2Str;
+
+	PositiveNumber p1(p1Str);
+	PositiveNumber p2(p2Str);
 	PositiveNumber p3 = p1 / p2;
 	CHECK(p3.toString() == "4");
 	p3 = p2 / p1;
@@ -42,12 +57,17 @@ TEST_CASE("Division Test for PositiveNumber") {
 	p2 = PositiveNumber("257");
 	p3 = p1 / p2;
 	CHECK(p3.toString() == "2607");
+	f.close();
 }
 
 //Test by V.Avramenko
 TEST_CASE("Division Test for SignedNumber") {
-	SignedNumber p1("-12");
-	SignedNumber p2("3");
+	std::ifstream f;
+	f.open("../Division Test for SignedNumber.txt");
+	std::string p1Str, p2Str;
+	f >> p1Str >> p2Str;
+	SignedNumber p1(p1Str);
+	SignedNumber p2(p2Str);
 	SignedNumber p3 = p1 / p2;
 	CHECK(p3.toString() == "-4");
 	p3 = p2 / p1;
@@ -64,12 +84,18 @@ TEST_CASE("Division Test for SignedNumber") {
 	p2 = SignedNumber("-3");
 	p3 = p1 / p2;
 	CHECK(p3.toString() == "0");
+	f.close();
 }
 
 //Test by V.Avramenko
 TEST_CASE("Remainder Test for Positive Numbers") {
-	PositiveNumber p1("10");
-	PositiveNumber p2("8");
+	std::ifstream f;
+	f.open("../Remainder Test for Positive Numbers.txt");
+	std::string p1Str, p2Str;
+	f >> p1Str >> p2Str;
+
+	PositiveNumber p1(p1Str);
+	PositiveNumber p2(p2Str);
 	PositiveNumber p3 = p1 % p2;
 	CHECK(p3.toString() == "2");
 	p1 = PositiveNumber("102");
@@ -82,12 +108,17 @@ TEST_CASE("Remainder Test for Positive Numbers") {
 	p2 = PositiveNumber("8");
 	p3 = p1 % p2;
 	CHECK(p3.toString() == "7");
+	f.close();
 }
 
 //Test by V.Avramenko
 TEST_CASE("Remainder Test for Signed Numbers") {
-	SignedNumber p1("-10");
-	SignedNumber p2("8");
+	std::ifstream f;
+	f.open("../Remainder Test for Signed Numbers.txt");
+	std::string p1Str, p2Str;
+	f >> p1Str >> p2Str;
+	SignedNumber p1(p1Str);
+	SignedNumber p2(p2Str);
 	SignedNumber p3 = p1 % p2;
 	CHECK(p3.toString() == "-2");
 	p1 = SignedNumber("-102");
@@ -128,25 +159,38 @@ TEST_CASE("Test on random numbers") {
 
 //Tests by M. Tyshchenko
 TEST_CASE("Signed numbers") {
-	FiniteNumber finite = FiniteNumber("x10 1344");
+
+	std::ifstream f;
+	f.open("../Signed numbers Test.txt");
+	std::string finiteStr, signedNStr, signedMStr,aStr,bStr;
+	getline(f, finiteStr);
+	f >> signedNStr >> signedMStr>>aStr>>bStr;
+	
+	FiniteNumber finite = FiniteNumber(finiteStr);
 	CHECK(finite.toString() == "4");
-	SignedNumber signedN = SignedNumber("1555");
-	SignedNumber signedM = SignedNumber("-300");
+	SignedNumber signedN = SignedNumber(signedNStr);
+	SignedNumber signedM = SignedNumber(signedMStr);
 	SignedNumber res = signedN;
 	res -= signedM;
 	CHECK(res.toString() == "1855");
 
 
-	SignedNumber a = SignedNumber("-3");
-	SignedNumber b = SignedNumber("0");
+	SignedNumber a = SignedNumber(aStr);
+	SignedNumber b = SignedNumber(bStr);
 	SignedNumber c = a * b;
 	CHECK(c.toString() == "0");
+	f.close();
 
 }
 //Testing FiniteNumbers by Vlad Avramenko
 TEST_CASE("Finite numbers") {
-	FiniteNumber fin1 = FiniteNumber("x10 6");
-	FiniteNumber fin2 = FiniteNumber("x10 6");
+	std::ifstream f;
+	f.open("../Finite numbers Tests.txt");
+	std::string fin1Str, fin2Str,origStr;
+	getline(f, fin1Str);
+	getline(f, fin2Str);
+	FiniteNumber fin1 = FiniteNumber(fin1Str);
+	FiniteNumber fin2 = FiniteNumber(fin2Str);
 	CHECK(fin1.toString() == "6");
 	CHECK(fin2.toString() == "6");
 	FiniteNumber fin3 = fin1 + fin2;
@@ -159,20 +203,24 @@ TEST_CASE("Finite numbers") {
 	CHECK(fin1.toString() == "4");
 	fin3 = fin1 * fin2;
 	CHECK(fin3.toString() == "4");
-	FiniteNumber orig = FiniteNumber("x10 7");
+	getline(f, origStr);
+	FiniteNumber orig = FiniteNumber(origStr);
 	FiniteNumber inv = orig.inverse();
 	CHECK(inv.toString() == "3");
-	fin1 = FiniteNumber("x10 4");
-	fin2 = FiniteNumber("x10 3");
+	getline(f, fin1Str);
+	getline(f, fin2Str);
+	fin1 = FiniteNumber(fin1Str);
+	fin2 = FiniteNumber(fin2Str);
 	FiniteNumber fin4 = fin1 / fin2;
 	FiniteNumber fin5 = fin2 / fin1;
 	CHECK(fin4.toString() == "8");
 	CHECK(fin5.toString() == "3");
 	fin1.divideBy(fin2);
 	CHECK(fin1.toString() == "8");
-
-	fin1 = FiniteNumber("x3769756249765794657934624756924805020202 7489572497584758047073759832659659249572052706703767350683596350");
-	fin2 = FiniteNumber("x3769756249765794657934624756924805020202 4892369322308579824750845027508578529957295624957285624");
+	getline(f, fin1Str);
+	getline(f, fin2Str);
+	fin1 = FiniteNumber(fin1Str);
+	fin2 = FiniteNumber(fin2Str);
 
 	auto res = fin1 + fin2;
 	CHECK(res.toString() == "1127822179038104809524733176879403005056");
@@ -191,21 +239,36 @@ TEST_CASE("Finite numbers") {
 
 	fin1 = FiniteNumber("-6 x5");
 	CHECK(fin1.toString() == "4");
+	f.close();
 }
 
 //Tests by M. Tyshchenko
 TEST_CASE("Test zero") {
-	PositiveNumber zero = PositiveNumber("0");
-	PositiveNumber a = PositiveNumber("10000");
-	PositiveNumber b = PositiveNumber("0000");
+	std::ifstream f;
+	f.open("../Test zero.txt");
+	std::string zeroStr, aStr, bStr;
+	f >> zeroStr >> aStr >> bStr;
+	PositiveNumber zero = PositiveNumber(zeroStr);
+	PositiveNumber a = PositiveNumber(aStr);
+	PositiveNumber b = PositiveNumber(bStr);
 	CHECK(a * b == zero);
 	CHECK(b * a == zero);
+	f.close();
 }
 
 //Tests for exponentiation by M. Tyshchenko
 TEST_CASE("Exponent") {
-	FiniteNumber n = FiniteNumber(PositiveNumber("100"), PositiveNumber("17"));
-	FiniteNumber m = FiniteNumber(PositiveNumber("431"), PositiveNumber("17"));
+	std::ifstream f;
+	f.open("../Exponent Test.txt");
+	std::string nStr, mStr, aNStr, toMultiplyStr, toMultiply2Str,baseStr,powerStr;
+	getline(f, nStr);
+	getline(f, mStr);
+	getline(f, aNStr);
+	getline(f, toMultiplyStr);
+	getline(f, toMultiply2Str);
+	
+	FiniteNumber n = FiniteNumber(nStr);
+	FiniteNumber m = FiniteNumber(mStr);
 	CHECK(n.toString() == "15");
 	CHECK((n * m).toString() == "5");
 	CHECK((m * n).toString() == "5");
@@ -215,14 +278,17 @@ TEST_CASE("Exponent") {
 	CHECK((aN.shift(-2)).toString() == "0");
 	CHECK(FiniteNumber("x257 10000").inverse().toString() == "67");
 
-	FiniteNumber toMultiply = FiniteNumber("x257 128");
-	FiniteNumber toMultiply2 = FiniteNumber("x257 80");
+	FiniteNumber toMultiply = FiniteNumber(toMultiplyStr);
+	FiniteNumber toMultiply2 = FiniteNumber(toMultiply2Str);
 	Exponentiation exp = Exponentiation();
 	FiniteNumber result = exp.montgomeryMultiplication(toMultiply, toMultiply2);
 	CHECK(result.toString() == "217");
-
-	toMultiply = FiniteNumber("x97 15");
-	toMultiply2 = FiniteNumber("x97 75");
+	getline(f, toMultiplyStr);
+	getline(f, toMultiply2Str);
+	getline(f, baseStr);
+	getline(f, powerStr);
+	toMultiply = FiniteNumber(toMultiplyStr);
+	toMultiply2 = FiniteNumber(toMultiply2Str);
 	CHECK(exp.montgomeryMultiplication(toMultiply, toMultiply2).toString() == "58");
 	exp.montgomeryMultiplicationDeprecated(toMultiply, toMultiply2).toString();
 
@@ -230,15 +296,17 @@ TEST_CASE("Exponent") {
 	PositiveNumber power = PositiveNumber("5");
 	result = exp.montgomeryExponention(base, power);
 	CHECK(result.toString() == "136");
-
-	base = FiniteNumber("x113 1222");
-	power = PositiveNumber("4");
+	getline(f, baseStr);
+	getline(f, powerStr);
+	base = FiniteNumber(baseStr);
+	power = PositiveNumber(powerStr);
 	result = exp.montgomeryExponention(base, power);
 	CHECK(result.toString() == "8");
 
-
-	base = FiniteNumber("x1015843 222222");
-	power = PositiveNumber("600");
+	getline(f, baseStr);
+	getline(f, powerStr);
+	base = FiniteNumber(baseStr);
+	power = PositiveNumber(powerStr);
 	std::string expected = "839534";
 	//TIMING
 	std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
@@ -255,6 +323,7 @@ TEST_CASE("Exponent") {
 	//CHECK(exp.slowExponention(base, power).toString() == expected);
 	//end = std::chrono::steady_clock::now();
 	//std::cout << "Slow = " << std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count() << " ms" << std::endl;
+	f.close();
 }
 
 TEST_CASE("Exponentiation on random values") {
@@ -273,10 +342,18 @@ TEST_CASE("Exponentiation on random values") {
 }
 //Tests for bits function
 TEST_CASE("Test binary form") {
-	CHECK(PositiveNumber("5").bits() == "101");
-	CHECK(PositiveNumber("0").bits() == "0");
-	CHECK(PositiveNumber("100").bits() == "1100100");
-	CHECK(PositiveNumber("4").bits() == "100");
+	std::ifstream f;
+	f.open("../Test binary form.txt");
+	std::string aStr;
+	f >> aStr;
+	CHECK(PositiveNumber(aStr).bits() == "101");
+	f >> aStr;
+	CHECK(PositiveNumber(aStr).bits() == "0");
+	f >> aStr;
+	CHECK(PositiveNumber(aStr).bits() == "1100100");
+	f >> aStr;
+	CHECK(PositiveNumber(aStr).bits() == "100");
+	f.close();
 }
 
 //Created by Y.Kishchuk
@@ -346,7 +423,11 @@ TEST_CASE("Test ElementOrder method") {
 	
 //Tests by P. Velychko #6
 TEST_CASE("TestNonQuadraticPositive") {
-	FiniteNumber a("2",11);
+	std::ifstream f;
+	f.open("../TestNonQuadraticPositive.txt");
+	std::string aStr;
+	f >> aStr;
+	FiniteNumber a(aStr);
 	FiniteNumber one("1", 11);
 	FiniteNumber x(a.power_mod((11 - 1) / 2));
 	if ( x != one) {
@@ -358,10 +439,15 @@ TEST_CASE("TestNonQuadraticPositive") {
 
 		CHECK(root1.power_mod(2) == a);
 	}
+	f.close();
 }
 
-TEST_CASE("TestQuadraticResidue") {
-	FiniteNumber a("3", 11);
+TEST_CASE("TestQuadraticResidue1") {
+	std::ifstream f;
+	f.open("../TestQuadraticResidue1.txt");
+	std::string aStr;
+	getline(f, aStr);
+	FiniteNumber a(aStr);
 	FiniteNumber b("5", 11);
 	FiniteNumber one("1", 11);
 
@@ -375,11 +461,17 @@ TEST_CASE("TestQuadraticResidue") {
 		FiniteNumber root(a.tonelli_shanks());
 		CHECK(root == b);
 	}
+	f.close();
+
 }
 
-TEST_CASE("TestQuadraticResidue") {
-	FiniteNumber a("3", 19);
+TEST_CASE("TestQuadraticResidue2") {
 	
+	std::ifstream f;
+	f.open("../TestQuadraticResidue2.txt");
+	std::string aStr;
+	getline(f, aStr);
+	FiniteNumber a(aStr);
 	FiniteNumber one("1", 19);
 
 	FiniteNumber x(a.power_mod((19 - 1) / 2));
@@ -392,69 +484,120 @@ TEST_CASE("TestQuadraticResidue") {
 		FiniteNumber root(a.tonelli_shanks());
 		CHECK(root.power_mod(2) == a);
 	}
+	f.close();
 }
 
 TEST_CASE("Test Integer Constuctors") {
-	int aInt = 20;
-	int bInt = 44;
+	std::ifstream f;
+	f.open("../Test Integer Constuctors.txt");
+	std::string aStr, bStr;
+	f >> aStr >> bStr;
+	int aInt = std::stoi(aStr);
+	int bInt = std::stoi(bStr);
 	PositiveNumber a = PositiveNumber(aInt);
 	PositiveNumber b = PositiveNumber(bInt);
 	CHECK("64" == (a + b).toString());
 	
 	FiniteNumber finite1 = FiniteNumber(18, 17);
 	CHECK("1" == finite1.toString());
+	f.close();
 }
 
 TEST_CASE("Additional operators test") {
-	FiniteNumber a = FiniteNumber(20, 17);
-	FiniteNumber b = FiniteNumber(3, 17);
-	FiniteNumber c = FiniteNumber(3, 11);
-	FiniteNumber d = FiniteNumber(4, 17);
+	std::ifstream f;
+	f.open("../Additional operators test.txt");
+	std::string aStr, bStr,cStr,dStr;
+	getline(f, aStr);
+	getline(f, bStr);
+	getline(f, cStr);
+	getline(f, dStr);
+	FiniteNumber a = FiniteNumber(aStr);
+	FiniteNumber b = FiniteNumber(bStr);
+	FiniteNumber c = FiniteNumber(cStr);
+	FiniteNumber d = FiniteNumber(dStr);
 	CHECK(a == b);
 	CHECK(a != c);
 	CHECK(a != d);
+	f.close();
 }
 
 TEST_CASE("Additional operators") {
-	FiniteNumber a = FiniteNumber(16, 17);
-	FiniteNumber b = FiniteNumber(14, 17);
+	std::ifstream f;
+	f.open("../Additional operators.txt");
+	std::string aStr, bStr;
+	getline(f, aStr);
+	getline(f, bStr);
+	FiniteNumber a = FiniteNumber(aStr);
+	FiniteNumber b = FiniteNumber(bStr);
 	CHECK(a > b);
 	CHECK(b < a);
 	CHECK(!(a < b));
 	CHECK(!(b > a));
+	f.close();
 }
 
 TEST_CASE("Modular Power") {
-	PositiveNumber a = PositiveNumber(81);
-	PositiveNumber b = PositiveNumber(6);
-	PositiveNumber c = PositiveNumber(12);
+	std::ifstream f;
+	f.open("../Modular Power.txt");
+	std::string aStr, bStr,cStr;
+	getline(f, aStr);
+	getline(f, bStr);
+	getline(f, cStr);
+	PositiveNumber a = PositiveNumber(aStr);
+	PositiveNumber b = PositiveNumber(bStr);
+	PositiveNumber c = PositiveNumber(cStr);
 	auto result = mod_power(a, b, c).toString();
 	CHECK("9" == result);
 }
 
 TEST_CASE("Miller-Rabin Primality Test") {
-	CHECK(!MillerRabin::miller_rabin(PositiveNumber("783")));
-	CHECK(!MillerRabin::miller_rabin(PositiveNumber("890")));
-	CHECK(!MillerRabin::miller_rabin(PositiveNumber("320")));
-	CHECK(!MillerRabin::miller_rabin(PositiveNumber("178")));
+	std::ifstream f;
+	f.open("../Miller-Rabin Primality Test.txt");
+	std::string aStr;
+	f >> aStr;
+	CHECK(!MillerRabin::miller_rabin(PositiveNumber(aStr)));
+	f >> aStr;
+	CHECK(!MillerRabin::miller_rabin(PositiveNumber(aStr)));
+	f >> aStr;
+	CHECK(!MillerRabin::miller_rabin(PositiveNumber(aStr)));
+	f >> aStr;
+	CHECK(!MillerRabin::miller_rabin(PositiveNumber(aStr)));
+	f >> aStr;
+	CHECK(MillerRabin::miller_rabin(PositiveNumber(aStr)));
+	f >> aStr;
+	CHECK(MillerRabin::miller_rabin(PositiveNumber(aStr)));
+	f >> aStr;
+	CHECK(MillerRabin::miller_rabin(PositiveNumber(aStr)));
+	f >> aStr;
+	CHECK(MillerRabin::miller_rabin(PositiveNumber(aStr)));
+	f >> aStr;
+	CHECK(MillerRabin::miller_rabin(PositiveNumber(aStr)));
+	f >> aStr;
+	CHECK(MillerRabin::miller_rabin(PositiveNumber(aStr)));
+	f >> aStr;
+	CHECK(MillerRabin::miller_rabin(PositiveNumber(aStr)));
+	f >> aStr;
+	CHECK(MillerRabin::miller_rabin(PositiveNumber(aStr)));
+	f >> aStr;
+	CHECK(MillerRabin::miller_rabin(PositiveNumber(aStr)));
+	f >> aStr;
+	CHECK(MillerRabin::miller_rabin(PositiveNumber(aStr)));
+	f >> aStr;
+	CHECK(MillerRabin::miller_rabin(PositiveNumber(aStr)));
+	f >> aStr;
+	CHECK(MillerRabin::miller_rabin(PositiveNumber(aStr)));
+	f >> aStr;
+	CHECK(MillerRabin::miller_rabin(PositiveNumber(aStr)));
+	f.close();
 
-	CHECK(MillerRabin::miller_rabin(PositiveNumber("2")));
-	CHECK(MillerRabin::miller_rabin(PositiveNumber("3")));
-	CHECK(MillerRabin::miller_rabin(PositiveNumber("5")));
-	CHECK(MillerRabin::miller_rabin(PositiveNumber("7")));
-	CHECK(MillerRabin::miller_rabin(PositiveNumber("11")));
-	CHECK(MillerRabin::miller_rabin(PositiveNumber("13")));
-	CHECK(MillerRabin::miller_rabin(PositiveNumber("17")));
-	CHECK(MillerRabin::miller_rabin(PositiveNumber("19")));
-	CHECK(MillerRabin::miller_rabin(PositiveNumber("23")));
-	CHECK(MillerRabin::miller_rabin(PositiveNumber("61")));
-	CHECK(MillerRabin::miller_rabin(PositiveNumber("617")));
-	CHECK(MillerRabin::miller_rabin(PositiveNumber("547")));
-	CHECK(MillerRabin::miller_rabin(PositiveNumber("941")));
 }
 
 TEST_CASE("Naive Factorization") {
-	PositiveNumber a1 = PositiveNumber("204562");
+	std::ifstream f;
+	f.open("../Naive Factorization.txt");
+	std::string a1Str,a2Str,a3Str;
+	f >> a1Str >> a2Str >> a3Str;
+	PositiveNumber a1 = PositiveNumber(a1Str);
 	std::map<PositiveNumber, int> result1 = map_factors(a1, naiveFactorization<PositiveNumber>);
 	std::map<PositiveNumber, int> toCheck1 = { std::pair<PositiveNumber,int>(PositiveNumber(2),1),
 		std::pair<PositiveNumber,int>(PositiveNumber(23),1),
@@ -462,7 +605,7 @@ TEST_CASE("Naive Factorization") {
 
 	CHECK(result1 == toCheck1);
 
-	PositiveNumber a2 = PositiveNumber("168");
+	PositiveNumber a2 = PositiveNumber(a2Str);
 	std::map<PositiveNumber, int> result2 = map_factors(a2, naiveFactorization<PositiveNumber>);
 	std::map<PositiveNumber, int> toCheck2 = { std::pair<PositiveNumber,int>(PositiveNumber(2),3),
 		std::pair<PositiveNumber,int>(PositiveNumber(3),1),
@@ -470,16 +613,21 @@ TEST_CASE("Naive Factorization") {
 
 	CHECK(result2 == toCheck2);
 
-	PositiveNumber a3 = PositiveNumber("43");
+	PositiveNumber a3 = PositiveNumber(a3Str);
 	std::map<PositiveNumber, int> result3 = map_factors(a3, naiveFactorization<PositiveNumber>);
 	std::map<PositiveNumber, int> toCheck3 = { std::pair<PositiveNumber,int>(PositiveNumber(43),1) };
 
 	CHECK(result3 == toCheck3);
+	f.close();
 
 }
 
 TEST_CASE("Pollard's Rho Factorization") {
-	PositiveNumber a1 = PositiveNumber("204562");
+	std::ifstream f;
+	f.open("../Pollard's Rho Factorization.txt");
+	std::string a1Str, a2Str, a3Str;
+	f >> a1Str >> a2Str >> a3Str;
+	PositiveNumber a1 = PositiveNumber(a1Str);
 	std::map<PositiveNumber,int> result1 = map_factors(a1, PollardFactorization::pollardRho<PositiveNumber>);
 	std::map<PositiveNumber, int> toCheck1 = {std::pair<PositiveNumber,int>(PositiveNumber(2),1),
 		std::pair<PositiveNumber,int>(PositiveNumber(23),1),
@@ -487,7 +635,7 @@ TEST_CASE("Pollard's Rho Factorization") {
 	
 	CHECK(result1 == toCheck1);
 
-	PositiveNumber a2 = PositiveNumber("168");
+	PositiveNumber a2 = PositiveNumber(a2Str);
 	std::map<PositiveNumber, int> result2 = map_factors(a2, PollardFactorization::pollardRho<PositiveNumber>);
 	std::map<PositiveNumber, int> toCheck2 = { std::pair<PositiveNumber,int>(PositiveNumber(2),3),
 		std::pair<PositiveNumber,int>(PositiveNumber(3),1),
@@ -495,10 +643,65 @@ TEST_CASE("Pollard's Rho Factorization") {
 
 	CHECK(result2 == toCheck2);
 
-	PositiveNumber a3 = PositiveNumber("43");
+	PositiveNumber a3 = PositiveNumber(a3Str);
 	std::map<PositiveNumber, int> result3 = map_factors(a3, PollardFactorization::pollardRho<PositiveNumber>);
 	std::map<PositiveNumber, int> toCheck3 = { std::pair<PositiveNumber,int>(PositiveNumber(43),1) };
 
 	CHECK(result3 == toCheck3);
+	f.close();
+}
 
+TEST_CASE("Euler For Prime Values")
+{
+	std::ifstream f;
+	f.open("../Euler For Prime Values.txt");
+	std::string value1Str, value2Str, degree2Str;
+	f >> value1Str >> value2Str >> degree2Str;
+
+	PositiveNumber value1(value1Str);
+	PositiveNumber answer1("1");
+
+	PositiveNumber value2(value2Str);
+	PositiveNumber degree2(degree2Str);
+	PositiveNumber answer2("11638");
+
+	CHECK(EulerForPrimeValues(value1) == answer1);
+	CHECK(EulerForPrimeValues(value2, degree2) == answer2);
+	f.close();
+}
+
+TEST_CASE("Euler")
+{
+	std::ifstream f;
+	f.open("../Euler.txt");
+	std::string value1Str, value2Str, value3Str, value4Str;
+	f >> value1Str >> value2Str >> value3Str >> value4Str;
+	PositiveNumber value1(value1Str);
+	PositiveNumber value2(value2Str);
+	PositiveNumber value3(value3Str);
+	PositiveNumber value4(value4Str);
+
+	CHECK(Euler(value1).toString() == "12");
+	CHECK(Euler(value2).toString() == "4027392");
+	CHECK(Euler(value3).toString() == "32");
+	CHECK(Euler(value4).toString() == "1");
+	f.close();
+}
+
+TEST_CASE("Carmichel")
+{
+	std::ifstream f;
+	f.open("../Carmichel.txt");
+	std::string value1Str, value2Str, value3Str, value4Str;
+	f >> value1Str >> value2Str >> value3Str >> value4Str;
+	PositiveNumber value1("9");
+	PositiveNumber value2("32");
+	PositiveNumber value3("36");
+	PositiveNumber value4("169");
+
+	CHECK(Carmichel(value1).toString() == "6");
+	CHECK(Carmichel(value2).toString() == "8");
+	CHECK(Carmichel(value3).toString() == "6");
+	CHECK(Carmichel(value4).toString() == "156");
+	f.close();
 }

@@ -137,13 +137,14 @@ public:
 		std::rotate(digits.begin(), digits.begin() + 1, digits.end());
 		digits[0] = 0;
 	}
-	//Implemented by Vlad Avramenko
+	//Implemented by Vlad Avramenko, edited by V.Horbanov
 	//Division for PositiveNumbers
-	PositiveNumber operator/(const PositiveNumber& other) const {
-		return divide(*this, other);
+
+	PositiveNumber operator/(const PositiveNumber& other) const{
+		return divide(const_cast<PositiveNumber&>(*this), const_cast<PositiveNumber&>(other));
 	}
 
-	PositiveNumber divide(const PositiveNumber& n1, const PositiveNumber& n2) const {
+	PositiveNumber divide(PositiveNumber& n1, PositiveNumber& n2) const{
 		if (n1 < n2) {
 			return PositiveNumber("0");
 		}
@@ -413,6 +414,12 @@ public:
 			}
 		}
 		return n1;
+	}
+	//Implemented by A.Volyk
+	static PositiveNumber LCM(PositiveNumber n1, PositiveNumber n2) {
+		PositiveNumber gcd = GCD(n1, n2);
+		PositiveNumber res = (n1 * n2) / gcd;
+		return res;
 	}
 	/*
 	* Shifting number left or right (% 10)
