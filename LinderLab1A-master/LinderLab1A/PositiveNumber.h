@@ -404,6 +404,12 @@ public:
 		}
 		return n1;
 	}
+	//Implemented by A.Volyk
+	static PositiveNumber LCM(PositiveNumber n1, PositiveNumber n2) {
+		PositiveNumber gcd = GCD(n1, n2);
+		PositiveNumber res = (n1 * n2) / gcd;
+		return res;
+	}
 	/*
 	* Shifting number left or right (% 10)
 	* Examples: 

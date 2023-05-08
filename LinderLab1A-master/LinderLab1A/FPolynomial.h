@@ -54,9 +54,13 @@ public:
 		return f.getP();
 	}
 
-	FPolynomial Normalise() {
-		// TODO:
-		return *this;
+	FPolynomial Normalized() const {
+		FPolynomial fpol = *this;
+		assert(fpol.coefficients.size() > 0);
+		auto leading = fpol.coefficients.front().getCoefficient();
+		for (auto& coef : fpol.coefficients)
+			coef.setCoefficient(coef.getCoefficient() / leading);
+		return fpol;
 	}
 
 	FPolynomial operator+(const FPolynomial& right) const {
@@ -277,4 +281,28 @@ public:
 		}
 	}
 
+
+	FPolynomial fastExponentiation(PositiveNumber degree)
+	{
+		std::string binDegree = degree.bitsReverse();
+		FPolynomial answer("1",f.getP());
+		FPolynomial temp(*this);
+
+		const int countOfIterations = binDegree.size() - 1;
+
+		for (int i = countOfIterations; i > 0; i--)
+		{
+			if (binDegree[i] == '1')
+			{
+				answer = answer * temp;
+			}
+
+			answer = answer * answer;
+		}
+
+		if (binDegree[0] == '1')
+			answer = answer * temp;
+
+		return answer;
+	}
 };

@@ -80,6 +80,13 @@ public:
 		}
 	}
 
+	PositiveNumber degree() const {
+		if (coefficients.empty()) {
+			return PositiveNumber("0");
+		}
+		return coefficients.front().getDegree();
+	}
+
 
 
 	//Returns derivative of the polynomial
