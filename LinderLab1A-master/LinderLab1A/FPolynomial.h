@@ -91,8 +91,11 @@ public:
 		if (x.getP() != this->f.getP()) {
 			return FiniteNumber("0"); //illegal arguments
 		}
+
 		Exponentiation exp;
 		FiniteNumber zero = FiniteNumber("0");
+		if (coefficients.empty())
+			return zero;
 		FiniteNumber current = FiniteNumber();
 		PositiveNumber one = PositiveNumber("1");
 		auto prevElement = PolynomialElement<FiniteNumber>(FiniteNumber("0"), coefficients.front().getDegree() + PositiveNumber("1"));
@@ -104,6 +107,8 @@ public:
 			current = (x * current) + element.getCoefficient();
 			prevElement = element;
 		}
+		PositiveNumber n = coefficients.back().getDegree();
+		current = current * exp.fastExponentiation(x, n);
 		return current;
 	}
 

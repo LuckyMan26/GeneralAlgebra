@@ -104,6 +104,8 @@ public:
 	SignedNumber valueAt(SignedNumber x) {
 		Exponentiation exp;
 		SignedNumber zero = SignedNumber("0");
+		if (coefficients.empty())
+			return zero;
 		SignedNumber current = SignedNumber();
 		auto prevElement = PolynomialElement<SignedNumber>(SignedNumber("0"), coefficients.front().getDegree() + PositiveNumber("1"));
 		for (auto element : coefficients) {
@@ -113,6 +115,8 @@ public:
 			current = (x * current) + element.getCoefficient();
 			prevElement = element;
 		}
+		PositiveNumber n = coefficients.back().getDegree();
+		current = current * exp.fastExponentiation(x, n);
 		return current;
 	}
 

@@ -18,7 +18,7 @@ TEST_CASE("Value at X") {
 	RPolynomial polinomial = RPolynomial(polinomial1Str);
 	RPolynomial polinomial2 = RPolynomial(polinomial2Str);
 	RPolynomial polinomial3 = RPolynomial(polinomial3Str);
-	CHECK(polinomial.valueAt(SignedNumber("2")).toString() == "-99");
+	CHECK(polinomial.valueAt(SignedNumber("6")).toString() == "7776");
 	CHECK(polinomial2.valueAt(SignedNumber("3")).toString() == "57835");
 	CHECK(polinomial3.valueAt(SignedNumber("10")).toString() == "6");
 	f.close();
