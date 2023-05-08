@@ -33,3 +33,4 @@ HEADERS += \
 FORMS += \
     FiniteFieldWindow.ui \
     mainwindow.ui
+

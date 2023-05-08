@@ -167,6 +167,7 @@ TEST_CASE("Multiplication")
 TEST_CASE("Division")
 {
 
+
 	std::ifstream f;
 	f.open("../RPolynomial/Division.txt");
 	std::string polinomial1Str, polinomial2Str;
@@ -253,7 +254,9 @@ TEST_CASE("GCD")
 
 	auto res = RPolynomial::GCD(pol1, pol2);
 	CHECK(res.toString() == "x^2+4x-6");
-  	f >> polinomial1Str >> polinomial2Str;
+
+	f >> polinomial1Str >> polinomial2Str;
+
 	pol1 = RPolynomial(polinomial1Str),
 	pol2 = RPolynomial(polinomial2Str);
 	res = RPolynomial::GCD(pol1, pol2);
@@ -274,6 +277,7 @@ TEST_CASE("GCD")
 	res = RPolynomial::GCD(pol1, pol2);
 	CHECK(res.toString() == "x+7");
 	f.close();
+
 
 }
 
@@ -305,5 +309,6 @@ TEST_CASE("Cyclotomic") {
 	test = RPolynomial::cyclotomic(PositiveNumber("105"));
 	DEBUG = test.toString();
 	CHECK(test.toString() == "x^48+x^47+x^46-x^43-x^42-2x^41-x^40-x^39+x^36+x^35+x^34+x^33+x^32+x^31-x^28-x^26-x^24-x^22-x^20+x^17+x^16+x^15+x^14+x^13+x^12-x^9-x^8-2x^7-x^6-x^5+x^2+x+1");
+
 
 }

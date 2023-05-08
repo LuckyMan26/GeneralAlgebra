@@ -202,12 +202,14 @@ TEST_CASE("Finite numbers") {
 	CHECK(fin1.toString() == "6");
 	fin3 = fin1 * fin2;
 
+
 	CHECK(fin3.toString() == "6");
 	FiniteNumber orig = FiniteNumber("x10 7");
 
 	CHECK(fin3.toString() == "4");
 	getline(f, origStr);
 	FiniteNumber orig = FiniteNumber(origStr);
+
 
 	FiniteNumber inv = orig.inverse();
 	CHECK(inv.toString() == "3");
@@ -306,6 +308,7 @@ TEST_CASE("Exponent") {
 	power = PositiveNumber(powerStr);
 	result = exp.montgomeryExponention(base, power);
 
+
 	CHECK(result.toString() == "8");
 
 	getline(f, baseStr);
@@ -328,6 +331,8 @@ TEST_CASE("Exponent") {
 	//CHECK(exp.slowExponention(base, power).toString() == expected);
 	//end = std::chrono::steady_clock::now();
 	//std::cout << "Slow = " << std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count() << " ms" << std::endl;
+	f.close();
+
 
 
 	base = FiniteNumber("x5 9");
@@ -351,6 +356,7 @@ TEST_CASE("Exponent") {
 	CHECK(res.toString() == "0");
 
 	f.close();
+
 
 }
 

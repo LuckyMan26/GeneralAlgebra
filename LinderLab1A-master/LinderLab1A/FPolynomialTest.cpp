@@ -56,12 +56,14 @@ TEST_SUITE("FPolynomial")
 		CHECK(sub.toString() == "4x^10+x^5+4x^4+4x^3+2x^2+x");
 		f >> polinomial1Str >> polinomial2Str;
 
+    fpol1 = FPolynomial(polinomial1Str, PositiveNumber(mod));
+		fpol2 = FPolynomial(polinomial2Str, PositiveNumber(mod));
 
-		/*fpol1 = FPolynomial("x^10-5x^5+1", PositiveNumber("5"));
-		fpol2 = FPolynomial("x^5-4x^4-9x^3+2x^2-x-1", PositiveNumber("5"));
+
+		
 
 		sub = fpol1 - fpol2;
-		CHECK(sub.toString() == "x^10+4x^5+4x^4+4x^3+3x^2+x+3");*/
+		CHECK(sub.toString() == "x^10+4x^5+4x^4+4x^3+3x^2+x+3");
 		fpol1 = FPolynomial("x^10-5x^5+1", PositiveNumber("5"));
 		fpol2 = FPolynomial("x^5-4x^4-4x^3+2x^2-x-1", PositiveNumber("5"));
 		auto D = fpol2.toString();
