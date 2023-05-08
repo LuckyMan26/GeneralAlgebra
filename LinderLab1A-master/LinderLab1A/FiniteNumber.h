@@ -99,19 +99,50 @@ public:
 		return *this;
 	}
 	friend FiniteNumber operator-(FiniteNumber left, const FiniteNumber& n) {
+		bool is_greater = true;
+		FiniteNumber n_copy = n;
+		if (left < n_copy) {
+			is_greater = false;
+		}
 		left.substract(n);
-		left.toFieldSize();
-		return left;
+		if (is_greater) {
+			left.toFieldSize();
+			return left;
+		}
+		else {
+			return FiniteNumber(left.getP() - left, left.getP());
+		}
+		
 	}
 	FiniteNumber& operator-=(const FiniteNumber& n) {
-		this->substract(n);
+		/*this->substract(n);
 		this->toFieldSize();
-		return *this;
+		return *this;*/
+		bool is_greater = true;
+		FiniteNumber n_copy = n;
+		if (*this < n_copy) {
+			is_greater = false;
+		}
+		this->substract(n);
+		if (is_greater) {
+			this->toFieldSize();
+			return *this;
+		}
+		else {
+			*this = FiniteNumber(this->getP() - *this, this->getP());
+			return *this;
+		}
 	}
 
 	friend FiniteNumber operator/(FiniteNumber left, const FiniteNumber& n) {
 		return left.divide(n);
 	}
+
+	//friend FiniteNumber operator%(const FiniteNumber& n1, const FiniteNumber& n2) {
+	//	assert(n1.f.getP() == n2.f.getP());
+	//	return n1 - (n2 * (n1 / n2));
+	//}
+
 	bool operator>(FiniteNumber& n) const {
 		PositiveNumber p1 = getP();
 		PositiveNumber p2 = n.getP();

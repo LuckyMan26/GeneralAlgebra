@@ -20,14 +20,21 @@ protected:
 	/*Removes all elements, where coefficient equals zero*/
 	virtual void trim() {
 		std::list<PolynomialElement<TCoefficient>> newList;
-		TCoefficient zero = genZeroCoefficient();
 
 		for (auto element : coefficients) {
-			if (element.getCoefficient() == zero)
+			if (element.getCoefficient().isZero())
 				continue;
 			newList.push_back(element);
 		}
 		this->coefficients = newList;
+	}
+
+
+	PositiveNumber degree() const {
+		if (coefficients.empty()) {
+			return PositiveNumber("0");
+		}
+		return coefficients.front().getDegree();
 	}
 
 	static std::string replaceAll(std::string origin, std::string target, std::string replacement) {

@@ -187,7 +187,7 @@ public:
 	}
 
 	PositiveNumber remainder(const PositiveNumber& n1, const PositiveNumber& n2) const{
-		PositiveNumber rem((n2 * (n1 / n2)));
+		/*PositiveNumber rem((n2 * (n1 / n2)));*/
 		return n1 - (n2 * (n1 / n2));
 	}
 
@@ -197,31 +197,20 @@ public:
 	//By V. Avramenko
 	//Inefficient, did not find a way of getting square root (efficiently) in long arithmetics
 	bool is_prime() {
-		PositiveNumber one = PositiveNumber("1");
 		PositiveNumber two = PositiveNumber("2");
 		PositiveNumber zero = PositiveNumber("0");
-		if (remainder(*this, two) == zero) {
-			return false;
-		}
-		PositiveNumber half = *this / two;
-		for (PositiveNumber i = PositiveNumber("3"); i < half; i += one) {
+		PositiveNumber one = PositiveNumber("1");
+		for (PositiveNumber i = two; i < *this; i += 1) {
 			if (remainder(*this, i) == zero) {
 				return false;
+			}
+			if (i * i >= *this) {
+				break;
 			}
 		}
 		return true;
 	}
-	//By V.Avramenko
-	bool is_even() {
-		PositiveNumber two = PositiveNumber("2");
-		PositiveNumber zero = PositiveNumber("0");
-		if (remainder(*this, two) == zero) {
-			return true;
-		}
-		else {
-			return false;
-		}
-	}
+
 
 	bool operator>(const PositiveNumber& n) const {
 		if (digits.size() > n.digits.size())

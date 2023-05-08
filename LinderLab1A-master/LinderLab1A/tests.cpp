@@ -197,13 +197,18 @@ TEST_CASE("Finite numbers") {
 	fin1 += fin2;
 	CHECK(fin1.toString() == "2");
 	fin3 = fin1 - fin2;
-	CHECK(fin3.toString() == "4");
+	CHECK(fin3.toString() == "6");
 	fin1 -= fin2;
-	CHECK(fin1.toString() == "4");
+	CHECK(fin1.toString() == "6");
 	fin3 = fin1 * fin2;
+
+	CHECK(fin3.toString() == "6");
+	FiniteNumber orig = FiniteNumber("x10 7");
+
 	CHECK(fin3.toString() == "4");
 	getline(f, origStr);
 	FiniteNumber orig = FiniteNumber(origStr);
+
 	FiniteNumber inv = orig.inverse();
 	CHECK(inv.toString() == "3");
 	getline(f, fin1Str);
@@ -289,17 +294,18 @@ TEST_CASE("Exponent") {
 	toMultiply = FiniteNumber(toMultiplyStr);
 	toMultiply2 = FiniteNumber(toMultiply2Str);
 	CHECK(exp.montgomeryMultiplication(toMultiply, toMultiply2).toString() == "58");
-	exp.montgomeryMultiplicationDeprecated(toMultiply, toMultiply2).toString();
 
 	FiniteNumber base = FiniteNumber("x257 30");
 	PositiveNumber power = PositiveNumber("5");
-	result = exp.montgomeryExponention(base, power);
+	result = exp.montgomeryExponentiation(base, power);
 	CHECK(result.toString() == "136");
+
 	getline(f, baseStr);
 	getline(f, powerStr);
 	base = FiniteNumber(baseStr);
 	power = PositiveNumber(powerStr);
 	result = exp.montgomeryExponention(base, power);
+
 	CHECK(result.toString() == "8");
 
 	getline(f, baseStr);
@@ -309,12 +315,12 @@ TEST_CASE("Exponent") {
 	std::string expected = "839534";
 	//TIMING
 	std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
-	CHECK(exp.montgomeryExponention(base, power).toString() == expected);
+	CHECK(exp.montgomeryExponentiation(base, power).toString() == expected);
 	std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
 	//std::cout << "Montgomery = " << std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count() << " ms" << std::endl;
 
 	begin = std::chrono::steady_clock::now();
-	CHECK(exp.fastExponention(base, power).toString() == expected);
+	CHECK(exp.fastExponentiation(base, power).toString() == expected);
 	end = std::chrono::steady_clock::now();
 	//std::cout << "Fast = " << std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count() << " ms" << std::endl;
 
@@ -322,7 +328,30 @@ TEST_CASE("Exponent") {
 	//CHECK(exp.slowExponention(base, power).toString() == expected);
 	//end = std::chrono::steady_clock::now();
 	//std::cout << "Slow = " << std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count() << " ms" << std::endl;
+
+
+	base = FiniteNumber("x5 9");
+	power = PositiveNumber("1");
+	FiniteNumber res = exp.montgomeryExponentiation(base, power);
+	CHECK(res.toString() == "4");
+
+	base = FiniteNumber("x2 1");
+	power = PositiveNumber("8");
+	res = exp.montgomeryExponentiation(base, power);
+	CHECK(res.toString() == "1");
+
+	base = FiniteNumber("x2 0");
+	power = PositiveNumber("0");
+	res = exp.montgomeryExponentiation(base, power);
+	CHECK(res.toString() == "1");
+
+	base = FiniteNumber("x2 0");
+	power = PositiveNumber("100");
+	res = exp.montgomeryExponentiation(base, power);
+	CHECK(res.toString() == "0");
+
 	f.close();
+
 }
 
 TEST_CASE("Exponentiation on random values") {
@@ -336,7 +365,7 @@ TEST_CASE("Exponentiation on random values") {
 		int b = powDistr(generator);
 		FiniteNumber aNum = FiniteNumber(std::to_string(a), PositiveNumber("197"));
 		PositiveNumber bNum = PositiveNumber(std::to_string(b));
-		CHECK(exponent.montgomeryExponention(aNum, bNum).toString() == exponent.slowExponention(aNum, bNum).toString());
+		CHECK(exponent.montgomeryExponentiation(aNum, bNum).toString() == exponent.slowExponentiation(aNum, bNum).toString());
 	}
 }
 //Tests for bits function
