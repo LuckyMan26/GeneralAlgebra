@@ -21,6 +21,8 @@ private slots:
 
     void on_FiniteFieldBtn_clicked();
 
+    void on_PFBtn_clicked();
+
 private:
     Ui::MainWindow *ui;
 

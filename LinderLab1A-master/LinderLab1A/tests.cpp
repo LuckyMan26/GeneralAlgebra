@@ -203,10 +203,9 @@ TEST_CASE("Finite numbers") {
 	fin3 = fin1 * fin2;
 
 
-	CHECK(fin3.toString() == "6");
-	FiniteNumber orig = FiniteNumber("x10 7");
+	
 
-	CHECK(fin3.toString() == "4");
+	CHECK(fin3.toString() == "6");
 	getline(f, origStr);
 	FiniteNumber orig = FiniteNumber(origStr);
 
@@ -306,7 +305,7 @@ TEST_CASE("Exponent") {
 	getline(f, powerStr);
 	base = FiniteNumber(baseStr);
 	power = PositiveNumber(powerStr);
-	result = exp.montgomeryExponention(base, power);
+	result = exp.montgomeryExponentiation(base, power);
 
 
 	CHECK(result.toString() == "8");

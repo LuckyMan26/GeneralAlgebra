@@ -56,28 +56,15 @@ TEST_SUITE("FPolynomial")
 		CHECK(sub.toString() == "4x^10+x^5+4x^4+4x^3+2x^2+x");
 		f >> polinomial1Str >> polinomial2Str;
 
-    fpol1 = FPolynomial(polinomial1Str, PositiveNumber(mod));
+		fpol1 = FPolynomial(polinomial1Str, PositiveNumber(mod));
 		fpol2 = FPolynomial(polinomial2Str, PositiveNumber(mod));
 
-
-		
-
-		sub = fpol1 - fpol2;
-		CHECK(sub.toString() == "x^10+4x^5+4x^4+4x^3+3x^2+x+3");
-		fpol1 = FPolynomial("x^10-5x^5+1", PositiveNumber("5"));
-		fpol2 = FPolynomial("x^5-4x^4-4x^3+2x^2-x-1", PositiveNumber("5"));
 		auto D = fpol2.toString();
 
 		sub = fpol1 - fpol2;
 		D = sub.toString();
 		CHECK(sub.toString() == "x^10+4x^5+4x^4+4x^3+3x^2+x+2");
 
-		fpol1 = FPolynomial(polinomial1Str, PositiveNumber(mod));
-		fpol2 = FPolynomial(polinomial2Str, PositiveNumber(mod));
-
-		sub = fpol1 - fpol2;
-		CHECK(sub.toString() == "x^10+4x^5+4x^4+4x^3+3x^2+x+3");
-		f.close();
 	}
 
 	TEST_CASE("Multiplication")

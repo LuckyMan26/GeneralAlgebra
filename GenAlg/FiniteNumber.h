@@ -2,6 +2,8 @@
 #include "PositiveNumber.h"
 #include <cassert>
 #include "FiniteField.h"
+#include "SignedNumber.h"
+
 //Created by M.Tyshchenko
 //Modified by A.Volyk
 //Modified by V.Horbanov
@@ -357,12 +359,11 @@ public:
 		PositiveNumber two(2);
 		PositiveNumber zero("0");
 		PositiveNumber four("4");
-		
 		FiniteNumber zeroFinite("0", f.getP());
 		FiniteNumber oneFinite("1", f.getP());
 		int s = 0;
 		FiniteNumber temp(f.getP() - 1, f.getP());
-		while ((q % two).isZero()) {
+		while ((q % two).isZero() || (q % two) == zero) {
 			q = q / two;
 			s += 1;
 		}
@@ -385,8 +386,7 @@ public:
 					break;
 				}
 			}
-		
-			FiniteNumber b = c.power_mod(n-i-1);
+			FiniteNumber b = c.power_mod(n - i - 1);
 			r = (r * b);
 			c = (b * b);
 			t = (t * c);

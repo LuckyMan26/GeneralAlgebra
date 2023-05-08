@@ -5,6 +5,9 @@
 #include "Pollard.h"
 #include "Euler.h"
 #include <QLabel>
+#include <regex>
+#include "CalculationOfSquareRoot.h"
+
 FiniteFieldWindow::FiniteFieldWindow(QWidget *parent):
     QDialog(parent),
     ui(new Ui::FiniteFieldWindow)
@@ -16,9 +19,9 @@ FiniteFieldWindow::FiniteFieldWindow(QWidget *parent):
     MultiplicationBtn = new QRadioButton("Множення", this);
     InverseBtn = new QRadioButton("Обернений", this);
     DividingBtn = new QRadioButton("Ділення", this);
-    PowerBtn = new QRadioButton("Додавання", this);
-    FactorizationNaive = new QRadioButton("Віднімання", this);
-    FactorizationRho = new QRadioButton("Множення", this);
+    PowerBtn = new QRadioButton("Степінь", this);
+    FactorizationNaive = new QRadioButton("Факторизація(наївний алгоритм)", this);
+    FactorizationRho = new QRadioButton("Факторизація(ефективний алгоритм)", this);
     SquareRoot = new QRadioButton("Квадратний корінь", this);
     Logarithm = new QRadioButton("Дискретний Логарифм", this);
     Order = new QRadioButton("Порядок Елемента", this);
@@ -59,7 +62,31 @@ FiniteFieldWindow::FiniteFieldWindow(QWidget *parent):
     ui->calculateLayout->addWidget(calculateBtn);
     connect(calculateBtn,&QPushButton::clicked,this,&FiniteFieldWindow::proccesOperation);
 }
+bool FiniteFieldWindow::isAlphaNumeric(std::string str) {
+
+    for(int i=0;i<str.length();i++){
+        if(!(str[i]>='0' && str[i]<='9')){
+            return false;
+        }
+    }
+    return true;
+}
+bool FiniteFieldWindow::processError(QString str){
+    if(str.toInt() < 0){
+        ui->result->append("Field size < 0");
+        return false;
+    }
+    if(!isAlphaNumeric(str.toStdString())){
+        ui->result->append("Fields size contains non-numerical values");
+        return false;
+    }
+    return true;
+}
 void FiniteFieldWindow::proccesOperation(){
+    if(! processError(FieldModule->text()) || !processError(FirstNumber->text()) || !processError(SecondNumber->text())){
+        return;
+    }
+
     if(AdditionBtn->isChecked()){
 
         FiniteNumber num1(FirstNumber->text().toStdString(),FieldModule->text().toStdString());
@@ -83,15 +110,24 @@ void FiniteFieldWindow::proccesOperation(){
     }
     else if(InverseBtn->isChecked()){
         FiniteNumber one("1",FieldModule->text().toStdString());
+        FiniteNumber zero("0",FieldModule->text().toStdString());
         FiniteNumber num1(FirstNumber->text().toStdString(),FieldModule->text().toStdString());
-        FiniteNumber num2(SecondNumber->text().toStdString(),FieldModule->text().toStdString());
+        //FiniteNumber num2(SecondNumber->text().toStdString(),FieldModule->text().toStdString());
         FiniteNumber res = one / num1;
-        ui->result->append("1/"+ FirstNumber->text() + "=" + QString::fromStdString(res.toString()) + "(mod " + QString::fromStdString(FieldModule->text().toStdString())+")");
+        if(num1!=zero){
+            ui->result->append("No inverse element for 0");
+        }
+        else
+            ui->result->append("1/"+ FirstNumber->text() + "=" + QString::fromStdString(res.toString()) + "(mod " + QString::fromStdString(FieldModule->text().toStdString())+")");
     }
     else if(DividingBtn->isChecked()){
 
         FiniteNumber num1(FirstNumber->text().toStdString(),FieldModule->text().toStdString());
         FiniteNumber num2(SecondNumber->text().toStdString(),FieldModule->text().toStdString());
+        FiniteNumber zero("0",FieldModule->text().toStdString());
+        if(num2!=zero){
+            ui->result->append("No inverse element for 0");
+        }
         FiniteNumber res = num1 / num2;
         ui->result->append(FirstNumber->text() + "/" + SecondNumber->text() + "=" + QString::fromStdString(res.toString()) + "(mod " + QString::fromStdString(FieldModule->text().toStdString())+")");
     }
@@ -100,7 +136,7 @@ void FiniteFieldWindow::proccesOperation(){
         FiniteNumber num1(FirstNumber->text().toStdString(),FieldModule->text().toStdString());
         PositiveNumber num2(SecondNumber->text().toStdString());
         Exponentiation exp;
-        FiniteNumber res = exp.montgomeryExponention(num1,num2);
+        FiniteNumber res = exp.montgomeryExponentiation(num1,num2);
         ui->result->append(FirstNumber->text() + "^" + SecondNumber->text() + "=" + QString::fromStdString(res.toString()) + "(mod " + QString::fromStdString(FieldModule->text().toStdString())+")");
     }
     else if(FactorizationNaive->isChecked()){
@@ -108,37 +144,43 @@ void FiniteFieldWindow::proccesOperation(){
         PositiveNumber num1(FirstNumber->text().toStdString());
         std::map<PositiveNumber, int> result = map_factors(num1, naiveFactorization<PositiveNumber>);
         auto it = result.begin();
-         ui->result->append(QString::fromStdString(it->first.toString()) + "^" + QString::number(it->second));
+        std::string string  = (it->first.toString()) + "^" + std::to_string(it->second);
         it++;
-         for(;it!=result.end();++it){
-            ui->result->append("*" + QString::fromStdString(it->first.toString()) + "^" + QString::number(it->second));
+        for(;it!=result.end();++it) {
+            string+= "*" + (it->first.toString()) + "^" + std::to_string(it->second);
+
         }
+
+        ui->result->setPlainText(QString::fromStdString(string));
     }
     else if(FactorizationRho->isChecked()){
 
         PositiveNumber num1(FirstNumber->text().toStdString());
         std::map<PositiveNumber,int> result = map_factors(num1, PollardFactorization::pollardRho<PositiveNumber>);
         auto it = result.begin();
-        ui->result->append(QString::fromStdString(it->first.toString()) + "^" + QString::number(it->second));
+        std::string string  = (it->first.toString()) + "^" + std::to_string(it->second);
         it++;
-        for(;it!=result.end();++it){
-            ui->result->append("*" + QString::fromStdString(it->first.toString()) + "^" + QString::number(it->second));
+        for(;it!=result.end();++it) {
+            string+= "*" + (it->first.toString()) + "^" + std::to_string(it->second);
+
         }
+
+        ui->result->setPlainText(QString::fromStdString(string));
     }
     else if(SquareRoot->isChecked()){
 
 
-        FiniteNumber num1(FirstNumber->text().toStdString(),FieldModule->text().toStdString());
-        FiniteNumber one("1", FieldModule->text().toStdString());
+        long long num1(FirstNumber->text().toInt());
+        int p = FieldModule->text().toInt();
 
-        FiniteNumber res = num1.tonelli_shanks();
-        FiniteNumber x(num1.power_mod((stoi(FieldModule->text().toStdString()) - 1) / 2));
-        if(x!=one){
+        if (CalculationOfSquareRoot::power_mod(num1, (p - 1) / 2, p) != 1) {
             ui->result->append("a is not a quadratic residue mod p");
-
         }
-        else
-            ui->result->append("Square root: "+ FirstNumber->text() + "=" + QString::fromStdString(res.toString()) + "(mod " + QString::fromStdString(FieldModule->text().toStdString())+")");
+
+        else{
+        long long root1 = CalculationOfSquareRoot::tonelli_shanks(num1, p);
+            ui->result->append("Square root: "+ FirstNumber->text() + "=" + QString::fromStdString(to_string(root1)) + "(mod " + QString::fromStdString(FieldModule->text().toStdString())+")");
+        }
     }
     else if(Logarithm->isChecked()){
 

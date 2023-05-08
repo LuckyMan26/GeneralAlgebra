@@ -10,8 +10,10 @@ CONFIG += c++20
 
 SOURCES += \
     finitefieldwindow.cpp \
+    fpolinomialwindow.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    prwindow.cpp
 
 HEADERS += \
     ../LinderLab1A-master/LinderLab1A/CalculationOfSquareRoot.h \
@@ -28,9 +30,15 @@ HEADERS += \
     ../LinderLab1A-master/LinderLab1A/RPolynomial.h \
     ../LinderLab1A-master/LinderLab1A/SignedNumber.h \
     finitefieldwindow.h \
-    mainwindow.h
+    fpolinomialwindow.h \
+    mainwindow.h \
+    prwindow.h
 
 FORMS += \
+    FPolynomialWindow.ui \
     FiniteFieldWindow.ui \
+    PRWindow.ui \
     mainwindow.ui
+
+
 

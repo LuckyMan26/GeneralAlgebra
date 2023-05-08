@@ -42,6 +42,8 @@ private:
     QLineEdit* SecondNumber;
     QLineEdit* Power;
     QLineEdit* FieldModule;
+    bool processError(QString);
+    bool isAlphaNumeric(std::string str);
 };
 
 #endif // FINITEFIELDWINDOW_H
