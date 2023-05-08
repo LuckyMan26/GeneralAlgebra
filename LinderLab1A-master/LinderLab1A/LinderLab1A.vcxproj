@@ -153,6 +153,31 @@
     <ClCompile Include="RPolynomialTest.cpp" />
     <ClCompile Include="tests.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\Additional operators test.txt" />
+    <Text Include="..\Additional operators.txt" />
+    <Text Include="..\Carmichel.txt" />
+    <Text Include="..\Division Test for PositiveNumber.txt" />
+    <Text Include="..\Division Test for SignedNumber.txt" />
+    <Text Include="..\Euler For Prime Values.txt" />
+    <Text Include="..\Euler.txt" />
+    <Text Include="..\Exponent Test.txt" />
+    <Text Include="..\Finite numbers Tests.txt" />
+    <Text Include="..\Miller-Rabin Primality Test.txt" />
+    <Text Include="..\Modular Power.txt" />
+    <Text Include="..\Naive Factorization.txt" />
+    <Text Include="..\Pollard%27s Rho Factorization.txt" />
+    <Text Include="..\Positive numbers Test.txt" />
+    <Text Include="..\Remainder Test for Positive Numbers.txt" />
+    <Text Include="..\Remainder Test for Signed Numbers.txt" />
+    <Text Include="..\Signed numbers Test.txt" />
+    <Text Include="..\Test binary form.txt" />
+    <Text Include="..\Test Integer Constuctors.txt" />
+    <Text Include="..\Test zero.txt" />
+    <Text Include="..\TestNonQuadraticPositive.txt" />
+    <Text Include="..\TestQuadraticResidue1.txt" />
+    <Text Include="..\TestQuadraticResidue2.txt" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
