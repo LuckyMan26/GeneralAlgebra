@@ -2,6 +2,8 @@
 #include "PositiveNumber.h"
 #include <cassert>
 #include "FiniteField.h"
+#include "SignedNumber.h"
+
 //Created by M.Tyshchenko
 //Modified by A.Volyk
 //Modified by V.Horbanov
@@ -82,7 +84,6 @@ public:
 		left.toFieldSize();
 		return left;
 	}
-
 	FiniteNumber& operator+=(const FiniteNumber& n) {
 		this->addTo(n);
 		this->toFieldSize();
@@ -115,7 +116,6 @@ public:
 		}
 		
 	}
-
 	FiniteNumber& operator-=(const FiniteNumber& n) {
 		/*this->substract(n);
 		this->toFieldSize();
@@ -137,14 +137,7 @@ public:
 	}
 
 	friend FiniteNumber operator/(FiniteNumber left, const FiniteNumber& n) {
-		left.divideBy(n);
-		left.toFieldSize();
-		return left;
-	}
-
-
-	bool operator==(const FiniteNumber& n) const {
-		return this->equals(const_cast<FiniteNumber&>(n)) && this->getP().equals(const_cast<FiniteNumber&>(n).getP());
+		return left.divide(n);
 	}
 
 	//friend FiniteNumber operator%(const FiniteNumber& n1, const FiniteNumber& n2) {
@@ -197,15 +190,6 @@ public:
 		return PositiveNumber::equals(n);
 	}
 
-
-	bool operator!=(const FiniteNumber& n) const {
-		return !(*this == n);
-	}
-
-
-	/*
-	* Implemented by Vlad Avramenko
-	*/
 
 	/*
 	* Find inverse number
@@ -375,12 +359,11 @@ public:
 		PositiveNumber two(2);
 		PositiveNumber zero("0");
 		PositiveNumber four("4");
-		
 		FiniteNumber zeroFinite("0", f.getP());
 		FiniteNumber oneFinite("1", f.getP());
 		int s = 0;
 		FiniteNumber temp(f.getP() - 1, f.getP());
-		while ((q % two).isZero()) {
+		while ((q % two).isZero() || (q % two) == zero) {
 			q = q / two;
 			s += 1;
 		}
@@ -403,8 +386,7 @@ public:
 					break;
 				}
 			}
-		
-			FiniteNumber b = c.power_mod(n-i-1);
+			FiniteNumber b = c.power_mod(n - i - 1);
 			r = (r * b);
 			c = (b * b);
 			t = (t * c);

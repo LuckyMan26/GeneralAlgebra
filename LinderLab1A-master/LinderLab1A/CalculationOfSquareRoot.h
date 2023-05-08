@@ -26,7 +26,8 @@
 using namespace std;
 
 // Calculates a^b mod n
-/*long long power_mod(long long a, long long b, long long n) {     // power_mod modulo exponentiation calculation
+namespace CalculationOfSquareRoot{
+long long power_mod(long long a, long long b, long long n) {     // power_mod modulo exponentiation calculation
     long long res = 1;
     while (b > 0) {
         if (b & 1) {
@@ -71,7 +72,7 @@ long long tonelli_shanks(long long a, long long p) {            // tonelli_shank
         n = i;
     }
     return r;
-}*/
-
+}
+}
 
 

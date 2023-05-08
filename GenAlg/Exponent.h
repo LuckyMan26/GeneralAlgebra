@@ -1,5 +1,6 @@
 #pragma once
 #include "FiniteNumber.h"
+#include "SignedNumber.h"
 
 class Exponentiation {
 private:
