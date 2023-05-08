@@ -426,7 +426,43 @@ TEST_CASE("Test ElementOrder method") {
 	CHECK(group3.ElementOrder(FiniteNumber("9 x10")).toString() == PositiveNumber("2").toString());
 	CHECK_THROWS_AS(group3.ElementOrder(FiniteNumber("10 x10")).toString(), std::overflow_error);
 }
-	
+
+//Test by T. Pysarenkov
+TEST_CASE("Test isGenerator method") {
+	FiniteGroup g1(PositiveNumber("x7"));
+	g1.setIdentity(FiniteNumber("1 x7"));
+	CHECK(!g1.isGenerator(FiniteNumber("1 x7")));
+	CHECK(!g1.isGenerator(FiniteNumber("2 x7")));
+	CHECK(g1.isGenerator(FiniteNumber("3 x7")));
+	CHECK(!g1.isGenerator(FiniteNumber("4 x7")));
+	CHECK(g1.isGenerator(FiniteNumber("5 x7")));
+	CHECK(!g1.isGenerator(FiniteNumber("6 x7")));
+
+	FiniteGroup g2(PositiveNumber("x11"));
+	g2.setIdentity(FiniteNumber("1 x11"));
+	CHECK(!g2.isGenerator(FiniteNumber("1 x11")));
+	CHECK(g2.isGenerator(FiniteNumber("2 x11")));
+	CHECK(!g2.isGenerator(FiniteNumber("3 x11")));
+	CHECK(!g2.isGenerator(FiniteNumber("4 x11")));
+	CHECK(!g2.isGenerator(FiniteNumber("5 x11")));
+	CHECK(g2.isGenerator(FiniteNumber("6 x11")));
+	CHECK(g2.isGenerator(FiniteNumber("7 x11")));
+	CHECK(g2.isGenerator(FiniteNumber("8 x11")));
+	CHECK(!g2.isGenerator(FiniteNumber("9 x11")));
+	CHECK(!g2.isGenerator(FiniteNumber("10 x11")));
+
+	FiniteGroup g3(PositiveNumber("x9"));
+	g3.setIdentity(FiniteNumber("1 x9"));
+	CHECK(!g3.isGenerator(FiniteNumber("1 x9")));
+	CHECK(g3.isGenerator(FiniteNumber("2 x9")));
+	CHECK_THROWS_AS(g3.isGenerator(FiniteNumber("3 x9")), std::runtime_error);
+	CHECK(!g3.isGenerator(FiniteNumber("4 x9")));
+	CHECK(g3.isGenerator(FiniteNumber("5 x9")));
+	CHECK_THROWS_AS(g3.isGenerator(FiniteNumber("6 x9")), std::runtime_error);
+	CHECK(!g3.isGenerator(FiniteNumber("7 x9")));
+	CHECK(!g3.isGenerator(FiniteNumber("8 x9")));
+}
+
 //Tests by P. Velychko #6
 TEST_CASE("TestNonQuadraticPositive") {
 	std::ifstream f;

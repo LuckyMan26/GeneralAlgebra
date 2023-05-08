@@ -74,21 +74,22 @@ public:
         return t;
     }
 
-    //Determining whether the input element is a generator of a multiplicative group
+    //Determining whether the input element is a generator of a multiplicative group modulo p
     bool isGenerator(const FiniteNumber& element) const {
         assert(identitySet);
         assert(element.getP() == this->getP());
-        if (element.toString() == "" || element.toString() == "0")
+        if (element.toString() == "" || element.toString() == "0" || element.GCD(element, this->getP()) != 1)
             throw std::runtime_error("Element is not a member of the group");
 
         auto n = order;
 
-        auto t = n;
         Exponentiation exp;
-        for (const auto& mult : factorization) {
-            auto b = exp.montgomeryExponention(element, n / mult.first);
-            if (b == FiniteNumber("1", f.getP()));
-                return false;
+        for (const auto& mult : factorization)//for every prime factor of n
+        {
+            auto b = exp.fastExponention(element, n / mult.first); 
+            if (b == identity)
+                return false;//the element is a generator if and only if (element)^(n/q) and 1 are not congruent modulo p,
+                //where n is order of the group, q is (any) prime factor of n
         }
         return true;
     }
