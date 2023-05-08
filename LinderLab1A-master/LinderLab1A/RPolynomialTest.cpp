@@ -111,6 +111,7 @@ TEST_CASE("Substraction")
 
 	sub = polinomial - polinomial2;
 	CHECK(sub.toString() == "-x^10+6x^5-4x^4-9x^3+2x^2-x-2");
+
 	f >> polinomial1Str >> polinomial2Str;
 	polinomial = RPolynomial(polinomial1Str);
 	polinomial2 = RPolynomial(polinomial2Str);
@@ -124,6 +125,7 @@ TEST_CASE("Substraction")
 	sub = polinomial - polinomial2;
 	CHECK(sub.toString() == "x^2");
 	f.close();
+
 }
 
 TEST_CASE("Multiplication")
@@ -155,19 +157,24 @@ TEST_CASE("Multiplication")
 	CHECK(mult.toString() == "x^15-4x^14-9x^13+2x^12-x^11-6x^10+20x^9+45x^8-10x^7+5x^6+6x^5-4x^4-9x^3+2x^2-x-1");
 	mult = polinomial2 * polinomial;
 	CHECK(mult.toString() == "x^15-4x^14-9x^13+2x^12-x^11-6x^10+20x^9+45x^8-10x^7+5x^6+6x^5-4x^4-9x^3+2x^2-x-1");
+
 	f.close();
+
 }
 
 
 //Test implementation by V.Horbanov
 TEST_CASE("Division")
 {
+
+
 	std::ifstream f;
 	f.open("../RPolynomial/Division.txt");
 	std::string polinomial1Str, polinomial2Str;
 	f >> polinomial1Str >> polinomial2Str;
 	RPolynomial pol1 = RPolynomial(polinomial1Str),
 				pol2 = RPolynomial(polinomial2Str);
+
 
 	auto res = pol1 / pol2;
 	CHECK(res.toString() == "x^2+4x-6");
@@ -194,10 +201,12 @@ TEST_CASE("Division")
 	res = pol1 / pol2;
 	CHECK(res.toString() == "x^2+x-6");
 	f.close();
+
 }
 
 TEST_CASE("Remainder")
 {
+
 	std::ifstream f;
 	f.open("../RPolynomial/Remainder.txt");
 	std::string polinomial1Str, polinomial2Str;
@@ -229,11 +238,13 @@ TEST_CASE("Remainder")
 	res = pol1 % pol2;
 	CHECK(res.toString() == "18");
 	f.close();
+
 }
 
 
 TEST_CASE("GCD") 
 {
+
 	std::ifstream f;
 	f.open("../RPolynomial/GCD.txt");
 	std::string polinomial1Str, polinomial2Str;
@@ -245,6 +256,7 @@ TEST_CASE("GCD")
 	CHECK(res.toString() == "x^2+4x-6");
 
 	f >> polinomial1Str >> polinomial2Str;
+
 	pol1 = RPolynomial(polinomial1Str),
 	pol2 = RPolynomial(polinomial2Str);
 	res = RPolynomial::GCD(pol1, pol2);
@@ -265,4 +277,38 @@ TEST_CASE("GCD")
 	res = RPolynomial::GCD(pol1, pol2);
 	CHECK(res.toString() == "x+7");
 	f.close();
+
+
+}
+
+TEST_CASE("Cyclotomic") {
+	RPolynomial test = RPolynomial::cyclotomic(PositiveNumber("25"));
+	std::string DEBUG = test.toString();
+	CHECK(test.toString() == "x^20+x^15+x^10+x^5+1");
+	test = RPolynomial::cyclotomic(PositiveNumber("2"));
+	DEBUG = test.toString();
+	CHECK(test.toString() == "x+1");
+	test = RPolynomial::cyclotomic(PositiveNumber("3"));
+	DEBUG = test.toString();
+	CHECK(test.toString() == "x^2+x+1");
+	test = RPolynomial::cyclotomic(PositiveNumber("6"));
+	DEBUG = test.toString();
+	CHECK(test.toString() == "x^2-x+1");
+	test = RPolynomial::cyclotomic(PositiveNumber("7"));
+	DEBUG = test.toString();
+	CHECK(test.toString() == "x^6+x^5+x^4+x^3+x^2+x+1");
+	test = RPolynomial::cyclotomic(PositiveNumber("12"));
+	DEBUG = test.toString();
+	CHECK(test.toString() == "x^4-x^2+1");
+	test = RPolynomial::cyclotomic(PositiveNumber("16"));
+	DEBUG = test.toString();
+	CHECK(test.toString() == "x^8+1");
+	test = RPolynomial::cyclotomic(PositiveNumber("30"));
+	DEBUG = test.toString();
+	CHECK(test.toString() == "x^8+x^7-x^5-x^4-x^3+x+1");
+	test = RPolynomial::cyclotomic(PositiveNumber("105"));
+	DEBUG = test.toString();
+	CHECK(test.toString() == "x^48+x^47+x^46-x^43-x^42-2x^41-x^40-x^39+x^36+x^35+x^34+x^33+x^32+x^31-x^28-x^26-x^24-x^22-x^20+x^17+x^16+x^15+x^14+x^13+x^12-x^9-x^8-2x^7-x^6-x^5+x^2+x+1");
+
+
 }

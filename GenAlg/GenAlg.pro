@@ -34,5 +34,3 @@ FORMS += \
     FiniteFieldWindow.ui \
     mainwindow.ui
 
-
-
