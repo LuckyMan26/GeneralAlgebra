@@ -1,13 +1,13 @@
 #include "finitefieldwindow.h"
 #include "ui_FiniteFieldWindow.h"
-#include "FiniteNumber.h"
-#include "Exponent.h"
-#include "Pollard.h"
-#include "Euler.h"
+#include "../LinderLab1A-master/LinderLab1A/FiniteNumber.h"
+#include "../LinderLab1A-master/LinderLab1A/Exponent.h"
+#include "../LinderLab1A-master/LinderLab1A/Pollard.h"
+#include "../LinderLab1A-master/LinderLab1A/Euler.h"
 #include <QLabel>
 #include <regex>
-#include "CalculationOfSquareRoot.h"
-
+#include "../LinderLab1A-master/LinderLab1A/CalculationOfSquareRoot.h"
+#include "../LinderLab1A-master/LinderLab1A/FiniteGroup.h"
 FiniteFieldWindow::FiniteFieldWindow(QWidget *parent):
     QDialog(parent),
     ui(new Ui::FiniteFieldWindow)
@@ -63,8 +63,11 @@ FiniteFieldWindow::FiniteFieldWindow(QWidget *parent):
     connect(calculateBtn,&QPushButton::clicked,this,&FiniteFieldWindow::proccesOperation);
 }
 bool FiniteFieldWindow::isAlphaNumeric(std::string str) {
+    if(str[0]!='-' && !(str[0]>='0' && str[0]<='9')){
+        return false;
+    }
+    for(int i=1;i<str.length();i++){
 
-    for(int i=0;i<str.length();i++){
         if(!(str[i]>='0' && str[i]<='9')){
             return false;
         }
@@ -83,60 +86,91 @@ bool FiniteFieldWindow::processError(QString str){
     return true;
 }
 void FiniteFieldWindow::proccesOperation(){
-    if(! processError(FieldModule->text()) || !processError(FirstNumber->text()) || !processError(SecondNumber->text())){
+    if(! processError(FieldModule->text())){
         return;
     }
-
+    if(!isAlphaNumeric(FirstNumber->text().toStdString())){
+        ui->result->append("FirstNumber field contains non-numerical values");
+        return;
+    }
+    if(! isAlphaNumeric(SecondNumber->text().toStdString()) && !SecondNumber->text().isEmpty()){
+        ui->result->append("SecondNumber field contains non-numerical values");
+        return;
+    }
     if(AdditionBtn->isChecked()){
-
+        if(!PositiveNumber(FieldModule->text().toStdString()).is_prime()){
+            ui->result->append("Field size should be prime");
+            return;
+        }
         FiniteNumber num1(FirstNumber->text().toStdString(),FieldModule->text().toStdString());
         FiniteNumber num2(SecondNumber->text().toStdString(),FieldModule->text().toStdString());
         FiniteNumber res = num1 + num2;
         ui->result->append(FirstNumber->text() + "+" + SecondNumber->text() + "=" + QString::fromStdString(res.toString()) + "(mod " + QString::fromStdString(FieldModule->text().toStdString())+")");
     }
     else if(SubstractionBtn->isChecked()){
-
+        if(!PositiveNumber(FieldModule->text().toStdString()).is_prime()){
+            ui->result->append("Field size should be prime");
+            return;
+        }
         FiniteNumber num1(FirstNumber->text().toStdString(),FieldModule->text().toStdString());
         FiniteNumber num2(SecondNumber->text().toStdString(),FieldModule->text().toStdString());
         FiniteNumber res = num1 - num2;
         ui->result->append(FirstNumber->text() + "-" + SecondNumber->text() + "=" + QString::fromStdString(res.toString()) + "(mod " + QString::fromStdString(FieldModule->text().toStdString())+")");
     }
     else if(MultiplicationBtn->isChecked()){
-
+        if(!PositiveNumber(FieldModule->text().toStdString()).is_prime()){
+            ui->result->append("Field size should be prime");
+            return;
+        }
         FiniteNumber num1(FirstNumber->text().toStdString(),FieldModule->text().toStdString());
         FiniteNumber num2(SecondNumber->text().toStdString(),FieldModule->text().toStdString());
         FiniteNumber res = num1 *  num2;
         ui->result->append(FirstNumber->text() + "*" + SecondNumber->text() + "=" + QString::fromStdString(res.toString()) + "(mod " + QString::fromStdString(FieldModule->text().toStdString())+")");
     }
     else if(InverseBtn->isChecked()){
+        if(!PositiveNumber(FieldModule->text().toStdString()).is_prime()){
+            ui->result->append("Field size should be prime");
+            return;
+        }
         FiniteNumber one("1",FieldModule->text().toStdString());
         FiniteNumber zero("0",FieldModule->text().toStdString());
         FiniteNumber num1(FirstNumber->text().toStdString(),FieldModule->text().toStdString());
         //FiniteNumber num2(SecondNumber->text().toStdString(),FieldModule->text().toStdString());
-        FiniteNumber res = one / num1;
-        if(num1!=zero){
+
+        if(num1==zero){
             ui->result->append("No inverse element for 0");
+            return;
         }
-        else
+        else{
+            FiniteNumber res = one / num1;
             ui->result->append("1/"+ FirstNumber->text() + "=" + QString::fromStdString(res.toString()) + "(mod " + QString::fromStdString(FieldModule->text().toStdString())+")");
+        }
     }
     else if(DividingBtn->isChecked()){
-
+        if(!PositiveNumber(FieldModule->text().toStdString()).is_prime()){
+            ui->result->append("Field size should be prime");
+            return;
+        }
         FiniteNumber num1(FirstNumber->text().toStdString(),FieldModule->text().toStdString());
         FiniteNumber num2(SecondNumber->text().toStdString(),FieldModule->text().toStdString());
         FiniteNumber zero("0",FieldModule->text().toStdString());
-        if(num2!=zero){
+        if(num2==zero){
             ui->result->append("No inverse element for 0");
+            return;
         }
         FiniteNumber res = num1 / num2;
         ui->result->append(FirstNumber->text() + "/" + SecondNumber->text() + "=" + QString::fromStdString(res.toString()) + "(mod " + QString::fromStdString(FieldModule->text().toStdString())+")");
     }
     if(PowerBtn->isChecked()){
-
+        if(!PositiveNumber(FieldModule->text().toStdString()).is_prime()){
+            ui->result->append("Field size should be prime");
+            return;
+        }
         FiniteNumber num1(FirstNumber->text().toStdString(),FieldModule->text().toStdString());
         PositiveNumber num2(SecondNumber->text().toStdString());
         Exponentiation exp;
         FiniteNumber res = exp.montgomeryExponentiation(num1,num2);
+
         ui->result->append(FirstNumber->text() + "^" + SecondNumber->text() + "=" + QString::fromStdString(res.toString()) + "(mod " + QString::fromStdString(FieldModule->text().toStdString())+")");
     }
     else if(FactorizationNaive->isChecked()){
@@ -169,7 +203,10 @@ void FiniteFieldWindow::proccesOperation(){
     }
     else if(SquareRoot->isChecked()){
 
-
+        if(!PositiveNumber(FieldModule->text().toStdString()).is_prime()){
+            ui->result->append("Field size should be prime");
+            return;
+        }
         long long num1(FirstNumber->text().toInt());
         int p = FieldModule->text().toInt();
 
@@ -188,20 +225,31 @@ void FiniteFieldWindow::proccesOperation(){
         ui->result->append("Автор не зробив завдання");
     }
     else if(Order->isChecked()){
+        if(!PositiveNumber(FieldModule->text().toStdString()).is_prime()){
+            ui->result->append("Field size should be prime");
+            return;
+        }
 
-        FiniteNumber num1(FirstNumber->text().toStdString(),FieldModule->text().toStdString());
-        //FiniteNumber res = num1.;
-       //ui->result->append("1/"+ FirstNumber->text() + "=" + QString::fromStdString(res.toString()) + "(mod " + QString::fromStdString(FieldModule->text().toStdString())+")");
+        FiniteGroup g1(PositiveNumber(FieldModule->text().toStdString()));
+        PositiveNumber res = g1.ElementOrder(FiniteNumber(FirstNumber->text().toStdString(),FieldModule->text().toStdString()));
+        ui->result->append("Order of "+ FirstNumber->text() + "at group Z" + FieldModule->text()+ "=" + QString::fromStdString(res.toString()));
     }
     else if(Phi->isChecked()){
-
+        if(FirstNumber->text()=="0"){
+            ui->result->append("Carmichel is undefined");
+            return;
+        }
         PositiveNumber num1(FirstNumber->text().toStdString());
 
         PositiveNumber res = Euler(num1);
         ui->result->append("Phi: " +  FirstNumber->text() + "=" + QString::fromStdString(res.toString()));
     }
     else if(Lambda->isChecked()){
+        if(FirstNumber->text()=="0"){
+            ui->result->append("Carmichel is undefined");
+            return;
 
+        }
         PositiveNumber num1(FirstNumber->text().toStdString());
 
         PositiveNumber res = Carmichel(num1);

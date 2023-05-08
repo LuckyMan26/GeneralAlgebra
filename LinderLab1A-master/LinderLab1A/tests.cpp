@@ -502,18 +502,21 @@ TEST_CASE("TestNonQuadraticPositive") {
 	std::ifstream f;
 	f.open("../TestNonQuadraticPositive.txt");
 	std::string aStr;
-	f >> aStr;
-	FiniteNumber a(aStr);
-	FiniteNumber one("1", 11);
-	FiniteNumber x(a.power_mod((11 - 1) / 2));
-	if ( x != one) {
+	getline(f, aStr);
+	long long a(stoi(aStr));
+
+	FiniteNumber one("1", 19);
+
+	long long x(CalculationOfSquareRoot::power_mod(a, (19 - 1) / 2, 19));
+
+
+	if (x != 1) {
 		cout << "a is not a quadratic residue mod p" << endl;
-	
 	}
 	else {
-		FiniteNumber root1 = a.tonelli_shanks();
+		long long root(CalculationOfSquareRoot::tonelli_shanks(a, 19));
 
-		CHECK(root1.power_mod(2) == a);
+		CHECK(CalculationOfSquareRoot::power_mod(root, 2, 19) == a);
 	}
 	f.close();
 }
@@ -523,19 +526,19 @@ TEST_CASE("TestQuadraticResidue1") {
 	f.open("../TestQuadraticResidue1.txt");
 	std::string aStr;
 	getline(f, aStr);
-	FiniteNumber a(aStr);
-	FiniteNumber b("5", 11);
+	long long a(stoi(aStr));
+	int b = 5;
 	FiniteNumber one("1", 11);
 
-	FiniteNumber x(a.power_mod((11 - 1) / 2));
+	long long x(CalculationOfSquareRoot::power_mod(a,(11-1)/2,11));
 
-	if (x != one) {
+	if (x != 1) {
 		cout << "a is not a quadratic residue mod p" << endl;
 
 	}
 	else {
-		FiniteNumber root(a.tonelli_shanks());
-		CHECK(root == b);
+		long long root(CalculationOfSquareRoot::tonelli_shanks(a,11));
+		CHECK(root == 5);
 	}
 	f.close();
 
@@ -547,18 +550,21 @@ TEST_CASE("TestQuadraticResidue2") {
 	f.open("../TestQuadraticResidue2.txt");
 	std::string aStr;
 	getline(f, aStr);
-	FiniteNumber a(aStr);
+	long long a(stoi(aStr));
+	
 	FiniteNumber one("1", 19);
 
-	FiniteNumber x(a.power_mod((19 - 1) / 2));
+	long long x(CalculationOfSquareRoot::power_mod(a, (19 - 1) / 2, 19));
 
-	if (x != one) {
+
+	if (x != 1) {
 		cout << "a is not a quadratic residue mod p" << endl;
 
 	}
 	else {
-		FiniteNumber root(a.tonelli_shanks());
-		CHECK(root.power_mod(2) == a);
+		long long root(CalculationOfSquareRoot::tonelli_shanks(a, 19));
+
+		CHECK(CalculationOfSquareRoot::power_mod(root,2,19) == a);
 	}
 	f.close();
 }

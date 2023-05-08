@@ -1,6 +1,6 @@
 #include "fpolinomialwindow.h"
 #include "ui_FPolynomialWindow.h"
-#include "FPolynomial.h"
+#include "../LinderLab1A-master/LinderLab1A/FPolynomial.h"
 #include <QLabel>
 #include <regex>
 

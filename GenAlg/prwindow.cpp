@@ -3,7 +3,7 @@
 #include "ui_PRWindow.h"
 #include <QLabel>
 #include <QPushButton>
-#include "RPolynomial.h"
+#include "../LinderLab1A-master/LinderLab1A/RPolynomial.h"
 PRWindow::PRWindow(QWidget *parent):
     QDialog(parent),
     ui(new Ui::PRWindow)
@@ -15,6 +15,7 @@ PRWindow::PRWindow(QWidget *parent):
     DerrivitiveBtn = new QRadioButton("Похідна", this);
     ValueBtn = new QRadioButton("Значення в точці", this);
     RemainderBtn = new QRadioButton("Остача", this);
+    QuatientBtn = new QRadioButton("Частка", this);
     GCD = new QRadioButton("НСД", this);
     CyclomiticBtn = new QRadioButton("Круговий многочлен заданого порядка", this);
 
@@ -109,6 +110,14 @@ void PRWindow::proccesOperation(){
         PositiveNumber order(Value->text().toStdString());
         RPolynomial res =  RPolynomial::cyclotomic(order);
         ui->result->append("Cyclomitic of order " + QString::fromStdString(order.toString()) +  "=" + QString::fromStdString(res.toString()));
+    }
+    if(QuatientBtn->isChecked()){
+
+
+        RPolynomial pol1(FirstPol->text().toStdString());
+        RPolynomial pol2(SecondPol->text().toStdString());
+        RPolynomial res = pol1 / pol2;
+        ui->result->append(FirstPol->text() + "/" + SecondPol->text() + "=" + QString::fromStdString(res.toString()));
     }
     }
 
