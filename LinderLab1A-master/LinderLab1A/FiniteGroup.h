@@ -56,13 +56,13 @@ public:
         
         Exponentiation exp;
         for (const auto& mult : factorization) {
-            t = t / exp.fastExponention(mult.first, mult.second);
+            t = t / exp.fastExponentiation(mult.first, mult.second);
             FiniteNumber elem1;
 
-            elem1 = exp.fastExponention(element, t);
+            elem1 = exp.fastExponentiation(element, t);
 
             while (elem1 != identity) {
-                elem1 = exp.fastExponention(elem1, mult.first);
+                elem1 = exp.fastExponentiation(elem1, mult.first);
 
                 t = t * mult.first;
 
@@ -86,7 +86,7 @@ public:
         Exponentiation exp;
         for (const auto& mult : factorization)//for every prime factor of n
         {
-            auto b = exp.fastExponention(element, n / mult.first); 
+            auto b = exp.fastExponentiation(element, n / mult.first);
             if (b == identity)
                 return false;//the element is a generator if and only if (element)^(n/q) and 1 are not congruent modulo p,
                 //where n is order of the group, q is (any) prime factor of n

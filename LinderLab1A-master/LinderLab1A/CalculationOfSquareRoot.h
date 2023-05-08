@@ -18,7 +18,7 @@
 //  
 // 
 // It can be seen that the program works correctly and finds the roots of the quadratic equation for arbitrary numbers a and prime p.
-
+#pragma once
 #include <iostream>
 #include <vector>
 #include <cmath>
@@ -48,13 +48,13 @@ long long tonelli_shanks(long long a, long long p) {            // tonelli_shank
         s += 1;
     }
     if (s == 1) {
-        return power_mod(a, (p + 1) / 4, p);
+        return CalculationOfSquareRoot::power_mod(a, (p + 1) / 4, p);
     }
     long long h;
-    for (h = 2; power_mod(h, (p - 1) / 2, p) != p - 1; h++) {}
-    long long c = power_mod(h, q, p);
-    long long r = power_mod(a, (q + 1) / 2, p);
-    long long t = power_mod(a, q, p);
+    for (h = 2; CalculationOfSquareRoot::power_mod(h, (p - 1) / 2, p) != p - 1; h++) {}
+    long long c = CalculationOfSquareRoot::power_mod(h, q, p);
+    long long r = CalculationOfSquareRoot::power_mod(a, (q + 1) / 2, p);
+    long long t = CalculationOfSquareRoot::power_mod(a, q, p);
     int n = s;
     while (t != 1) {
         long long tt = t;
@@ -65,7 +65,7 @@ long long tonelli_shanks(long long a, long long p) {            // tonelli_shank
                 break;
             }
         }
-        long long b = power_mod(c, 1LL << (n - i - 1), p);
+        long long b = CalculationOfSquareRoot::power_mod(c, 1LL << (n - i - 1), p);
         r = (r * b) % p;
         c = (b * b) % p;
         t = (t * c) % p;

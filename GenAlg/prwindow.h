@@ -30,6 +30,7 @@ private:
     QRadioButton *RemainderBtn;
     QRadioButton *GCD;
     QRadioButton *CyclomiticBtn;
+    QRadioButton *QuatientBtn;
     QPushButton* calculateBtn;
     QLineEdit* FirstPol;
     QLineEdit* SecondPol;

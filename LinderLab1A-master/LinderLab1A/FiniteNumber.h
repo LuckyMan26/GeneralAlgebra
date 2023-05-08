@@ -2,6 +2,8 @@
 #include "PositiveNumber.h"
 #include <cassert>
 #include "FiniteField.h"
+#include "SignedNumber.h"
+
 //Created by M.Tyshchenko
 //Modified by A.Volyk
 //Modified by V.Horbanov
@@ -31,7 +33,9 @@ public:
 	FiniteNumber(std::string from, PositiveNumber p) {
 		bool negativeBase = parseIsNegative(from);
 		this->digits = parseDigits(from);
+		toFieldSize();
 		setP(p, negativeBase);
+		
 	}
 
 	FiniteNumber(long long a, long long p) : PositiveNumber(a) {
@@ -351,7 +355,7 @@ public:
 		return gotMinus;
 	}
 	// Calculates a^b mod n
-	FiniteNumber power_mod(PositiveNumber b) {     // power_mod modulo exponentiation calculation
+	/*FiniteNumber power_mod(PositiveNumber b) {     // power_mod modulo exponentiation calculation
 		FiniteNumber a(*this);
 		FiniteNumber res("1", f.getP());
 		FiniteNumber zero("0");
@@ -412,5 +416,5 @@ public:
 		}
 		return r;
 
-	}
+	}*/
 };
