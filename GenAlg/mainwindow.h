@@ -19,6 +19,8 @@ public:
 private slots:
     void on_PRBtn_clicked();
 
+    void on_FiniteFieldBtn_clicked();
+
 private:
     Ui::MainWindow *ui;
 

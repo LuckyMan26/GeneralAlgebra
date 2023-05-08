@@ -18,6 +18,12 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_PRBtn_clicked()
 {
+
+}
+
+
+void MainWindow::on_FiniteFieldBtn_clicked()
+{
     FiniteFieldWindow window(this);
     window.exec();
 }

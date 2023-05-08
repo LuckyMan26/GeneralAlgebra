@@ -17,17 +17,24 @@
    <widget class="QWidget" name="verticalLayoutWidget">
     <property name="geometry">
      <rect>
-      <x>220</x>
-      <y>40</y>
+      <x>240</x>
+      <y>50</y>
       <width>281</width>
       <height>491</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
+      <widget class="QPushButton" name="FiniteFieldBtn">
+       <property name="text">
+        <string>Операції на скінченному полі</string>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QPushButton" name="PRBtn">
        <property name="text">
-        <string>Кільце многочленів</string>
+        <string>Кільце Многочленів</string>
        </property>
       </widget>
      </item>
@@ -35,13 +42,6 @@
       <widget class="QPushButton" name="PFBtn">
        <property name="text">
         <string>Поле многочленів</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="FiniteFieldBtn">
-       <property name="text">
-        <string>Операції на скінченному полі</string>
        </property>
       </widget>
      </item>
