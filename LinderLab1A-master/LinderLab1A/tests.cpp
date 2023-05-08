@@ -5,6 +5,7 @@
 #include "FiniteNumber.h"
 //#include "Exponent.h"
 #include "Polynomial.h"
+#include "FiniteGroup.h"
 #include "CalculationOfSquareRoot.h"
 #include "MillerRabin.h"
 //#include "Pollard.h"
@@ -31,8 +32,8 @@ TEST_CASE("Positive numbers") {
 	CHECK((b - a).toString() == "1135");
 	CHECK((b + a).toString() == "1333");
 	CHECK((a + b).toString() == "1333");
+
 	f.close();
-	
 }
 
 //Test by V.Avramenko
@@ -389,6 +390,112 @@ TEST_CASE("Test binary form") {
 	f.close();
 }
 
+//Created by Y.Kishchuk
+TEST_CASE("Test setIdentity and getIdentity methods") {
+	FiniteGroup group(PositiveNumber("10"));
+
+	group.setIdentity(FiniteNumber("0 x10"));
+	CHECK(group.getIdentity() == FiniteNumber("0 x10"));
+	CHECK(group.getIdentity() == FiniteNumber("0 x10"));
+	group.setIdentity(FiniteNumber("1 x10"));
+	CHECK(group.getIdentity() == FiniteNumber("1 x10"));
+}
+
+TEST_CASE("Test setGroupBinaryOperation method") {
+	FiniteGroup group(PositiveNumber("10"));
+
+	// Test if the binary operation is set correctly
+	CHECK(group.operate(FiniteNumber("2 x10"), FiniteNumber("3 x10")) == FiniteNumber("6 x10"));
+}
+
+TEST_CASE("Test getP method") {
+	FiniteGroup group(PositiveNumber("10"));
+
+	auto ten = PositiveNumber("10");
+	CHECK(group.getP().equals(ten));
+
+	// Test getP method with a different modulus
+	FiniteGroup group2(PositiveNumber("7"));
+	auto seven = PositiveNumber("7");
+	CHECK(group2.getP() == seven);
+}
+
+TEST_CASE("Test ElementOrder method") {
+	FiniteGroup group(PositiveNumber("7"));
+	group.setIdentity(FiniteNumber("1 x7"));
+
+	// Test ElementOrder method
+	CHECK_THROWS_AS(group.ElementOrder(FiniteNumber("0 x7")).toString(), std::runtime_error);
+	CHECK(group.ElementOrder(FiniteNumber("1 x7")).toString() == PositiveNumber("1").toString());
+	CHECK(group.ElementOrder(FiniteNumber("2 x7")).toString() == PositiveNumber("3").toString());
+	CHECK(group.ElementOrder(FiniteNumber("3 x7")).toString() == PositiveNumber("6").toString());
+	CHECK(group.ElementOrder(FiniteNumber("4 x7")).toString() == PositiveNumber("3").toString());
+	CHECK(group.ElementOrder(FiniteNumber("5 x7")).toString() == PositiveNumber("6").toString());
+	CHECK(group.ElementOrder(FiniteNumber("6 x7")).toString() == PositiveNumber("2").toString());
+
+	auto group2 = FiniteGroup(PositiveNumber("11"));
+	group2.setIdentity(FiniteNumber("1 x11"));
+	CHECK_THROWS_AS(group2.ElementOrder(FiniteNumber("0 x11")).toString(), std::runtime_error);
+	CHECK(group2.ElementOrder(FiniteNumber("1 x11")).toString() == PositiveNumber("1").toString());
+	CHECK(group2.ElementOrder(FiniteNumber("2 x11")).toString() == PositiveNumber("10").toString());
+	CHECK(group2.ElementOrder(FiniteNumber("3 x11")).toString() == PositiveNumber("5").toString());
+	CHECK(group2.ElementOrder(FiniteNumber("4 x11")).toString() == PositiveNumber("5").toString());
+	CHECK(group2.ElementOrder(FiniteNumber("5 x11")).toString() == PositiveNumber("5").toString());
+	CHECK(group2.ElementOrder(FiniteNumber("6 x11")).toString() == PositiveNumber("10").toString());
+	CHECK(group2.ElementOrder(FiniteNumber("7 x11")).toString() == PositiveNumber("10").toString());
+	CHECK(group2.ElementOrder(FiniteNumber("8 x11")).toString() == PositiveNumber("10").toString());
+	CHECK(group2.ElementOrder(FiniteNumber("9 x11")).toString() == PositiveNumber("5").toString());
+	CHECK(group2.ElementOrder(FiniteNumber("10 x11")).toString() == PositiveNumber("2").toString());
+
+	auto group3 = FiniteGroup(PositiveNumber("10"));
+	group3.setIdentity(FiniteNumber("1 x10"));
+	CHECK(group3.ElementOrder(FiniteNumber("1 x10")).toString() == PositiveNumber("1").toString());
+	CHECK_THROWS_AS(group3.ElementOrder(FiniteNumber("2 x10")).toString(), std::overflow_error);
+	CHECK(group3.ElementOrder(FiniteNumber("3 x10")).toString() == PositiveNumber("4").toString());
+	CHECK_THROWS_AS(group3.ElementOrder(FiniteNumber("4 x10")).toString(), std::overflow_error);
+	CHECK_THROWS_AS(group3.ElementOrder(FiniteNumber("5 x10")).toString(), std::overflow_error);
+	CHECK_THROWS_AS(group3.ElementOrder(FiniteNumber("6 x10")).toString(), std::overflow_error);
+	CHECK(group3.ElementOrder(FiniteNumber("7 x10")).toString() == PositiveNumber("4").toString());
+	CHECK_THROWS_AS(group3.ElementOrder(FiniteNumber("8 x10")).toString(), std::overflow_error);
+	CHECK(group3.ElementOrder(FiniteNumber("9 x10")).toString() == PositiveNumber("2").toString());
+	CHECK_THROWS_AS(group3.ElementOrder(FiniteNumber("10 x10")).toString(), std::overflow_error);
+}
+
+//Test by T. Pysarenkov
+TEST_CASE("Test isGenerator method") {
+	FiniteGroup g1(PositiveNumber("x7"));
+	g1.setIdentity(FiniteNumber("1 x7"));
+	CHECK(!g1.isGenerator(FiniteNumber("1 x7")));
+	CHECK(!g1.isGenerator(FiniteNumber("2 x7")));
+	CHECK(g1.isGenerator(FiniteNumber("3 x7")));
+	CHECK(!g1.isGenerator(FiniteNumber("4 x7")));
+	CHECK(g1.isGenerator(FiniteNumber("5 x7")));
+	CHECK(!g1.isGenerator(FiniteNumber("6 x7")));
+
+	FiniteGroup g2(PositiveNumber("x11"));
+	g2.setIdentity(FiniteNumber("1 x11"));
+	CHECK(!g2.isGenerator(FiniteNumber("1 x11")));
+	CHECK(g2.isGenerator(FiniteNumber("2 x11")));
+	CHECK(!g2.isGenerator(FiniteNumber("3 x11")));
+	CHECK(!g2.isGenerator(FiniteNumber("4 x11")));
+	CHECK(!g2.isGenerator(FiniteNumber("5 x11")));
+	CHECK(g2.isGenerator(FiniteNumber("6 x11")));
+	CHECK(g2.isGenerator(FiniteNumber("7 x11")));
+	CHECK(g2.isGenerator(FiniteNumber("8 x11")));
+	CHECK(!g2.isGenerator(FiniteNumber("9 x11")));
+	CHECK(!g2.isGenerator(FiniteNumber("10 x11")));
+
+	FiniteGroup g3(PositiveNumber("x9"));
+	g3.setIdentity(FiniteNumber("1 x9"));
+	CHECK(!g3.isGenerator(FiniteNumber("1 x9")));
+	CHECK(g3.isGenerator(FiniteNumber("2 x9")));
+	CHECK_THROWS_AS(g3.isGenerator(FiniteNumber("3 x9")), std::runtime_error);
+	CHECK(!g3.isGenerator(FiniteNumber("4 x9")));
+	CHECK(g3.isGenerator(FiniteNumber("5 x9")));
+	CHECK_THROWS_AS(g3.isGenerator(FiniteNumber("6 x9")), std::runtime_error);
+	CHECK(!g3.isGenerator(FiniteNumber("7 x9")));
+	CHECK(!g3.isGenerator(FiniteNumber("8 x9")));
+}
 
 //Tests by P. Velychko #6
 TEST_CASE("TestNonQuadraticPositive") {

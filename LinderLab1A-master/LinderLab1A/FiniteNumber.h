@@ -82,6 +82,7 @@ public:
 		left.toFieldSize();
 		return left;
 	}
+
 	FiniteNumber& operator+=(const FiniteNumber& n) {
 		this->addTo(n);
 		this->toFieldSize();
@@ -114,6 +115,7 @@ public:
 		}
 		
 	}
+
 	FiniteNumber& operator-=(const FiniteNumber& n) {
 		/*this->substract(n);
 		this->toFieldSize();
@@ -135,7 +137,14 @@ public:
 	}
 
 	friend FiniteNumber operator/(FiniteNumber left, const FiniteNumber& n) {
-		return left.divide(n);
+		left.divideBy(n);
+		left.toFieldSize();
+		return left;
+	}
+
+
+	bool operator==(const FiniteNumber& n) const {
+		return this->equals(const_cast<FiniteNumber&>(n)) && this->getP().equals(const_cast<FiniteNumber&>(n).getP());
 	}
 
 	//friend FiniteNumber operator%(const FiniteNumber& n1, const FiniteNumber& n2) {
@@ -188,6 +197,15 @@ public:
 		return PositiveNumber::equals(n);
 	}
 
+
+	bool operator!=(const FiniteNumber& n) const {
+		return !(*this == n);
+	}
+
+
+	/*
+	* Implemented by Vlad Avramenko
+	*/
 
 	/*
 	* Find inverse number
