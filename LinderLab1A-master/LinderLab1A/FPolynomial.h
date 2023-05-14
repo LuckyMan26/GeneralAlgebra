@@ -124,83 +124,87 @@ public:
 		return deriv;
 	}
 
-	FPolynomial operator/(const FPolynomial& divider) const {
+	FPolynomial operator/(const FPolynomial& divisor) const {
 
 		auto deg1 = PositiveNumber("0"), deg2 = deg1;
 		auto nullNum = FiniteNumber("0", f.getP());
-		if (divider.coefficients.empty() || divider.coefficients.front().getCoefficient() == nullNum) {
+		if (divisor.coefficients.empty() || divisor.coefficients.front().getCoefficient() == nullNum) {
 			throw std::invalid_argument("Division by zero");
 		}
 
 		auto quotient = FPolynomial();
-		quotient.setP(divider.getP());
-		FPolynomial divident = *this;
-		deg1 = divident.degree();
-		deg2 = divider.degree();
-		
+		quotient.setP(divisor.getP());
+		FPolynomial dividend = *this;
+		deg1 = dividend.degree();
+		deg2 = divisor.degree();
+        
+        //do while remainder's degree is higher than divisor's or until remainder is zero
+		while (deg1 >= deg2 && !dividend.coefficients.empty()) {
 
-		while (deg1 >= deg2 && !divident.coefficients.empty()) {
-
-			FiniteNumber num1 = divident.coefficients.front().getCoefficient();
-			FiniteNumber num2 = divider.coefficients.front().getCoefficient();
-
-			auto leadingElement = divident.coefficients.front() / divider.coefficients.front();
+			FiniteNumber num1 = dividend.coefficients.front().getCoefficient();
+			FiniteNumber num2 = divisor.coefficients.front().getCoefficient();
+            
+            //division of leading terms of polynomials
+			auto leadingElement = dividend.coefficients.front() / divisor.coefficients.front();
 			auto leadingPolynomial = FPolynomial();
-			leadingPolynomial.setP(divider.getP());
+			leadingPolynomial.setP(divisor.getP());
 			leadingPolynomial.emplaceDegree(leadingElement.getCoefficient(), leadingElement.getDegree());
 			quotient.emplaceDegree(leadingElement.getCoefficient(), leadingElement.getDegree());
+            
+            //multiply the result just obtained by divisor and subtract from dividend
+            //(as soon as the conditions of the while cycle are not met,
+            //consider the difference to be remainder)
+			leadingPolynomial = leadingPolynomial * divisor;
 
-			leadingPolynomial = leadingPolynomial * divider;
+			dividend = dividend - leadingPolynomial;
 
-			divident = divident - leadingPolynomial;
-
-			deg1 = divident.degree();
-			deg2 = divider.degree();
+			deg1 = dividend.degree();
+			deg2 = divisor.degree();
 		}
 
 		return quotient;
 	}
 
-	FPolynomial operator %(const FPolynomial& divider) const {
-
+	FPolynomial operator %(const FPolynomial& divisor) const {
+        //same as division, but the remainder is returned
 		auto deg1 = PositiveNumber("0"), deg2 = deg1;
 		auto nullNum = FiniteNumber("0", f.getP());
 
-		if (/*divider.degree() <= deg1*/divider.coefficients.empty() || divider.coefficients.front().getCoefficient() == nullNum) {
+		if (/*divider.degree() <= deg1*/divisor.coefficients.empty() || divisor.coefficients.front().getCoefficient() == nullNum) {
 			throw std::invalid_argument("Division by zero");
 		}
 		auto quotient = FPolynomial();
-		quotient.setP(divider.getP());
-		FPolynomial divident = *this;
-		deg1 = divident.degree();
-		deg2 = divider.degree();
+		quotient.setP(divisor.getP());
+		FPolynomial dividend = *this;
+		deg1 = dividend.degree();
+		deg2 = divisor.degree();
 
-		while (deg1 >= deg2 && !divident.coefficients.empty()) {
+		while (deg1 >= deg2 && !dividend.coefficients.empty()) {
 
-			auto num1 = divident.coefficients.front().getCoefficient();
-			auto num2 = divider.coefficients.front().getCoefficient();
+			auto num1 = dividend.coefficients.front().getCoefficient();
+			auto num2 = divisor.coefficients.front().getCoefficient();
 
-			auto deb1 = divident.coefficients.front();
-			auto deb2 = divider.coefficients.front();
+			auto deb1 = dividend.coefficients.front();
+			auto deb2 = divisor.coefficients.front();
 
-			auto leadingElement = divident.coefficients.front() / divider.coefficients.front();
+			auto leadingElement = dividend.coefficients.front() / divisor.coefficients.front();
 			auto leadingPolynomial = FPolynomial();
-			leadingPolynomial.setP(divider.getP());
+			leadingPolynomial.setP(divisor.getP());
 			leadingPolynomial.emplaceDegree(leadingElement.getCoefficient(), leadingElement.getDegree());
 
 
 			quotient.emplaceDegree(leadingElement.getCoefficient(), leadingElement.getDegree());
 
-			leadingPolynomial = leadingPolynomial * divider;
-			divident = divident - leadingPolynomial;
+			leadingPolynomial = leadingPolynomial * divisor;
+			dividend = dividend - leadingPolynomial;
 
-			deg1 = divident.degree();
-			deg2 = divider.degree();
+			deg1 = dividend.degree();
+			deg2 = divisor.degree();
 
 
 		}
 
-		return divident;
+		return dividend;
 	}
 
 	friend FPolynomial divideByNum(FPolynomial R, FiniteNumber Num) {
