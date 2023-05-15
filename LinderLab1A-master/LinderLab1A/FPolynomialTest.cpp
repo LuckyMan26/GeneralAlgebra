@@ -274,6 +274,25 @@ TEST_SUITE("FPolynomial")
 		actual_remainder = f1 - quotient * f2;
 		tested_remainder = f1 % f2;
 		CHECK(tested_remainder.toString() == actual_remainder.toString());
+		//Tests by T.Pysarenkov for kind of greater degrees and some smaller ones
+		f1 = FPolynomial("x^4 + x^3 + 2*x^2 + 1", PositiveNumber("5"));
+		f2 = FPolynomial("3*x^2 + 5*x + 1", PositiveNumber("5"));
+		CHECK((f1 / f2).toString() == "2x^2+2x");
+		CHECK((f1 % f2).toString() == "3x+1");
+		f2 = FPolynomial("0", PositiveNumber("5"));
+		CHECK_THROWS_AS(f1 / f2, std::invalid_argument);
+		f1 = FPolynomial("17*x^16 + 13*x^15 - 10*x^12 + 34*x^8 - x^2", PositiveNumber("11"));
+		f2 = FPolynomial("10*x^14 + 9*x^11 - x^3 + 1", PositiveNumber("11"));
+		CHECK((f1 / f2).toString() == "5x^2+9x");
+		CHECK((f1 % f2).toString() == "10x^13+8x^12+x^8+5x^5+9x^4+5x^2+2x");
+		f1 = FPolynomial("x^29 - 1*x^25 + 27*x^22 - 17*x^16 + 13*x^15 - 10*x^12 + 34*x^8 - x^2", PositiveNumber("17"));
+		f2 = FPolynomial("3*x^19 - 10*x^14 + 9*x^11 - x^3 + 1", PositiveNumber("17"));
+		CHECK((f1 / f2).toString() == "6x^10+11x^6+3x^5+9x^3+16x^2+14x+10");
+		CHECK((f1 % f2).toString() == "8x^17+14x^16+2x^14+15x^13+12x^11+11x^10+11x^9+3x^8+15x^6+13x^5+14x^4+x^3+3x+7");
+		f1 = FPolynomial("x^29 - 1*x^25 + 27*x^22 - 17*x^16 + 13*x^15 - 10*x^12 + 34*x^8 - x^2", PositiveNumber("7"));
+		f2 = FPolynomial("3*x^19 - 10*x^14 + 9*x^11 - x^3 + 1", PositiveNumber("7"));
+		CHECK((f1 / f2).toString() == "5x^10+2x^6+5x^5+2x^3+6x^2+2x+5");
+		CHECK((f1 % f2).toString() == "2x^17+5x^16+5x^15+4x^14+4x^11+2x^10+2x^9+4x^8+x^5+2x^4+3x^3+5x+2");
 	}
 	//Works fine so far :)
 

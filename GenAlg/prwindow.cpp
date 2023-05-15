@@ -4,6 +4,7 @@
 #include <QLabel>
 #include <QPushButton>
 #include "../LinderLab1A-master/LinderLab1A/RPolynomial.h"
+#include "../LinderLab1A-master/LinderLab1A/FPolynomial.h"
 PRWindow::PRWindow(QWidget *parent):
     QDialog(parent),
     ui(new Ui::PRWindow)
@@ -28,6 +29,7 @@ PRWindow::PRWindow(QWidget *parent):
     ui->RadioButtonLayout->addWidget(RemainderBtn,2,1);
     ui->RadioButtonLayout->addWidget(GCD,2,2);
     ui->RadioButtonLayout->addWidget(CyclomiticBtn,2,3);
+    ui->RadioButtonLayout->addWidget(QuatientBtn,2,4);
 
 
     FirstPol = new QLineEdit(this);
@@ -91,17 +93,17 @@ void PRWindow::proccesOperation(){
     }
     if(RemainderBtn->isChecked()){
 
-        RPolynomial pol1(FirstPol->text().toStdString());
-        RPolynomial pol2(SecondPol->text().toStdString());
-        RPolynomial res = pol1 % pol2;
+        FPolynomial pol1(FirstPol->text().toStdString(), 5);
+        FPolynomial pol2(SecondPol->text().toStdString(), 5);
+        FPolynomial res = pol1 % pol2;
         ui->result->append(FirstPol->text() + "%" + SecondPol->text() + "=" + QString::fromStdString(res.toString()));
     }
     if(GCD->isChecked()){
 
 
-        RPolynomial pol1(FirstPol->text().toStdString());
-        RPolynomial pol2(SecondPol->text().toStdString());
-        RPolynomial res = RPolynomial::GCD(pol1,pol2);
+        FPolynomial pol1(FirstPol->text().toStdString(), 5);
+        FPolynomial pol2(SecondPol->text().toStdString(), 5);
+        FPolynomial res = FPolynomial::GCD(pol1,pol2);
         ui->result->append("GCD(" + FirstPol->text() + "," + SecondPol->text()+ ")" + "=" + QString::fromStdString(res.toString()));
     }
     if(CyclomiticBtn->isChecked()){
@@ -114,9 +116,9 @@ void PRWindow::proccesOperation(){
     if(QuatientBtn->isChecked()){
 
 
-        RPolynomial pol1(FirstPol->text().toStdString());
-        RPolynomial pol2(SecondPol->text().toStdString());
-        RPolynomial res = pol1 / pol2;
+        FPolynomial pol1(FirstPol->text().toStdString(), 5);
+        FPolynomial pol2(SecondPol->text().toStdString(), 5);
+        FPolynomial res = pol1 / pol2;
         ui->result->append(FirstPol->text() + "/" + SecondPol->text() + "=" + QString::fromStdString(res.toString()));
     }
     }
