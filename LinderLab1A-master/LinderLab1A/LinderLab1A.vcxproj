@@ -144,6 +144,7 @@
     <ClInclude Include="PositiveNumber.h" />
     <ClInclude Include="RPolynomial.h" />
     <ClInclude Include="SignedNumber.h" />
+    <ClInclude Include="TrueFPolynomial.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CalculationOfSquareRoot.cpp" />
@@ -152,6 +153,7 @@
     <ClCompile Include="PolynomialElementTest.cpp" />
     <ClCompile Include="RPolynomialTest.cpp" />
     <ClCompile Include="tests.cpp" />
+    <ClCompile Include="TrueFPolynomialTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\Additional operators test.txt" />
