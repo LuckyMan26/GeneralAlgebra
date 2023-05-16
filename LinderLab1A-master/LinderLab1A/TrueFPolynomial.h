@@ -6,7 +6,7 @@
 #include "FiniteField.h"
 
 // Really true Polynomial in Finite Field. Trust me, bro 😎
-class TrueFPolynomial : protected FPolynomial
+class TrueFPolynomial : public FPolynomial
 {
 private:
 	FPolynomial irreducible;
@@ -46,6 +46,8 @@ public:
 		auto leading = fpol.coefficients.front().getCoefficient();
 		for (auto& coef : fpol.coefficients)
 			coef.setCoefficient(coef.getCoefficient() / leading);
+
+		fpol.toFieldSize();
 		return fpol;
 	}
 
@@ -71,6 +73,7 @@ public:
 		if (binDegree[0] == '1')
 			answer = answer * temp;
 
+		answer.toFieldSize();
 		return answer;
 	}
 };
