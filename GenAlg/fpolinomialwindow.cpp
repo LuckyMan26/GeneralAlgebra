@@ -1,6 +1,6 @@
 #include "fpolinomialwindow.h"
 #include "ui_FPolynomialWindow.h"
-#include "../LinderLab1A-master/LinderLab1A/FPolynomial.h"
+#include "../LinderLab1A-master/LinderLab1A/TrueFPolynomial.h".h".h"
 #include <QLabel>
 #include <regex>
 
@@ -90,39 +90,44 @@ void FPolynomialWindow::proccesOperation(){
     }
     if(AdditionBtn->isChecked()){
 
-        FPolynomial pol1(FirstPol->text().toStdString(),FieldModule->text().toStdString());
-        FPolynomial pol2(SecondPol->text().toStdString(),FieldModule->text().toStdString());
-        FPolynomial res = pol1 + pol2;
+        FPolynomial irreducible(Ri->text().toStdString(), FieldModule->text().toStdString());
+        TrueFPolynomial pol1(FirstPol->text().toStdString(), irreducible);
+        TrueFPolynomial pol2(SecondPol->text().toStdString(), irreducible);
+        TrueFPolynomial res = pol1 + pol2;
         ui->result->append(FirstPol->text() + "+" + SecondPol->text() + "=" + QString::fromStdString(res.toString()));
     }
     else if(SubstractionBtn->isChecked()){
 
-        FPolynomial pol1(FirstPol->text().toStdString(),FieldModule->text().toStdString());
-        FPolynomial pol2(SecondPol->text().toStdString(),FieldModule->text().toStdString());
-        FPolynomial res = pol1 - pol2;
+        FPolynomial irreducible(Ri->text().toStdString(), FieldModule->text().toStdString());
+        TrueFPolynomial pol1(FirstPol->text().toStdString(), irreducible);
+        TrueFPolynomial pol2(SecondPol->text().toStdString(), irreducible);
+        TrueFPolynomial res = pol1 - pol2;
         ui->result->append(FirstPol->text() + "-" + SecondPol->text() + "=" + QString::fromStdString(res.toString()));
     }
     else if(MultiplicationBtn->isChecked()){
 
-        FPolynomial pol1(FirstPol->text().toStdString(),FieldModule->text().toStdString());
-        FPolynomial pol2(SecondPol->text().toStdString(),FieldModule->text().toStdString());
-        FPolynomial res = pol1 * pol2;
+        FPolynomial irreducible(Ri->text().toStdString(), FieldModule->text().toStdString());
+        TrueFPolynomial pol1(FirstPol->text().toStdString(), irreducible);
+        TrueFPolynomial pol2(SecondPol->text().toStdString(), irreducible);
+        TrueFPolynomial res = pol1 * pol2;
         ui->result->append(FirstPol->text() + "*" + SecondPol->text() + "=" + QString::fromStdString(res.toString()));
     }
     else if(NormingBtn->isChecked()){
-        FPolynomial pol1(FirstPol->text().toStdString(),FieldModule->text().toStdString());
+        FPolynomial irreducible(Ri->text().toStdString(), FieldModule->text().toStdString());
+        TrueFPolynomial pol1(FirstPol->text().toStdString(), irreducible);
 
 
-        //FPolynomial res = pol1.Normalized();
-        //ui->result->append("Normize: " + FirstPol->text() +  "=" + QString::fromStdString(res.toString()));
+        TrueFPolynomial res = pol1.Normalized();
+        ui->result->append("Normize: " + FirstPol->text() +  "=" + QString::fromStdString(res.toString()));
     }
     else if(PowerBtn->isChecked()){
 
-        FPolynomial pol1(FirstPol->text().toStdString(),FieldModule->text().toStdString());
+        FPolynomial irreducible(Ri->text().toStdString(), FieldModule->text().toStdString());
+        TrueFPolynomial pol1(FirstPol->text().toStdString(), irreducible);
 
         PositiveNumber num(Power->text().toStdString());
-        //FPolynomial res = pol1.fastExponentiation(num);
-        //ui->result->append( FirstPol->text() + " in " + Power->text() + " power " +  "=" + QString::fromStdString(res.toString()));
+        TrueFPolynomial res = pol1.fastExponentiation(num);
+        ui->result->append( FirstPol->text() + " in " + Power->text() + " power " +  "=" + QString::fromStdString(res.toString()));
     }
     if(InverseBtn->isChecked()){
 
