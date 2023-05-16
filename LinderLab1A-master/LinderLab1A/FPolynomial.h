@@ -54,15 +54,6 @@ public:
 		return f.getP();
 	}
 
-	FPolynomial Normalized() const {
-		FPolynomial fpol = *this;
-		assert(fpol.coefficients.size() > 0);
-		auto leading = fpol.coefficients.front().getCoefficient();
-		for (auto& coef : fpol.coefficients)
-			coef.setCoefficient(coef.getCoefficient() / leading);
-		return fpol;
-	}
-
 	FPolynomial operator+(const FPolynomial& right) const {
 		assert(f == const_cast<FiniteField&>(right.f));
 		const Polynomial& pol = *this;
@@ -198,7 +189,7 @@ public:
 
 			*this = *this - leadingPolynomial;
 
-			deg1 = this->degree();
+			deg1 = this->degree();	
 			deg2 = divisor.degree();
 		}
 		return *this;

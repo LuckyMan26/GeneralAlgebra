@@ -113,16 +113,16 @@ void FPolynomialWindow::proccesOperation(){
         FPolynomial pol1(FirstPol->text().toStdString(),FieldModule->text().toStdString());
 
 
-        FPolynomial res = pol1.Normalized();
-        ui->result->append("Normize: " + FirstPol->text() +  "=" + QString::fromStdString(res.toString()));
+        //FPolynomial res = pol1.Normalized();
+        //ui->result->append("Normize: " + FirstPol->text() +  "=" + QString::fromStdString(res.toString()));
     }
     else if(PowerBtn->isChecked()){
 
         FPolynomial pol1(FirstPol->text().toStdString(),FieldModule->text().toStdString());
 
         PositiveNumber num(Power->text().toStdString());
-        FPolynomial res = pol1.fastExponentiation(num);
-        ui->result->append( FirstPol->text() + " in " + Power->text() + " power " +  "=" + QString::fromStdString(res.toString()));
+        //FPolynomial res = pol1.fastExponentiation(num);
+        //ui->result->append( FirstPol->text() + " in " + Power->text() + " power " +  "=" + QString::fromStdString(res.toString()));
     }
     if(InverseBtn->isChecked()){
 

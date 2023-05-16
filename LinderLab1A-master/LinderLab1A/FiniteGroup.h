@@ -27,12 +27,12 @@ public:
     // Binary operation method
     FiniteNumber operate(const FiniteNumber& a, const FiniteNumber& b) const {
         auto temp_p = this->getP();
-        assert(a.getP().equals(temp_p) && b.getP().equals(temp_p), "Elements have different P");
+        //assert(a.getP().equals(temp_p) && b.getP().equals(temp_p), "Elements have different P");
         return a * b;
     }
 
     FiniteNumber getIdentity() const {
-        assert(identitySet, "Identity element is not set");
+        //assert(identitySet, "Identity element is not set");
         return identity;
     }
 
@@ -41,7 +41,7 @@ public:
     }
 
     void setIdentity(const FiniteNumber& element) {
-        assert(element.getP().equals(this->getP()), "Element has different P");
+        //assert(element.getP().equals(this->getP()), "Element has different P");
         identity = element;
         identitySet = true;
     }
