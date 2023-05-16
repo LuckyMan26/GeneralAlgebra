@@ -10,7 +10,7 @@
 
 class FPolynomial : public Polynomial<FiniteNumber>
 {
-private:
+protected:
 	FiniteField f;
 	FPolynomial() {}
 	FPolynomial(const std::string& str) : Polynomial(str) {};
@@ -52,15 +52,6 @@ public:
 
 	PositiveNumber getP() const {
 		return f.getP();
-	}
-
-	FPolynomial Normalized() const {
-		FPolynomial fpol = *this;
-		assert(fpol.coefficients.size() > 0);
-		auto leading = fpol.coefficients.front().getCoefficient();
-		for (auto& coef : fpol.coefficients)
-			coef.setCoefficient(coef.getCoefficient() / leading);
-		return fpol;
 	}
 
 	FPolynomial operator+(const FPolynomial& right) const {
@@ -165,8 +156,8 @@ public:
 		return quotient;
 	}
 
-	FPolynomial operator %(const FPolynomial& divisor) const {
-        //same as division, but the remainder is returned
+	FPolynomial remainder(const FPolynomial& divisor) {
+		//same as division, but the remainder is returned
 		auto deg1 = PositiveNumber("0"), deg2 = deg1;
 		auto nullNum = FiniteNumber("0", f.getP());
 
@@ -175,19 +166,18 @@ public:
 		}
 		auto quotient = FPolynomial();
 		quotient.setP(divisor.getP());
-		FPolynomial dividend = *this;
-		deg1 = dividend.degree();
+		deg1 = this->degree();
 		deg2 = divisor.degree();
 
-		while (deg1 >= deg2 && !dividend.coefficients.empty()) {
+		while (deg1 >= deg2 && !this->coefficients.empty()) {
 
-			auto num1 = dividend.coefficients.front().getCoefficient();
+			auto num1 = this->coefficients.front().getCoefficient();
 			auto num2 = divisor.coefficients.front().getCoefficient();
 
-			auto deb1 = dividend.coefficients.front();
+			auto deb1 = this->coefficients.front();
 			auto deb2 = divisor.coefficients.front();
 
-			auto leadingElement = dividend.coefficients.front() / divisor.coefficients.front();
+			auto leadingElement = this->coefficients.front() / divisor.coefficients.front();
 			auto leadingPolynomial = FPolynomial();
 			leadingPolynomial.setP(divisor.getP());
 			leadingPolynomial.emplaceDegree(leadingElement.getCoefficient(), leadingElement.getDegree());
@@ -196,15 +186,18 @@ public:
 			quotient.emplaceDegree(leadingElement.getCoefficient(), leadingElement.getDegree());
 
 			leadingPolynomial = leadingPolynomial * divisor;
-			dividend = dividend - leadingPolynomial;
 
-			deg1 = dividend.degree();
+			*this = *this - leadingPolynomial;
+
+			deg1 = this->degree();	
 			deg2 = divisor.degree();
-
-
 		}
+		return *this;
+	}
 
-		return dividend;
+	FPolynomial operator %(const FPolynomial& divisor) const {
+		FPolynomial left = *this;
+		return left.remainder(divisor);
 	}
 
 	friend FPolynomial divideByNum(FPolynomial R, FiniteNumber Num) {
@@ -288,30 +281,5 @@ public:
 			res = dividend / divider;
 			return res;
 		}
-	}
-
-
-	FPolynomial fastExponentiation(PositiveNumber degree)
-	{
-		std::string binDegree = degree.bitsReverse();
-		FPolynomial answer("1",f.getP());
-		FPolynomial temp(*this);
-
-		const int countOfIterations = binDegree.size() - 1;
-
-		for (int i = countOfIterations; i > 0; i--)
-		{
-			if (binDegree[i] == '1')
-			{
-				answer = answer * temp;
-			}
-
-			answer = answer * answer;
-		}
-
-		if (binDegree[0] == '1')
-			answer = answer * temp;
-
-		return answer;
 	}
 };

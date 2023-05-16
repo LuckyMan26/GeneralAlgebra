@@ -94,48 +94,48 @@ TEST_SUITE("FPolynomial")
 		f.close();
 	}
 
-	TEST_CASE("Normalization")
-	{
-		std::ifstream f;
-		f.open("../FPolynomial/Normalization.txt");
-		std::string polinomial1Str;
+	//TEST_CASE("Normalization")
+	//{
+	//	std::ifstream f;
+	//	f.open("../FPolynomial/Normalization.txt");
+	//	std::string polinomial1Str;
 
 
-		f >> polinomial1Str;
-			FPolynomial fpol(polinomial1Str, PositiveNumber("7"));
-		CHECK(fpol.Normalized().toString() == "x^2+4x+6");
-		f >> polinomial1Str;
+	//	f >> polinomial1Str;
+	//		FPolynomial fpol(polinomial1Str, PositiveNumber("7"));
+	//	CHECK(fpol.Normalized().toString() == "x^2+4x+6");
+	//	f >> polinomial1Str;
 
-		fpol = FPolynomial(polinomial1Str, PositiveNumber("11"));
-		CHECK(fpol.Normalized().toString() == "x^5+4x^4+9x^3+2x^2+x+1");
-		f >> polinomial1Str;
+	//	fpol = FPolynomial(polinomial1Str, PositiveNumber("11"));
+	//	CHECK(fpol.Normalized().toString() == "x^5+4x^4+9x^3+2x^2+x+1");
+	//	f >> polinomial1Str;
 
-		fpol = FPolynomial(polinomial1Str, PositiveNumber("11"));
-		CHECK(fpol.Normalized().toString() == "x^5+2x^4+4x^3+x^2+3x");
-		f >> polinomial1Str;
+	//	fpol = FPolynomial(polinomial1Str, PositiveNumber("11"));
+	//	CHECK(fpol.Normalized().toString() == "x^5+2x^4+4x^3+x^2+3x");
+	//	f >> polinomial1Str;
 
-		fpol = FPolynomial(polinomial1Str, PositiveNumber("11"));
-		CHECK(fpol.Normalized().toString() == "x^5+3x^4+6x^3+7x^2+10x+9");
-		f.close();
-	}
+	//	fpol = FPolynomial(polinomial1Str, PositiveNumber("11"));
+	//	CHECK(fpol.Normalized().toString() == "x^5+3x^4+6x^3+7x^2+10x+9");
+	//	f.close();
+	//}
 
 
-	TEST_CASE("Fast Exponentiation")
-	{
-		std::ifstream f;
-		f.open("../FPolynomial/Fast Exponentiation.txt");
-		std::string polinomial1Str;
-		f >> polinomial1Str;
-		FPolynomial fpol(polinomial1Str, PositiveNumber("11"));
+	//TEST_CASE("Fast Exponentiation")
+	//{
+	//	std::ifstream f;
+	//	f.open("../FPolynomial/Fast Exponentiation.txt");
+	//	std::string polinomial1Str;
+	//	f >> polinomial1Str;
+	//	FPolynomial fpol(polinomial1Str, PositiveNumber("11"));
 
-		CHECK(fpol.fastExponentiation(PositiveNumber("3")).toString() == "7x^3+7x^2+6x+8");
-		CHECK(fpol.fastExponentiation(PositiveNumber("5")).toString() == "10x^5+2x^4+5x^3+9x^2+7x+10");
-		f >> polinomial1Str;
+	//	CHECK(fpol.fastExponentiation(PositiveNumber("3")).toString() == "7x^3+7x^2+6x+8");
+	//	CHECK(fpol.fastExponentiation(PositiveNumber("5")).toString() == "10x^5+2x^4+5x^3+9x^2+7x+10");
+	//	f >> polinomial1Str;
 
-		FPolynomial fpol2(polinomial1Str, PositiveNumber("154"));
-		CHECK(fpol2.fastExponentiation(PositiveNumber("5")).toString() == "21x^15+112x^13+140x^12+126x^11+84x^10+56x^9+42x^8+98x^7+28x^6+132x^5+122x^4+114x^3+108x^2+18x+32");		
-		CHECK(fpol2.fastExponentiation(PositiveNumber("0")).toString() == "1");
-	}
+	//	FPolynomial fpol2(polinomial1Str, PositiveNumber("154"));
+	//	CHECK(fpol2.fastExponentiation(PositiveNumber("5")).toString() == "21x^15+112x^13+140x^12+126x^11+84x^10+56x^9+42x^8+98x^7+28x^6+132x^5+122x^4+114x^3+108x^2+18x+32");		
+	//	CHECK(fpol2.fastExponentiation(PositiveNumber("0")).toString() == "1");
+	//}
 
 	TEST_CASE("Value at X")
 	{

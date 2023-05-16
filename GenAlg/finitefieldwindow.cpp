@@ -59,6 +59,7 @@ FiniteFieldWindow::FiniteFieldWindow(QWidget *parent):
     ui->gridLayout->addWidget(label4,2,1);
     ui->gridLayout->addWidget(FieldModule,2,2);
     calculateBtn = new QPushButton("Виконати операцію",this);
+    calculateBtn->setFont(QFont("Arial", 12, QFont::Bold));
     ui->calculateLayout->addWidget(calculateBtn);
     connect(calculateBtn,&QPushButton::clicked,this,&FiniteFieldWindow::proccesOperation);
 }
@@ -98,40 +99,40 @@ void FiniteFieldWindow::proccesOperation(){
         return;
     }
     if(AdditionBtn->isChecked()){
-        if(!PositiveNumber(FieldModule->text().toStdString()).is_prime()){
+        /*if(!PositiveNumber(FieldModule->text().toStdString()).is_prime()){
             ui->result->append("Field size should be prime");
             return;
-        }
+        }*/
         FiniteNumber num1(FirstNumber->text().toStdString(),FieldModule->text().toStdString());
         FiniteNumber num2(SecondNumber->text().toStdString(),FieldModule->text().toStdString());
         FiniteNumber res = num1 + num2;
         ui->result->append(FirstNumber->text() + "+" + SecondNumber->text() + "=" + QString::fromStdString(res.toString()) + "(mod " + QString::fromStdString(FieldModule->text().toStdString())+")");
     }
     else if(SubstractionBtn->isChecked()){
-        if(!PositiveNumber(FieldModule->text().toStdString()).is_prime()){
+        /*if(!PositiveNumber(FieldModule->text().toStdString()).is_prime()){
             ui->result->append("Field size should be prime");
             return;
-        }
+        }*/
         FiniteNumber num1(FirstNumber->text().toStdString(),FieldModule->text().toStdString());
         FiniteNumber num2(SecondNumber->text().toStdString(),FieldModule->text().toStdString());
         FiniteNumber res = num1 - num2;
         ui->result->append(FirstNumber->text() + "-" + SecondNumber->text() + "=" + QString::fromStdString(res.toString()) + "(mod " + QString::fromStdString(FieldModule->text().toStdString())+")");
     }
     else if(MultiplicationBtn->isChecked()){
-        if(!PositiveNumber(FieldModule->text().toStdString()).is_prime()){
+        /*if(!PositiveNumber(FieldModule->text().toStdString()).is_prime()){
             ui->result->append("Field size should be prime");
             return;
-        }
+        }*/
         FiniteNumber num1(FirstNumber->text().toStdString(),FieldModule->text().toStdString());
         FiniteNumber num2(SecondNumber->text().toStdString(),FieldModule->text().toStdString());
         FiniteNumber res = num1 *  num2;
         ui->result->append(FirstNumber->text() + "*" + SecondNumber->text() + "=" + QString::fromStdString(res.toString()) + "(mod " + QString::fromStdString(FieldModule->text().toStdString())+")");
     }
     else if(InverseBtn->isChecked()){
-        if(!PositiveNumber(FieldModule->text().toStdString()).is_prime()){
+        /*if(!PositiveNumber(FieldModule->text().toStdString()).is_prime()){
             ui->result->append("Field size should be prime");
             return;
-        }
+        }*/
         FiniteNumber one("1",FieldModule->text().toStdString());
         FiniteNumber zero("0",FieldModule->text().toStdString());
         FiniteNumber num1(FirstNumber->text().toStdString(),FieldModule->text().toStdString());
@@ -142,15 +143,15 @@ void FiniteFieldWindow::proccesOperation(){
             return;
         }
         else{
-            FiniteNumber res = one / num1;
+            FiniteNumber res = num1.inverse();
             ui->result->append("1/"+ FirstNumber->text() + "=" + QString::fromStdString(res.toString()) + "(mod " + QString::fromStdString(FieldModule->text().toStdString())+")");
         }
     }
     else if(DividingBtn->isChecked()){
-        if(!PositiveNumber(FieldModule->text().toStdString()).is_prime()){
+        /*if(!PositiveNumber(FieldModule->text().toStdString()).is_prime()){
             ui->result->append("Field size should be prime");
             return;
-        }
+        }*/
         FiniteNumber num1(FirstNumber->text().toStdString(),FieldModule->text().toStdString());
         FiniteNumber num2(SecondNumber->text().toStdString(),FieldModule->text().toStdString());
         FiniteNumber zero("0",FieldModule->text().toStdString());
@@ -162,10 +163,10 @@ void FiniteFieldWindow::proccesOperation(){
         ui->result->append(FirstNumber->text() + "/" + SecondNumber->text() + "=" + QString::fromStdString(res.toString()) + "(mod " + QString::fromStdString(FieldModule->text().toStdString())+")");
     }
     if(PowerBtn->isChecked()){
-        if(!PositiveNumber(FieldModule->text().toStdString()).is_prime()){
+        /*if(!PositiveNumber(FieldModule->text().toStdString()).is_prime()){
             ui->result->append("Field size should be prime");
             return;
-        }
+        }*/
         FiniteNumber num1(FirstNumber->text().toStdString(),FieldModule->text().toStdString());
         PositiveNumber num2(SecondNumber->text().toStdString());
         Exponentiation exp;
@@ -203,10 +204,10 @@ void FiniteFieldWindow::proccesOperation(){
     }
     else if(SquareRoot->isChecked()){
 
-        if(!PositiveNumber(FieldModule->text().toStdString()).is_prime()){
+        /*if(!PositiveNumber(FieldModule->text().toStdString()).is_prime()){
             ui->result->append("Field size should be prime");
             return;
-        }
+        }*/
         long long num1(FirstNumber->text().toInt());
         int p = FieldModule->text().toInt();
 
@@ -225,20 +226,20 @@ void FiniteFieldWindow::proccesOperation(){
         ui->result->append("Автор не зробив завдання");
     }
     else if(Order->isChecked()){
-        if(!PositiveNumber(FieldModule->text().toStdString()).is_prime()){
+        /*if(!PositiveNumber(FieldModule->text().toStdString()).is_prime()){
             ui->result->append("Field size should be prime");
             return;
-        }
+        }*/
 
         FiniteGroup g1(PositiveNumber(FieldModule->text().toStdString()));
         PositiveNumber res = g1.ElementOrder(FiniteNumber(FirstNumber->text().toStdString(),FieldModule->text().toStdString()));
         ui->result->append("Order of "+ FirstNumber->text() + "at group Z" + FieldModule->text()+ "=" + QString::fromStdString(res.toString()));
     }
     else if(Phi->isChecked()){
-        if(FirstNumber->text()=="0"){
+        /*if(FirstNumber->text()=="0"){
             ui->result->append("Carmichel is undefined");
             return;
-        }
+        }*/
         PositiveNumber num1(FirstNumber->text().toStdString());
 
         PositiveNumber res = Euler(num1);

@@ -35,6 +35,7 @@ private:
     QLineEdit* FirstPol;
     QLineEdit* SecondPol;
     QLineEdit* Value;
+    QLineEdit* Modulo;
 };
 
 #endif // PRWINDOW_H
