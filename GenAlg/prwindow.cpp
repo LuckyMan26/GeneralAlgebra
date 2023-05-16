@@ -33,19 +33,26 @@ PRWindow::PRWindow(QWidget *parent):
 
 
     FirstPol = new QLineEdit(this);
+    FirstPol->setFixedWidth(300);
     QLabel* label1 = new QLabel("Перший многочлен: ", this);
     ui->gridLayout->addWidget(label1,0,1);
     ui->gridLayout->addWidget(FirstPol,0,2);
+
     SecondPol = new QLineEdit(this);
+    SecondPol->setFixedWidth(300);
     QLabel* label2 = new QLabel("Другий многочлен: ", this);
     ui->gridLayout->addWidget(label2,1,1);
     ui->gridLayout->addWidget(SecondPol,1,2);
-    QLabel* label3 = new QLabel("Значення або порядок ", this);
+
     Value = new QLineEdit(this);
+    Value->setFixedWidth(300);
+    QLabel* label3 = new QLabel("Значення або порядок ", this);
     ui->gridLayout->addWidget(label3,2,1);
     ui->gridLayout->addWidget(Value,2,2);
 
+
     calculateBtn = new QPushButton("Виконати операцію",this);
+    calculateBtn->setFont(QFont("Arial", 12, QFont::Bold));
     ui->btnLayout->addWidget(calculateBtn);
     connect(calculateBtn,&QPushButton::clicked,this,&PRWindow::proccesOperation);
 }

@@ -59,6 +59,7 @@ FiniteFieldWindow::FiniteFieldWindow(QWidget *parent):
     ui->gridLayout->addWidget(label4,2,1);
     ui->gridLayout->addWidget(FieldModule,2,2);
     calculateBtn = new QPushButton("Виконати операцію",this);
+    calculateBtn->setFont(QFont("Arial", 12, QFont::Bold));
     ui->calculateLayout->addWidget(calculateBtn);
     connect(calculateBtn,&QPushButton::clicked,this,&FiniteFieldWindow::proccesOperation);
 }

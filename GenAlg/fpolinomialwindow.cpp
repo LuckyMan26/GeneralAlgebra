@@ -9,6 +9,10 @@ FPolynomialWindow::FPolynomialWindow(QWidget *parent):
     ui(new Ui::FPolynomialWindow)
 {
     ui->setupUi(this);
+
+    QFont boldFont;
+    boldFont.setBold(true);
+
     AdditionBtn = new QRadioButton("Додавання", this);
     SubstractionBtn = new QRadioButton("Віднімання", this);
     MultiplicationBtn = new QRadioButton("Множення", this);
@@ -33,32 +37,52 @@ FPolynomialWindow::FPolynomialWindow(QWidget *parent):
     ui->RadioButtonLayout->addWidget(OrderOfIrreducibleBtn,2,3);
     ui->RadioButtonLayout->addWidget(IsGeneratorBtn,2,4);
 
+    ui->RadioButtonLayout->setSpacing(20);
+
     FirstPol = new QLineEdit(this);
+    FirstPol->setFixedWidth(300);
     QLabel* label1 = new QLabel("Перший многочлен: ", this);
+    label1->setFont(boldFont);
     ui->gridLayout->addWidget(label1,0,1);
     ui->gridLayout->addWidget(FirstPol,0,2);
-    SecondPol = new QLineEdit(this);
 
+    SecondPol = new QLineEdit(this);
+    SecondPol->setFixedWidth(300);
     QLabel* label2 = new QLabel("Другий многочлен: ", this);
+    label2->setFont(boldFont);
     ui->gridLayout->addWidget(label2,1,1);
     ui->gridLayout->addWidget(SecondPol,1,2);
-    QLabel* label3 = new QLabel("Степінь ", this);
-    QLabel* label4 = new QLabel("Ri ", this);
-    QLabel* label5 = new QLabel("Розмір поля ", this);
+
     Power = new QLineEdit(this);
-    FieldModule  = new QLineEdit(this);
+    Power->setFixedWidth(300);
+    QLabel* label3 = new QLabel("Степінь ", this);
+    label3->setFont(boldFont);
     ui->gridLayout->addWidget(label3,2,1);
     ui->gridLayout->addWidget(Power,2,2);
+
+    FieldModule  = new QLineEdit(this);
+    FieldModule->setFixedWidth(300);
+    QLabel* label5 = new QLabel("Розмір поля ", this);
+    label5->setFont(boldFont);
     ui->gridLayout->addWidget(FieldModule,3,2);
     ui->gridLayout->addWidget(label5,3,1);
 
     Ri = new QLineEdit(this);
+    Ri->setFixedWidth(300);
+    QLabel* label4 = new QLabel("Ri ", this);
+    label4->setFont(boldFont);
     ui->gridLayout->addWidget(label4,4,1);
     ui->gridLayout->addWidget(Ri,4,2);
+
+    ui->gridLayout->setVerticalSpacing(20);
+
     calculateBtn = new QPushButton("Виконати операцію",this);
+    calculateBtn->setFont(QFont("Arial", 12, QFont::Bold));
     ui->btnLayout->addWidget(calculateBtn);
     connect(calculateBtn,&QPushButton::clicked,this,&FPolynomialWindow::proccesOperation);
 }
+
+
 FPolynomialWindow::~FPolynomialWindow()
 {
     delete ui;
