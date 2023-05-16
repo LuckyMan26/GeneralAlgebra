@@ -54,13 +54,13 @@ public:
 
 	TrueFPolynomial fastExponentiation(PositiveNumber degree)
 	{
-		std::string binDegree = degree.bitsReverse();
+		std::string binDegree = degree.bits();
 		TrueFPolynomial answer("1", this->irreducible);
 		TrueFPolynomial temp(*this);
 
 		const int countOfIterations = binDegree.size() - 1;
 
-		for (int i = countOfIterations; i > 0; i--)
+		for (int i = 0; i < countOfIterations; i++)
 		{
 			if (binDegree[i] == '1')
 			{
@@ -70,7 +70,7 @@ public:
 			answer = answer * answer;
 		}
 
-		if (binDegree[0] == '1')
+		if (binDegree[countOfIterations] == '1')
 			answer = answer * temp;
 
 		answer.toFieldSize();
