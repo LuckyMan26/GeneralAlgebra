@@ -50,6 +50,11 @@ PRWindow::PRWindow(QWidget *parent):
     ui->gridLayout->addWidget(label3,2,1);
     ui->gridLayout->addWidget(Value,2,2);
 
+    Modulo = new QLineEdit(this);
+    Modulo->setFixedWidth(300);
+    QLabel* label4 = new QLabel("Розмір поля ", this);
+    ui->gridLayout->addWidget(label4,3,1);
+    ui->gridLayout->addWidget(Modulo,3,2);
 
     calculateBtn = new QPushButton("Виконати операцію",this);
     calculateBtn->setFont(QFont("Arial", 12, QFont::Bold));
@@ -66,65 +71,81 @@ void PRWindow::proccesOperation(){
 
     if(AdditionBtn->isChecked()){
 
-        RPolynomial pol1(FirstPol->text().toStdString());
-        RPolynomial pol2(SecondPol->text().toStdString());
-        RPolynomial res = pol1 + pol2;
+        PositiveNumber p(Modulo->text().toStdString());
+
+        FPolynomial pol1(FirstPol->text().toStdString(), p);
+        FPolynomial pol2(SecondPol->text().toStdString(), p);
+        FPolynomial res = pol1 + pol2;
         ui->result->append(FirstPol->text() + "+" + SecondPol->text() + "=" + QString::fromStdString(res.toString()));
     }
     else if(SubstractionBtn->isChecked()){
 
-        RPolynomial pol1(FirstPol->text().toStdString());
-        RPolynomial pol2(SecondPol->text().toStdString());
-        RPolynomial res = pol1 - pol2;
+        PositiveNumber p(Modulo->text().toStdString());
+
+        FPolynomial pol1(FirstPol->text().toStdString(), p);
+        FPolynomial pol2(SecondPol->text().toStdString(), p);
+        FPolynomial res = pol1 - pol2;
         ui->result->append(FirstPol->text() + "-" + SecondPol->text() + "=" + QString::fromStdString(res.toString()));
     }
     else if(MultiplicationBtn->isChecked()){
+        PositiveNumber p(Modulo->text().toStdString());
 
-        RPolynomial pol1(FirstPol->text().toStdString());
-        RPolynomial pol2(SecondPol->text().toStdString());
-        RPolynomial res = pol1 * pol2;
+        FPolynomial pol1(FirstPol->text().toStdString(), p);
+        FPolynomial pol2(SecondPol->text().toStdString(), p);
+        FPolynomial res = pol1 * pol2;
         ui->result->append(FirstPol->text() + "*" + SecondPol->text() + "=" + QString::fromStdString(res.toString()));
     }
     else if(DerrivitiveBtn->isChecked()){
-        RPolynomial pol1(FirstPol->text().toStdString());
+        PositiveNumber p(Modulo->text().toStdString());
 
-        RPolynomial res = pol1.derivative();
+        FPolynomial pol1(FirstPol->text().toStdString(), p);
+
+        FPolynomial res = pol1.derivative();
         ui->result->append("Derivative: " + FirstPol->text() +  "=" + QString::fromStdString(res.toString()));
     }
     else if(ValueBtn->isChecked()){
 
-        RPolynomial pol1(FirstPol->text().toStdString());
-        SignedNumber num(Value->text().toStdString());
-        SignedNumber res = pol1.valueAt(num);
+        PositiveNumber p(Modulo->text().toStdString());
+
+        FPolynomial pol1(FirstPol->text().toStdString(), p);
+        FiniteNumber num(Value->text().toStdString(), p);
+        FiniteNumber res = pol1.valueAt(num);
         ui->result->append("Value of " +  FirstPol->text() + "at " + Value->text() + +  "=" + QString::fromStdString(res.toString()));
     }
     if(RemainderBtn->isChecked()){
 
-        FPolynomial pol1(FirstPol->text().toStdString(), 5);
-        FPolynomial pol2(SecondPol->text().toStdString(), 5);
+        PositiveNumber p(Modulo->text().toStdString());
+
+        FPolynomial pol1(FirstPol->text().toStdString(), p);
+        FPolynomial pol2(SecondPol->text().toStdString(), p);
         FPolynomial res = pol1 % pol2;
         ui->result->append(FirstPol->text() + "%" + SecondPol->text() + "=" + QString::fromStdString(res.toString()));
     }
     if(GCD->isChecked()){
 
+        PositiveNumber p(Modulo->text().toStdString());
 
-        FPolynomial pol1(FirstPol->text().toStdString(), 5);
-        FPolynomial pol2(SecondPol->text().toStdString(), 5);
+        FPolynomial pol1(FirstPol->text().toStdString(), p);
+        FPolynomial pol2(SecondPol->text().toStdString(), p);
         FPolynomial res = FPolynomial::GCD(pol1,pol2);
         ui->result->append("GCD(" + FirstPol->text() + "," + SecondPol->text()+ ")" + "=" + QString::fromStdString(res.toString()));
     }
     if(CyclomiticBtn->isChecked()){
 
-
+        PositiveNumber p(Modulo->text().toStdString());
         PositiveNumber order(Value->text().toStdString());
-        RPolynomial res =  RPolynomial::cyclotomic(order);
+
+        auto f = FiniteField(p);
+
+        FPolynomial res =  FPolynomial::cyclotomic(order, f);
         ui->result->append("Cyclomitic of order " + QString::fromStdString(order.toString()) +  "=" + QString::fromStdString(res.toString()));
     }
     if(QuatientBtn->isChecked()){
 
+        PositiveNumber p(Modulo->text().toStdString());
 
-        FPolynomial pol1(FirstPol->text().toStdString(), 5);
-        FPolynomial pol2(SecondPol->text().toStdString(), 5);
+        FPolynomial pol1(FirstPol->text().toStdString(), p);
+        FPolynomial pol2(SecondPol->text().toStdString(), p);
         FPolynomial res = pol1 / pol2;
         ui->result->append(FirstPol->text() + "/" + SecondPol->text() + "=" + QString::fromStdString(res.toString()));
     }
